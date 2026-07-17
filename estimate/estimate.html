@@ -1,25 +1,38 @@
             <h1>장례 비용 · 견적</h1>
             <div class="estimate-intro">
                 <p class="intro-text">필요한 정보만 간단히 선택하면 대략적인 견적을 확인할 수 있습니다.</p>
-                <div class="intro-steps">
-                    <div class="intro-step">1. 기본 정보 입력</div>
-                    <div class="intro-step">2. 지역/기간 선택</div>
-                    <div class="intro-step">3. 종교·서비스 확인</div>
-                    <div class="intro-step">4. 연락처 입력 후 접수</div>
+                <div class="intro-steps" aria-label="견적 작성 진행 단계">
+                    <div class="intro-step is-active" data-step-indicator="0" aria-current="step"><span>01</span>기본 정보</div>
+                    <div class="intro-step" data-step-indicator="1"><span>02</span>지역 · 상품</div>
+                    <div class="intro-step" data-step-indicator="2"><span>03</span>연락처 · 동의</div>
                 </div>
-                <p class="intro-note">필수 항목은 <span class="required">*</span>로 표시됩니다.</p>
+                <p class="intro-note">필수 항목은 <span class="required">*</span>로 표시됩니다. 단계별로 입력한 뒤 다음 버튼을 눌러주세요.</p>
             </div>
             
             <form id="estimateForm" class="estimate-form">
                 <!-- 1단계: 기본 정보 -->
-                <div class="form-section">
+                <div class="form-section" data-wizard-step="0">
                     <h2 class="section-title">1. 기본 정보</h2>
+                    <fieldset class="death-status-fieldset">
+                        <legend>현재 상황 <span class="required">*</span></legend>
+                        <p>정확한 안내를 위해 가장 먼저 현재 상황을 선택해주세요.</p>
+                        <div class="death-status-options">
+                            <label class="death-status-option">
+                                <input type="radio" name="deathStatus" value="before" required>
+                                <span><strong>사망 전</strong><small>사전 상담과 준비가 필요한 경우</small></span>
+                            </label>
+                            <label class="death-status-option">
+                                <input type="radio" name="deathStatus" value="after" required>
+                                <span><strong>사망 후</strong><small>장례 절차를 바로 준비해야 하는 경우</small></span>
+                            </label>
+                        </div>
+                    </fieldset>
                     <div class="form-group">
-                        <label for="name">고인 성함 <span class="required">*</span></label>
+                        <label for="name" id="personNameLabel">성함 <span class="required">*</span></label>
                         <input type="text" id="name" name="name" placeholder="예: 홍길동" required>
                     </div>
                     <div class="form-group">
-                        <label for="relationship">고인과의 관계 <span class="required">*</span></label>
+                        <label for="relationship">관계 <span class="required">*</span></label>
                         <select id="relationship" name="relationship" required>
                             <option value="">선택하세요</option>
                             <option value="부모">부모</option>
@@ -30,12 +43,13 @@
                             <option value="기타">기타</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="deathDate">사망일 <span class="required">*</span></label>
-                        <input type="date" id="deathDate" name="deathDate" required>
+                    <div class="form-group" id="deathDateGroup">
+                        <label for="deathDate">사망일 <span class="required" id="deathDateRequired">*</span></label>
+                        <input type="date" id="deathDate" name="deathDate" disabled>
+                        <p class="field-help" id="deathDateHelp">현재 상황을 먼저 선택해주세요.</p>
                     </div>
                     <div class="form-group">
-                        <label for="deathLocation">사망 장소 <span class="required">*</span></label>
+                        <label for="deathLocation">장소 <span class="required">*</span></label>
                         <select id="deathLocation" name="deathLocation" onchange="toggleDeathLocationOther(this.value)" required>
                             <option value="">선택하세요</option>
                             <option value="병원">병원</option>
@@ -45,8 +59,8 @@
                             <option value="기타">기타</option>
                         </select>
                         <div id="deathLocationOtherInput" class="other-input-container">
-                            <label for="deathLocationOtherText">기타 사망 장소</label>
-                            <input type="text" id="deathLocationOtherText" name="deathLocationOtherText" class="other-input" placeholder="사망 장소를 입력하세요">
+                            <label for="deathLocationOtherText">기타 장소</label>
+                            <input type="text" id="deathLocationOtherText" name="deathLocationOtherText" class="other-input" placeholder="장소를 입력하세요">
                         </div>
                     </div>
                     <div class="form-group">
@@ -56,7 +70,7 @@
                 </div>
                 
                 <!-- 2단계: 지역 선택 -->
-                <div class="form-section">
+                <div class="form-section" data-wizard-step="1">
                     <h2 class="section-title">2. 장례 지역 선택 (장례를 지낼 지역을 선택해주세요)</h2>
                     <div class="form-group">
                         <label for="sido">시/도 <span class="required">*</span></label>
@@ -72,17 +86,20 @@
                     </div>
                     <div class="form-group">
                         <label for="funeralPeriod">장례 기간 <span class="required">*</span></label>
-                        <select id="funeralPeriod" name="funeralPeriod" required>
+                        <select id="funeralPeriod" name="funeralPeriod" onchange="toggleFuneralPeriodOther(this.value)" required>
                             <option value="">선택하세요</option>
-                            <option value="3일">3일장</option>
-                            <option value="5일">5일장</option>
-                            <option value="7일">7일장</option>
+                            <option value="3일장">3일장</option>
+                            <option value="기타">기타</option>
                         </select>
+                        <div id="funeralPeriodOtherInput" class="other-input-container">
+                            <label for="funeralPeriodOtherText">기타 장례 기간</label>
+                            <input type="text" id="funeralPeriodOtherText" name="funeralPeriodOtherText" class="other-input" placeholder="예: 2일장, 가족장 일정">
+                        </div>
                     </div>
                 </div>
                 
                 <!-- 2-1단계: 장례식장 선택 -->
-                <div class="form-section" id="funeralHallListSection" style="display: none;">
+                <div class="form-section" id="funeralHallListSection" data-wizard-step="1" style="display: none;">
                     <h2 class="section-title">장례식장 선택</h2>
                     <div class="form-group">
                         <label>선택 가능한 장례식장</label>
@@ -100,76 +117,16 @@
                 </div>
 
                 <!-- 3단계: 상조 상품 선택 -->
-                <div class="form-section">
-                    <h2 class="section-title">3. 상조 상품 선택 <span class="required">*</span></h2>
+                <div class="form-section" data-wizard-step="1">
+                    <h2 class="section-title">상조 상품 선택 <span class="required">*</span></h2>
                     <div class="product-grid" id="funeralProductGrid">
                         <div class="loading-message">상조 상품을 불러오는 중...</div>
                     </div>
                 </div>
 
-                <!-- 4단계: 종교 및 의례 -->
-                <div class="form-section">
-                    <h2 class="section-title">4. 종교 및 의례</h2>
-                    <div class="form-group">
-                        <label for="religion">종교 <span class="required">*</span></label>
-                        <select id="religion" name="religion" onchange="toggleReligionOther(this.value)" required>
-                            <option value="">선택하세요</option>
-                            <option value="불교">불교</option>
-                            <option value="기독교">기독교</option>
-                            <option value="천주교">천주교</option>
-                            <option value="무교">무교</option>
-                            <option value="기타">기타</option>
-                        </select>
-                        <div id="religionOtherInput" class="other-input-container">
-                            <label for="religionOtherText">기타 종교</label>
-                            <input type="text" id="religionOtherText" name="religionOtherText" class="other-input" placeholder="종교를 입력하세요">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 5단계: 준비된 서비스 -->
-                <div class="form-section">
-                    <h2 class="section-title">5. 준비된 서비스</h2>
-                    <div class="form-group">
-                        <label>준비된 서비스</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="preparedServices" value="portraitPhoto">
-                                <span>영정사진</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="preparedServices" value="shroud">
-                                <span>수의</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="preparedServices" value="clothes">
-                                <span>옷</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="preparedServices" value="other" id="otherPreparedService" onchange="toggleOtherServiceInput(this.checked)">
-                                <span>기타</span>
-                            </label>
-                        </div>
-                        <div id="otherServiceInput" class="other-input-container">
-                            <label for="otherServiceText">기타 준비된 서비스 내용</label>
-                            <input type="text" id="otherServiceText" name="otherServiceText" class="other-input" placeholder="준비된 서비스 내용을 입력하세요">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="burialSite">장지 선택</label>
-                        <select id="burialSite" name="burialSite">
-                            <option value="">선택하세요</option>
-                            <option value="cemetery">공원묘지</option>
-                            <option value="natural">자연장지</option>
-                            <option value="columbarium">봉안당</option>
-                            <option value="home">가정 보관</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- 6단계: 연락처 정보 -->
-                <div class="form-section">
-                    <h2 class="section-title">6. 연락처 정보</h2>
+                <!-- 3단계: 연락처 정보 -->
+                <div class="form-section" data-wizard-step="2">
+                    <h2 class="section-title">3. 연락처 정보</h2>
                     <div class="form-group">
                         <label for="contactName">요청자 성함 <span class="required">*</span></label>
                         <input type="text" id="contactName" name="contactName" placeholder="예: 김담당" required>
@@ -182,16 +139,80 @@
                         <label for="contactEmail">이메일</label>
                         <input type="email" id="contactEmail" name="contactEmail">
                     </div>
+
+                    <div class="wizard-review" id="wizardReview" aria-live="polite">
+                        <div class="wizard-review-head">
+                            <div>
+                                <span class="wizard-review-eyebrow">입력 내용 확인</span>
+                                <h3>견적 요청 정보를 확인해주세요</h3>
+                            </div>
+                            <button type="button" class="review-edit-btn" data-review-edit-step="0">처음부터 수정</button>
+                        </div>
+                        <dl class="wizard-review-grid">
+                            <div><dt>현재 상황</dt><dd id="reviewDeathStatus">-</dd></div>
+                            <div><dt id="reviewNameLabel">성함</dt><dd id="reviewName">-</dd></div>
+                            <div><dt>장례 지역</dt><dd id="reviewRegion">-</dd></div>
+                            <div><dt>장례 기간</dt><dd id="reviewPeriod">-</dd></div>
+                            <div><dt>예상 조문객</dt><dd id="reviewVisitors">-</dd></div>
+                            <div><dt>연락받을 분</dt><dd id="reviewContact">-</dd></div>
+                        </dl>
+                    </div>
                 </div>
                 
                 <!-- 견적 요청 버튼 -->
                 <div class="form-actions">
+                    <section class="privacy-consent-panel" id="privacyConsentPanel" aria-labelledby="consentTitle">
+                        <div class="consent-heading">
+                            <span>PRIVACY &amp; CONSENT</span>
+                            <h3 id="consentTitle">개인정보 처리 동의 안내</h3>
+                            <p>견적 상담 접수와 연락을 위해 아래 내용을 확인하고 동의해주세요.</p>
+                        </div>
+                        <label class="consent-all-toggle" for="allConsent">
+                            <input type="checkbox" id="allConsent">
+                            <span><strong>필수 항목 전체 동의</strong><small>아래 필수 동의 항목을 한 번에 선택합니다.</small></span>
+                        </label>
+
+                        <div class="consent-scroll-area" tabindex="0" aria-label="개인정보 처리 동의 상세 내용">
+                            <article class="consent-document">
+                                <label class="consent-card" for="privacyConsent">
+                                    <input type="checkbox" id="privacyConsent" name="privacyConsent" value="1" required>
+                                    <span class="consent-card-body"><strong><em>필수</em> 개인정보 수집 · 이용 동의</strong><span>견적 상담 접수를 위해 필요한 최소 정보의 수집·이용에 동의합니다.</span></span>
+                                </label>
+                                <dl class="consent-detail-list">
+                                    <div><dt>수집·이용 목적</dt><dd>장례 견적 산출, 상담 접수, 요청 내용 확인 및 상담 결과 안내</dd></div>
+                                    <div><dt>수집 항목</dt><dd>현재 상황, 환우명 또는 고인 성함, 관계, 사망일(사망 후인 경우), 장소, 예상 조문객 수, 장례 지역·기간, 선택 상품·시설, 요청자 성명·연락처 및 이메일(선택)</dd></div>
+                                    <div><dt>보유·이용 기간</dt><dd>견적 상담 완료 및 관련 업무 종료 시까지 보유 후 지체 없이 파기합니다. 관계 법령에 별도 보관 의무가 있는 경우 해당 기간 동안 보관합니다.</dd></div>
+                                    <div><dt>동의 거부 권리</dt><dd>동의를 거부할 권리가 있으나, 필수 정보 수집·이용에 동의하지 않으면 온라인 견적 상담 접수가 제한됩니다.</dd></div>
+                                </dl>
+                            </article>
+
+                            <article class="consent-document">
+                                <label class="consent-card" for="contactConsent">
+                                    <input type="checkbox" id="contactConsent" name="contactConsent" value="1" required>
+                                    <span class="consent-card-body"><strong><em>필수</em> 견적 상담 연락 동의</strong><span>접수 내용 확인과 견적 안내를 위한 연락에 동의합니다.</span></span>
+                                </label>
+                                <dl class="consent-detail-list">
+                                    <div><dt>연락 목적</dt><dd>견적 요청 확인, 추가 정보 확인, 상담 일정 조율 및 견적 결과 안내</dd></div>
+                                    <div><dt>이용 항목</dt><dd>요청자 성명, 휴대전화번호, 이메일(입력한 경우), 견적 요청 식별정보</dd></div>
+                                    <div><dt>연락 방법</dt><dd>전화, 문자메시지 또는 이메일 중 요청 처리에 필요한 방법</dd></div>
+                                    <div><dt>동의 거부 권리</dt><dd>연락에 동의하지 않을 수 있으나, 견적 요청 확인과 결과 안내가 어려워 접수가 제한됩니다.</dd></div>
+                                </dl>
+                            </article>
+
+                            <div class="consent-policy-note">
+                                <strong>개인정보 보호 안내</strong>
+                                <p>Leave Life는 상담에 필요한 최소한의 정보만 처리하며, 접근 권한을 부여받은 담당자만 해당 정보를 확인할 수 있도록 관리합니다.</p>
+                                <span>동의문 버전 2026.07.18</span>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- 견적서 정보 표시 (estimate_id가 있을 때만) -->
                     <div id="estimateInfoDisplay" class="estimate-info-display">
                         <h3 class="estimate-info-title">견적 요청 정보</h3>
                         <div class="estimate-info-grid">
                             <div class="estimate-info-item">
-                                <div class="estimate-info-label">고인 성함</div>
+                                <div class="estimate-info-label" id="displayPersonNameLabel">성함</div>
                                 <div class="estimate-info-value" id="displayDeceasedName">-</div>
                             </div>
                             <div class="estimate-info-item">
@@ -208,8 +229,13 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="submit-btn">견적 요청하기</button>
-                    <p class="submit-note">입력하신 정보는 상담 목적 외에는 사용되지 않습니다.</p>
+                    <div class="wizard-actions">
+                        <button type="button" class="wizard-btn wizard-prev-btn" id="wizardPrevBtn">이전</button>
+                        <span class="wizard-step-status" id="wizardStepStatus" aria-live="polite">1 / 3</span>
+                        <button type="button" class="wizard-btn wizard-next-btn" id="wizardNextBtn">다음 단계</button>
+                        <button type="submit" class="submit-btn" id="wizardSubmitBtn">동의하고 견적 요청 완료</button>
+                    </div>
+                    <p class="submit-note" id="wizardSubmitNote">입력 내용 확인과 필수 동의를 마치면 견적 요청이 접수됩니다.</p>
                 </div>
             </form>
 
@@ -237,41 +263,6 @@
                         <div class="product-modal-row">
                             <span class="label">포함 상품</span>
                             <div id="productModalDetails" class="product-modal-details">-</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 장례식장 리스트 및 가격 정보 섹션 -->
-            <div id="funeralHallPriceSection" class="funeral-hall-price-section">
-                <!-- 장례식장 리스트 -->
-                <div class="form-section">
-                    <h2 class="section-title">장례식장 선택</h2>
-                    <div id="selectedRegionInfo" class="selected-region-info"></div>
-                    <p class="data-source-note">장례식장 정보 출처: 장례식장 정보 제공처</p>
-                    <div id="funeralHallListForEstimate" class="funeral-hall-grid">
-                        <div class="loading-message">장례식장 목록을 불러오는 중...</div>
-                    </div>
-                </div>
-
-                <!-- 선택된 장례식장의 가격 정보 -->
-                <div id="selectedHallPriceInfo" class="selected-hall-price-info">
-                    <div class="form-section">
-                        <div class="price-header">
-                            <h2 class="section-title section-title-no-margin">가격 정보</h2>
-                            <button onclick="closeSelectedHallPrice()" class="cancel-btn cancel-btn-small">닫기</button>
-                        </div>
-                        <div id="selectedHallNameDisplay" class="selected-hall-name-display">
-                            <h3></h3>
-                        </div>
-                        <div id="priceCategoriesContainer" class="price-categories-container">
-                            <!-- 동적으로 추가됨 -->
-                        </div>
-                        <div class="total-price-container">
-                            <div class="total-price-content">
-                                <h3 class="total-price-title">총 요금</h3>
-                                <div class="total-price-value" id="totalPriceDisplay">0원</div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -336,7 +327,7 @@
                 .form-section {
                     background-color: var(--surface);
                     padding: 30px;
-                    border-radius: 8px;
+                    border-radius: 16px;
                     box-shadow: var(--shadow-soft);
                     margin-bottom: 30px;
                     border: 1px solid var(--border);
@@ -377,10 +368,6 @@
                     font-size: 1.5rem;
                     padding-bottom: 10px;
                     border-bottom: 2px solid var(--accent);
-                }
-                
-                .section-title-no-margin {
-                    margin: 0;
                 }
                 
                 .form-group {
@@ -430,7 +417,7 @@
                 .form-input:focus {
                     outline: none;
                     border-color: var(--accent);
-                    box-shadow: 0 0 0 3px rgba(179, 139, 90, 0.2);
+                    box-shadow: 0 0 0 4px rgba(45, 105, 83, 0.12);
                 }
                 
                 .other-input-container {
@@ -487,7 +474,7 @@
                 
                 .submit-btn:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(141, 107, 63, 0.3);
+                    box-shadow: 0 10px 24px rgba(23, 63, 50, 0.2);
                 }
                 
                 .submit-btn:active {
@@ -502,37 +489,46 @@
 
                 .product-card {
                     border: 1px solid var(--border);
-                    border-radius: 10px;
-                    padding: 16px;
+                    border-radius: 14px;
+                    padding: 20px;
                     background: var(--surface);
                     position: relative;
                     cursor: pointer;
-                    transition: border-color 0.2s, box-shadow 0.2s;
+                    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
                 }
 
                 .product-card:hover {
-                    border-color: #667eea;
-                    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.12);
+                    border-color: var(--green-700, #2d6953);
+                    box-shadow: 0 10px 24px rgba(23, 63, 50, 0.1);
+                    transform: translateY(-2px);
                 }
 
                 .product-card input[type="radio"] {
                     position: absolute;
-                    top: 16px;
-                    left: 16px;
+                    top: 20px;
+                    left: 20px;
+                    accent-color: var(--green-800, #205442);
                 }
 
                 .product-info-btn {
                     position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    width: 24px;
-                    height: 24px;
+                    top: 14px;
+                    right: 14px;
+                    display: grid;
+                    place-items: center;
+                    width: 34px;
+                    height: 34px;
+                    padding: 0;
                     border-radius: 50%;
-                    border: 1px solid #667eea;
-                    background: #fff;
-                    color: #667eea;
-                    font-weight: 700;
+                    border: 1px solid rgba(45, 105, 83, 0.14);
+                    background: var(--green-100, #e8f0ec);
+                    color: var(--green-800, #205442);
                     cursor: pointer;
+                }
+
+                .product-info-btn svg {
+                    width: 18px;
+                    height: 18px;
                 }
 
                 .product-title {
@@ -545,7 +541,7 @@
                 .product-price {
                     font-size: 1.1rem;
                     font-weight: 700;
-                    color: #667eea;
+                    color: var(--green-800, #205442);
                     margin-bottom: 6px;
                     padding-left: 32px;
                 }
@@ -557,8 +553,9 @@
                 }
 
                 .product-card.selected {
-                    border-color: #667eea;
-                    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+                    border-color: var(--green-700, #2d6953);
+                    background: #f5f9f7;
+                    box-shadow: 0 0 0 3px rgba(45, 105, 83, 0.11);
                 }
 
                 .product-modal {
@@ -662,11 +659,6 @@
                 }
                 
                 /* 장례식장 관련 스타일 */
-                .funeral-hall-price-section {
-                    display: none;
-                    margin-top: 30px;
-                }
-
                 .data-source-note {
                     margin: 6px 0 0 0;
                     color: var(--muted);
@@ -698,12 +690,13 @@
 
                 .funeral-hall-item:hover {
                     border-color: var(--accent);
-                    box-shadow: 0 2px 8px rgba(141, 107, 63, 0.18);
+                    box-shadow: 0 8px 18px rgba(23, 63, 50, 0.09);
                 }
 
                 .funeral-hall-item.selected {
-                    border-color: #2f6fed;
-                    box-shadow: 0 0 0 2px rgba(47, 111, 237, 0.25);
+                    border-color: var(--green-700, #2d6953);
+                    background: #f5f9f7;
+                    box-shadow: 0 0 0 3px rgba(45, 105, 83, 0.11);
                 }
 
                 .funeral-hall-item-title {
@@ -717,218 +710,6 @@
                     color: var(--muted);
                     font-size: 0.9rem;
                     margin-bottom: 5px;
-                }
-                
-                .selected-region-info {
-                    margin-bottom: 15px;
-                    padding: 10px;
-                    background-color: var(--surface-alt);
-                    border-radius: 5px;
-                    color: var(--accent-strong);
-                    font-weight: 500;
-                    border-left: 4px solid var(--accent);
-                }
-                
-                .funeral-hall-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                    gap: 15px;
-                }
-                
-                .funeral-hall-card {
-                    padding: 20px;
-                    background-color: var(--surface);
-                    border: 2px solid var(--border);
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                }
-                
-                .funeral-hall-card:hover {
-                    border-color: var(--accent);
-                    box-shadow: 0 4px 12px rgba(141, 107, 63, 0.2);
-                }
-                
-                .funeral-hall-card h4 {
-                    color: var(--accent-strong);
-                    margin: 0 0 10px 0;
-                    font-size: 1.1rem;
-                    font-weight: 600;
-                }
-                
-                .funeral-hall-card p {
-                    color: var(--muted);
-                    margin: 5px 0;
-                    font-size: 0.9rem;
-                }
-                
-                .selected-hall-price-info {
-                    display: none;
-                    margin-top: 30px;
-                }
-                
-                .price-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 20px;
-                }
-                
-                .cancel-btn {
-                    background-color: var(--surface-alt);
-                    color: var(--text);
-                    border: 1px solid var(--border);
-                    border-radius: 5px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-                
-                .cancel-btn-small {
-                    padding: 8px 20px;
-                }
-                
-                .cancel-btn:hover {
-                    background-color: #e7dfd5;
-                }
-                
-                .selected-hall-name-display {
-                    margin-bottom: 15px;
-                    padding: 15px;
-                    background-color: var(--accent);
-                    color: var(--on-accent);
-                    border-radius: 5px;
-                }
-                
-                .selected-hall-name-display h3 {
-                    margin: 0;
-                    font-size: 1.2rem;
-                }
-                
-                .price-categories-container {
-                    margin-bottom: 20px;
-                }
-                
-                .price-category {
-                    margin-bottom: 30px;
-                    background-color: var(--surface);
-                    border: 1px solid var(--border);
-                    border-radius: 8px;
-                    overflow: hidden;
-                }
-                
-                .price-category-header {
-                    padding: 15px;
-                    background-color: var(--surface-alt);
-                    color: var(--text);
-                    font-weight: 600;
-                    font-size: 1.1rem;
-                    border-bottom: 1px solid var(--border);
-                }
-                
-                .price-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                
-                .price-table thead tr {
-                    background-color: var(--surface-alt);
-                }
-                
-                .price-table th {
-                    padding: 12px;
-                    text-align: left;
-                    border: 1px solid var(--border);
-                    font-weight: 600;
-                }
-                
-                .price-table th.price-th-select {
-                    width: 50px;
-                }
-                
-                .price-table th.price-th-name {
-                    min-width: 200px;
-                }
-                
-                .price-table th.price-th-type {
-                    min-width: 120px;
-                }
-                
-                .price-table th.price-th-service {
-                    min-width: 200px;
-                }
-                
-                .price-table th.price-th-price {
-                    min-width: 150px;
-                    text-align: right;
-                }
-                
-                .price-table td {
-                    padding: 12px;
-                    border: 1px solid var(--border);
-                }
-                
-                .price-table tbody tr:nth-child(even) {
-                    background-color: var(--surface-alt);
-                }
-                
-                .price-table tbody tr:nth-child(odd) {
-                    background-color: var(--surface);
-                }
-                
-                .price-table td.price-td-center {
-                    text-align: center;
-                }
-                
-                .price-table td.price-td-right {
-                    text-align: right;
-                }
-                
-                .price-checkbox {
-                    width: 20px;
-                    height: 20px;
-                    cursor: pointer;
-                }
-                
-                .price-product-name {
-                    color: var(--text);
-                    font-weight: 500;
-                }
-                
-                .price-product-type,
-                .price-service-content {
-                    color: var(--muted);
-                }
-                
-                .price-value {
-                    color: var(--accent-strong);
-                    font-weight: bold;
-                    font-size: 1.05rem;
-                }
-                
-                .total-price-container {
-                    padding: 20px;
-                    background-color: var(--surface-alt);
-                    border: 2px solid var(--accent);
-                    border-radius: 8px;
-                    margin-top: 20px;
-                }
-                
-                .total-price-content {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-                
-                .total-price-title {
-                    margin: 0;
-                    color: var(--accent-strong);
-                    font-size: 1.3rem;
-                }
-                
-                .total-price-value {
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    color: var(--accent-strong);
                 }
                 
                 .loading-message {
@@ -948,15 +729,577 @@
                     color: var(--muted);
                     font-size: 0.9rem;
                 }
+
+                /* 단계형 견적 작성 */
+                .estimate-form .form-section[data-wizard-step] {
+                    display: none;
+                }
+
+                .estimate-form .form-section[data-wizard-step][hidden] {
+                    display: none !important;
+                }
+
+                .estimate-form .form-section[data-wizard-step].is-active-step {
+                    display: block;
+                    animation: wizardStepIn 0.26s ease both;
+                }
+
+                #funeralHallListSection.is-active-step[style*="display: none"] {
+                    display: none;
+                }
+
+                @keyframes wizardStepIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .intro-steps {
+                    position: relative;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 0;
+                    overflow: hidden;
+                    border: 1px solid var(--line, #e5e3dd);
+                    border-radius: 12px;
+                    background: #fff;
+                }
+
+                .intro-step {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 9px;
+                    min-height: 54px;
+                    padding: 10px 12px;
+                    border: 0;
+                    border-right: 1px solid var(--line, #e5e3dd);
+                    border-radius: 0;
+                    background: #fff;
+                    color: var(--muted, #69716d);
+                    font-size: 0.86rem;
+                    font-weight: 600;
+                    transition: color 0.2s ease, background 0.2s ease;
+                }
+
+                .intro-step:last-child {
+                    border-right: 0;
+                }
+
+                .intro-step span {
+                    display: grid;
+                    place-items: center;
+                    width: 26px;
+                    height: 26px;
+                    flex: 0 0 auto;
+                    border: 1px solid #d7d9d5;
+                    border-radius: 50%;
+                    font-size: 0.68rem;
+                }
+
+                .intro-step.is-active {
+                    color: #fff;
+                    background: var(--green-900, #173f32);
+                }
+
+                .intro-step.is-active span {
+                    border-color: rgba(255, 255, 255, 0.55);
+                }
+
+                .intro-step.is-complete {
+                    color: var(--green-800, #205442);
+                    background: var(--green-100, #e8f0ec);
+                }
+
+                .intro-step.is-complete span {
+                    color: #fff;
+                    background: var(--green-700, #2d6953);
+                    border-color: var(--green-700, #2d6953);
+                }
+
+                .wizard-review {
+                    margin-top: 28px;
+                    padding: 24px;
+                    border: 1px solid var(--line, #e5e3dd);
+                    border-radius: 14px;
+                    background: var(--cream, #f7f4ee);
+                }
+
+                .wizard-review-head {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 18px;
+                    margin-bottom: 20px;
+                }
+
+                .wizard-review-eyebrow {
+                    display: block;
+                    margin-bottom: 4px;
+                    color: var(--green-700, #2d6953);
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    letter-spacing: 0.1em;
+                }
+
+                .wizard-review h3 {
+                    margin: 0;
+                    color: var(--ink, #1f2522);
+                    font-size: 1.05rem;
+                }
+
+                .review-edit-btn {
+                    flex: 0 0 auto;
+                    padding: 8px 12px;
+                    color: var(--green-800, #205442);
+                    background: #fff;
+                    border: 1px solid #cfd6d2;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                }
+
+                .wizard-review-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 1px;
+                    margin: 0;
+                    overflow: hidden;
+                    background: var(--line, #e5e3dd);
+                    border: 1px solid var(--line, #e5e3dd);
+                    border-radius: 10px;
+                }
+
+                .wizard-review-grid > div {
+                    min-width: 0;
+                    padding: 14px 16px;
+                    background: #fff;
+                }
+
+                .wizard-review-grid dt {
+                    margin-bottom: 4px;
+                    color: var(--muted, #69716d);
+                    font-size: 0.72rem;
+                }
+
+                .wizard-review-grid dd {
+                    margin: 0;
+                    overflow: hidden;
+                    color: var(--ink, #1f2522);
+                    font-size: 0.88rem;
+                    font-weight: 700;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .privacy-consent-panel {
+                    display: none;
+                    max-width: 800px;
+                    margin: 0 auto 24px;
+                    padding: 26px;
+                    text-align: left;
+                    background: #fff;
+                    border: 1px solid var(--line, #e5e3dd);
+                    border-radius: 14px;
+                    box-shadow: var(--shadow-sm, 0 10px 35px rgba(27, 48, 40, 0.08));
+                }
+
+                .privacy-consent-panel.is-visible {
+                    display: grid;
+                    gap: 12px;
+                }
+
+                .consent-heading {
+                    margin-bottom: 6px;
+                }
+
+                .consent-heading > span {
+                    display: inline-block;
+                    margin-bottom: 5px;
+                    color: var(--green-700, #2d6953);
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    letter-spacing: 0.1em;
+                }
+
+                .consent-heading h3 {
+                    margin: 0;
+                    color: var(--ink, #1f2522);
+                    font-size: 1.2rem;
+                }
+
+                .consent-heading p {
+                    margin: 5px 0 0;
+                    color: var(--muted, #69716d);
+                    font-size: 0.82rem;
+                }
+
+                .consent-card {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 13px;
+                    padding: 18px;
+                    cursor: pointer;
+                    background: var(--cream, #f7f4ee);
+                    border: 1px solid transparent;
+                    border-radius: 11px;
+                    transition: border-color 0.18s ease, background 0.18s ease;
+                }
+
+                .consent-card:has(input:checked) {
+                    background: var(--green-100, #e8f0ec);
+                    border-color: rgba(45, 105, 83, 0.35);
+                }
+
+                .consent-card input {
+                    width: 20px;
+                    height: 20px;
+                    flex: 0 0 auto;
+                    margin: 3px 0 0;
+                    accent-color: var(--green-800, #205442);
+                }
+
+                .consent-card-body {
+                    display: grid;
+                    gap: 5px;
+                    min-width: 0;
+                }
+
+                .consent-card-body strong {
+                    margin-bottom: 4px;
+                    color: var(--ink, #1f2522);
+                    font-size: 0.92rem;
+                }
+
+                .consent-card-body strong em {
+                    margin-right: 7px;
+                    color: #a84d3b;
+                    font-size: 0.7rem;
+                    font-style: normal;
+                }
+
+                .consent-card-body > span {
+                    color: var(--muted, #69716d);
+                    font-size: 0.73rem;
+                    line-height: 1.6;
+                }
+
+                .consent-card-body b {
+                    display: inline-block;
+                    min-width: 56px;
+                    color: #3d4742;
+                    font-weight: 700;
+                }
+
+                .wizard-actions {
+                    position: sticky;
+                    bottom: 14px;
+                    z-index: 20;
+                    display: grid;
+                    grid-template-columns: minmax(96px, auto) 1fr minmax(140px, auto);
+                    align-items: center;
+                    gap: 12px;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 14px;
+                    background: rgba(255, 255, 255, 0.94);
+                    border: 1px solid rgba(31, 37, 34, 0.1);
+                    border-radius: 14px;
+                    box-shadow: 0 14px 34px rgba(27, 48, 40, 0.14);
+                    backdrop-filter: blur(14px);
+                }
+
+                .wizard-btn,
+                .submit-btn {
+                    min-height: 48px;
+                    padding: 0 22px;
+                    border-radius: 9px;
+                    font-size: 0.9rem;
+                    font-weight: 700;
+                }
+
+                .wizard-prev-btn {
+                    color: var(--green-900, #173f32);
+                    background: #fff;
+                    border: 1px solid #cfd4d1;
+                    cursor: pointer;
+                }
+
+                .wizard-next-btn,
+                .submit-btn {
+                    color: #fff;
+                    background: var(--green-900, #173f32);
+                    border: 1px solid var(--green-900, #173f32);
+                    cursor: pointer;
+                }
+
+                .wizard-next-btn:hover,
+                .submit-btn:hover {
+                    background: var(--green-800, #205442);
+                    transform: translateY(-1px);
+                }
+
+                .wizard-step-status {
+                    color: var(--muted, #69716d);
+                    font-size: 0.78rem;
+                    font-weight: 700;
+                    text-align: center;
+                }
+
+                .wizard-actions [hidden],
+                .submit-note[hidden] {
+                    display: none !important;
+                }
+
+                .wizard-field-error {
+                    border-color: #b64c3b !important;
+                    box-shadow: 0 0 0 4px rgba(182, 76, 59, 0.1) !important;
+                }
+
+                .death-status-fieldset {
+                    margin: 0 0 22px;
+                    padding: 0;
+                    border: 0;
+                }
+
+                .death-status-fieldset legend {
+                    margin-bottom: 5px;
+                    color: var(--ink, #1f2522);
+                    font-size: .94rem;
+                    font-weight: 750;
+                }
+
+                .death-status-fieldset > p,
+                .field-help {
+                    margin: 0 0 11px;
+                    color: var(--muted, #69716d);
+                    font-size: .76rem;
+                    line-height: 1.55;
+                }
+
+                .death-status-options {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 11px;
+                }
+
+                .death-status-option {
+                    position: relative;
+                    display: flex;
+                    min-width: 0;
+                    min-height: 88px;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 17px 18px;
+                    cursor: pointer;
+                    background: #fff;
+                    border: 1px solid var(--line, #e5e3dd);
+                    border-radius: 12px;
+                    transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+                }
+
+                .death-status-option:has(input:checked) {
+                    background: #edf5f1;
+                    border-color: #4c806a;
+                    box-shadow: 0 0 0 3px rgba(45, 105, 83, .08);
+                }
+
+                .death-status-option input {
+                    width: 20px;
+                    height: 20px;
+                    flex: 0 0 auto;
+                    margin: 0;
+                    accent-color: var(--green-800, #205442);
+                }
+
+                .death-status-option span,
+                .death-status-option strong,
+                .death-status-option small {
+                    display: block;
+                    min-width: 0;
+                }
+
+                .death-status-option strong {
+                    color: #23352d;
+                    font-size: .94rem;
+                }
+
+                .death-status-option small {
+                    margin-top: 4px;
+                    color: #718078;
+                    font-size: .72rem;
+                    line-height: 1.45;
+                }
+
+                #deathDateGroup.is-disabled {
+                    opacity: .7;
+                }
+
+                #deathDate:disabled {
+                    color: #87928d;
+                    cursor: not-allowed;
+                    background: #eef1ef !important;
+                }
+
+                .privacy-consent-panel {
+                    max-width: 880px;
+                    padding: 28px;
+                    background: #fbfcfb;
+                    border-color: #dce5e0;
+                    box-shadow: 0 16px 44px rgba(25, 52, 41, .08);
+                }
+
+                .consent-all-toggle {
+                    display: flex;
+                    align-items: center;
+                    gap: 13px;
+                    padding: 17px 18px;
+                    cursor: pointer;
+                    background: #e9f2ed;
+                    border: 1px solid #bfd5ca;
+                    border-radius: 11px;
+                }
+
+                .consent-all-toggle input {
+                    width: 22px;
+                    height: 22px;
+                    flex: 0 0 auto;
+                    margin: 0;
+                    accent-color: #205442;
+                }
+
+                .consent-all-toggle span,
+                .consent-all-toggle strong,
+                .consent-all-toggle small {
+                    display: block;
+                }
+
+                .consent-all-toggle strong {
+                    color: #173f31;
+                    font-size: .94rem;
+                }
+
+                .consent-all-toggle small {
+                    margin-top: 3px;
+                    color: #62756c;
+                    font-size: .72rem;
+                }
+
+                .consent-scroll-area {
+                    max-height: 330px;
+                    overflow-y: auto;
+                    padding: 4px 10px 4px 0;
+                    scrollbar-color: #7b9d8e #e7ece9;
+                    scrollbar-width: thin;
+                    outline: none;
+                }
+
+                .consent-scroll-area:focus {
+                    border-radius: 9px;
+                    box-shadow: 0 0 0 3px rgba(45, 105, 83, .1);
+                }
+
+                .consent-scroll-area::-webkit-scrollbar {
+                    width: 9px;
+                }
+
+                .consent-scroll-area::-webkit-scrollbar-track {
+                    background: #e7ece9;
+                    border-radius: 999px;
+                }
+
+                .consent-scroll-area::-webkit-scrollbar-thumb {
+                    background: #7b9d8e;
+                    border: 2px solid #e7ece9;
+                    border-radius: 999px;
+                }
+
+                .consent-document {
+                    overflow: hidden;
+                    margin-bottom: 12px;
+                    background: #fff;
+                    border: 1px solid #dfe6e2;
+                    border-radius: 11px;
+                }
+
+                .consent-document .consent-card {
+                    border: 0;
+                    border-bottom: 1px solid #e5ebe8;
+                    border-radius: 0;
+                }
+
+                .consent-document .consent-card:has(input:checked) {
+                    background: #edf5f1;
+                    border-color: #d5e3dc;
+                }
+
+                .consent-detail-list {
+                    margin: 0;
+                    padding: 3px 18px 12px 51px;
+                }
+
+                .consent-detail-list > div {
+                    display: grid;
+                    grid-template-columns: 116px minmax(0, 1fr);
+                    gap: 13px;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #edf1ef;
+                }
+
+                .consent-detail-list > div:last-child {
+                    border-bottom: 0;
+                }
+
+                .consent-detail-list dt {
+                    color: #41544a;
+                    font-size: .72rem;
+                    font-weight: 800;
+                }
+
+                .consent-detail-list dd {
+                    margin: 0;
+                    color: #68766f;
+                    font-size: .72rem;
+                    line-height: 1.65;
+                }
+
+                .consent-policy-note {
+                    padding: 17px 18px;
+                    color: #d5e5dd;
+                    background: #1d4938;
+                    border-radius: 11px;
+                }
+
+                .consent-policy-note strong {
+                    display: block;
+                    margin-bottom: 6px;
+                    color: #fff;
+                    font-size: .82rem;
+                }
+
+                .consent-policy-note p {
+                    margin: 0;
+                    font-size: .72rem;
+                    line-height: 1.65;
+                }
+
+                .consent-policy-note span {
+                    display: block;
+                    margin-top: 9px;
+                    color: #a9c5b8;
+                    font-size: .65rem;
+                }
                 
                 /* 반응형 디자인 */
                 @media (max-width: 1200px) {
                     .estimate-form {
                         max-width: 95%;
-                    }
-                    
-                    .funeral-hall-grid {
-                        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                     }
                 }
                 
@@ -980,42 +1323,47 @@
                         gap: 10px;
                     }
                     
-                    .funeral-hall-grid {
+                    .intro-step {
+                        flex-direction: column;
+                        gap: 4px;
+                        min-height: 68px;
+                        padding: 8px 4px;
+                        font-size: 0.7rem;
+                    }
+
+                    .wizard-review-grid {
                         grid-template-columns: 1fr;
                     }
-                    
-                    .price-header {
-                        flex-direction: column;
-                        gap: 15px;
-                        align-items: flex-start;
+
+                    .wizard-actions {
+                        bottom: 8px;
+                        grid-template-columns: auto 1fr auto;
+                        gap: 8px;
+                        padding: 9px;
                     }
-                    
-                    .price-table {
-                        font-size: 0.9rem;
+
+                    .wizard-btn,
+                    .submit-btn {
+                        min-height: 44px;
+                        padding-inline: 14px;
+                        font-size: 0.8rem;
                     }
-                    
-                    .price-table th,
-                    .price-table td {
-                        padding: 8px;
+
+                    .privacy-consent-panel {
+                        padding: 18px;
                     }
-                    
-                    .price-table th.price-th-name,
-                    .price-table th.price-th-service {
-                        min-width: 150px;
+
+                    .death-status-options {
+                        grid-template-columns: 1fr;
                     }
-                    
-                    .total-price-content {
-                        flex-direction: column;
-                        gap: 10px;
-                        align-items: flex-start;
+
+                    .consent-detail-list {
+                        padding: 3px 14px 11px;
                     }
-                    
-                    .total-price-title {
-                        font-size: 1.1rem;
-                    }
-                    
-                    .total-price-value {
-                        font-size: 1.3rem;
+
+                    .consent-detail-list > div {
+                        grid-template-columns: 1fr;
+                        gap: 4px;
                     }
                 }
                 
@@ -1029,46 +1377,29 @@
                     }
                     
                     .submit-btn {
-                        padding: 12px 30px;
-                        font-size: 1rem;
-                        width: 100%;
+                        padding: 0 13px;
+                        font-size: 0.76rem;
+                        width: auto;
                     }
                     
-                    .price-table {
-                        display: block;
-                        overflow-x: auto;
-                        white-space: nowrap;
+                    .wizard-review {
+                        padding: 18px 14px;
                     }
-                    
-                    .price-table thead,
-                    .price-table tbody,
-                    .price-table tr,
-                    .price-table th,
-                    .price-table td {
-                        display: block;
+
+                    .wizard-review-head {
+                        flex-direction: column;
                     }
-                    
-                    .price-table thead {
-                        display: none;
+
+                    .consent-card {
+                        padding: 15px 13px;
                     }
-                    
-                    .price-table tr {
-                        margin-bottom: 15px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        padding: 10px;
+
+                    .wizard-actions {
+                        grid-template-columns: auto 1fr auto;
                     }
-                    
-                    .price-table td {
-                        border: none;
-                        padding: 5px 0;
-                        text-align: left !important;
-                    }
-                    
-                .price-table td:before {
-                    content: attr(data-label) ": ";
-                    font-weight: 600;
-                    color: var(--accent-strong);
+
+                    .wizard-step-status {
+                        font-size: 0.7rem;
                     }
                 }
                 
@@ -1110,7 +1441,6 @@
                     const ratio = width / height;
                     const isMobile = width < 768;
                     const isTablet = width >= 768 && width < 1024;
-                    const isDesktop = width >= 1024;
                     
                     // 화면 비율에 따른 클래스 추가
                     document.body.classList.remove('screen-portrait', 'screen-landscape', 'screen-mobile', 'screen-tablet', 'screen-desktop');
@@ -1128,23 +1458,6 @@
                     } else {
                         document.body.classList.add('screen-desktop');
                     }
-                    
-                    // 테이블 반응형 처리
-                    const tables = document.querySelectorAll('.price-table');
-                    tables.forEach(table => {
-                        if (width < 480) {
-                            const rows = table.querySelectorAll('tbody tr');
-                            rows.forEach((row, index) => {
-                                const cells = row.querySelectorAll('td');
-                                const headers = table.querySelectorAll('thead th');
-                                cells.forEach((cell, cellIndex) => {
-                                    if (headers[cellIndex]) {
-                                        cell.setAttribute('data-label', headers[cellIndex].textContent.trim());
-                                    }
-                                });
-                            });
-                        }
-                    });
                 }
                 
                 // 초기 실행 및 리사이즈 이벤트
@@ -1169,10 +1482,9 @@
                     }
                 }
 
-                // 종교 기타 입력창 토글
-                function toggleReligionOther(value) {
-                    const inputDiv = document.getElementById('religionOtherInput');
-                    const inputField = document.getElementById('religionOtherText');
+                function toggleFuneralPeriodOther(value) {
+                    const inputDiv = document.getElementById('funeralPeriodOtherInput');
+                    const inputField = document.getElementById('funeralPeriodOtherText');
                     if (value === '기타') {
                         inputDiv.style.display = 'block';
                         inputField.focus();
@@ -1184,17 +1496,68 @@
                     }
                 }
 
-                // 기타 준비된 서비스 입력창 토글
-                function toggleOtherServiceInput(checked) {
-                    const inputDiv = document.getElementById('otherServiceInput');
-                    const inputField = document.getElementById('otherServiceText');
-                    if (checked) {
-                        inputDiv.style.display = 'block';
-                        inputField.focus();
-                    } else {
-                        inputDiv.style.display = 'none';
-                        inputField.value = '';
+                function getDeathStatus() {
+                    return document.querySelector('input[name="deathStatus"]:checked')?.value || '';
+                }
+
+                function formatEstimatePersonName(name, deathStatus = getDeathStatus()) {
+                    const trimmed = (name || '').trim();
+                    if (!trimmed) return '-';
+                    return deathStatus === 'before' ? `${trimmed} 님` : `故 ${trimmed} 님`;
+                }
+
+                function updateDeathStatusUI() {
+                    const deathStatus = getDeathStatus();
+                    const isBefore = deathStatus === 'before';
+                    const isAfter = deathStatus === 'after';
+                    const dateInput = document.getElementById('deathDate');
+                    const dateGroup = document.getElementById('deathDateGroup');
+                    const dateRequired = document.getElementById('deathDateRequired');
+                    const dateHelp = document.getElementById('deathDateHelp');
+                    const nameLabel = document.getElementById('personNameLabel');
+                    const reviewNameLabel = document.getElementById('reviewNameLabel');
+                    const displayNameLabel = document.getElementById('displayPersonNameLabel');
+
+                    if (nameLabel) nameLabel.innerHTML = `${isBefore ? '환우명' : isAfter ? '고인 성함' : '성함'} <span class="required">*</span>`;
+                    if (reviewNameLabel) reviewNameLabel.textContent = isBefore ? '환우명' : isAfter ? '고인 성함' : '성함';
+                    if (displayNameLabel) displayNameLabel.textContent = isBefore ? '환우명' : isAfter ? '고인 성함' : '성함';
+
+                    if (dateInput) {
+                        dateInput.disabled = !isAfter;
+                        dateInput.required = isAfter;
+                        if (!isAfter) dateInput.value = '';
                     }
+                    if (dateGroup) dateGroup.classList.toggle('is-disabled', !isAfter);
+                    if (dateRequired) dateRequired.hidden = !isAfter;
+                    if (dateHelp) {
+                        dateHelp.textContent = isBefore
+                            ? '사망 전 상담에서는 사망일을 입력하지 않습니다.'
+                            : isAfter
+                                ? '확인된 사망일을 선택해주세요.'
+                                : '현재 상황을 먼저 선택해주세요.';
+                    }
+                }
+
+                function setupConsentControls() {
+                    const allConsent = document.getElementById('allConsent');
+                    const requiredConsents = Array.from(document.querySelectorAll('#privacyConsent, #contactConsent'));
+                    if (!allConsent || !requiredConsents.length) return;
+
+                    const syncAllConsent = () => {
+                        const checkedCount = requiredConsents.filter((control) => control.checked).length;
+                        allConsent.checked = checkedCount === requiredConsents.length;
+                        allConsent.indeterminate = checkedCount > 0 && checkedCount < requiredConsents.length;
+                    };
+
+                    allConsent.addEventListener('change', () => {
+                        requiredConsents.forEach((control) => {
+                            control.checked = allConsent.checked;
+                            control.dispatchEvent(new Event('change', { bubbles: true }));
+                        });
+                        syncAllConsent();
+                    });
+                    requiredConsents.forEach((control) => control.addEventListener('change', syncAllConsent));
+                    syncAllConsent();
                 }
 
                 // 전화번호 자동 포맷팅
@@ -1212,113 +1575,118 @@
                     }
                 }
 
-                // 시/도 목록 로드
-                function loadSidoList() {
-                    const sidoSelect = document.getElementById('sido');
-                    if (!sidoSelect) {
-                        return;
-                    }
-                    
-                    sidoSelect.innerHTML = '<option value="">로딩 중...</option>';
-                    
-                    const apiUrl = '../api/get_funeral_halls.php?per_page=1000';
-                    
-                    fetch(apiUrl)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok: ' + response.status);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success && data.halls && data.halls.length > 0) {
-                                const sidoSet = new Set();
-                                data.halls.forEach((hall) => {
-                                    if (hall.addr_sido && hall.addr_sido.trim() !== '') {
-                                        sidoSet.add(hall.addr_sido.trim());
-                                    } else if (hall.address && hall.address.trim() !== '-') {
-                                        const parts = hall.address.trim().split(' ');
-                                        if (parts.length > 0 && parts[0] && parts[0].trim() !== '') {
-                                            sidoSet.add(parts[0].trim());
-                                        }
-                                    }
-                                });
-                                
-                                sidoSelect.innerHTML = '<option value="">선택하세요</option>';
-                                if (sidoSet.size > 0) {
-                                    Array.from(sidoSet).sort().forEach(sido => {
-                                        const option = document.createElement('option');
-                                        option.value = sido;
-                                        option.textContent = sido;
-                                        sidoSelect.appendChild(option);
-                                    });
-                                } else {
-                                    sidoSelect.innerHTML = '<option value="">데이터가 없습니다</option>';
-                                }
-                            } else {
-                                sidoSelect.innerHTML = '<option value="">데이터를 불러올 수 없습니다</option>';
-                            }
-                        })
-                        .catch(error => {
-                            sidoSelect.innerHTML = '<option value="">로딩 실패: ' + error.message + '</option>';
-                        });
+                var funeralHallCachePromise = null;
+                var regionDirectoryPromise = null;
+
+                function normalizeFuneralHall(hall) {
+                    const fullAddress = String(hall.addr_full || hall.address || hall.addr_detail || '').trim();
+                    const addressParts = fullAddress.split(/\s+/).filter(Boolean);
+                    const sido = String(hall.addr_sido || addressParts[0] || '').trim();
+                    const sigungu = String(hall.addr_sigungu || addressParts[1] || '').trim();
+                    return {
+                        ...hall,
+                        addr_sido: sido,
+                        addr_sigungu: sigungu,
+                        addr_full: fullAddress,
+                        address: fullAddress
+                    };
                 }
 
-                // 시/군/구 목록 로드 (Promise 반환)
-                function loadSigunguList(sido) {
-                    return new Promise((resolve) => {
-                        const sigunguSelect = document.getElementById('sigungu');
-                        
-                        if (!sido) {
-                            sigunguSelect.innerHTML = '<option value="">시/도를 먼저 선택하세요</option>';
-                            resolve();
-                            return;
-                        }
-                        
-                        sigunguSelect.innerHTML = '<option value="">로딩 중...</option>';
-                        
-                        fetch(`../api/get_funeral_halls.php?per_page=1000&sido=${encodeURIComponent(sido)}`)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                }
+                function loadFuneralHallCache() {
+                    if (!funeralHallCachePromise) {
+                        funeralHallCachePromise = fetch('../data/funeral_halls.json?t=20260717', { cache: 'no-store' })
+                            .then((response) => {
+                                if (!response.ok) throw new Error('장례식장 캐시를 불러올 수 없습니다.');
                                 return response.json();
                             })
-                            .then(data => {
-                                if (data.success && data.halls && data.halls.length > 0) {
-                                    const sigunguSet = new Set();
-                                    data.halls.forEach(hall => {
-                                        if (hall.addr_sigungu && hall.addr_sigungu.trim() !== '') {
-                                            sigunguSet.add(hall.addr_sigungu.trim());
-                                        } else if (hall.address && hall.address.trim() !== '-') {
-                                            const parts = hall.address.trim().split(' ');
-                                            if (parts.length > 1 && parts[0] === sido && parts[1] && parts[1].trim() !== '') {
-                                                sigunguSet.add(parts[1].trim());
-                                            }
-                                        }
-                                    });
-                                    
-                                    sigunguSelect.innerHTML = '<option value="">선택하세요</option>';
-                                    if (sigunguSet.size > 0) {
-                                        Array.from(sigunguSet).sort().forEach(sigungu => {
-                                            const option = document.createElement('option');
-                                            option.value = sigungu;
-                                            option.textContent = sigungu;
-                                            sigunguSelect.appendChild(option);
-                                        });
-                                    } else {
-                                        sigunguSelect.innerHTML = '<option value="">데이터가 없습니다</option>';
-                                    }
-                                } else {
-                                    sigunguSelect.innerHTML = '<option value="">데이터를 불러올 수 없습니다</option>';
-                                }
-                                resolve();
-                            })
-                            .catch(error => {
-                                sigunguSelect.innerHTML = '<option value="">로딩 실패</option>';
-                                resolve();
+                            .then((data) => (Array.isArray(data.halls) ? data.halls : []).map(normalizeFuneralHall));
+                    }
+                    return funeralHallCachePromise;
+                }
+
+                function loadRegionDirectory() {
+                    if (!regionDirectoryPromise) {
+                        regionDirectoryPromise = loadFuneralHallCache().then((halls) => {
+                            const directory = {};
+                            halls.forEach((hall) => {
+                                if (!hall.addr_sido || !hall.addr_sigungu) return;
+                                if (!directory[hall.addr_sido]) directory[hall.addr_sido] = new Set();
+                                directory[hall.addr_sido].add(hall.addr_sigungu);
                             });
-                    });
+                            return Object.fromEntries(
+                                Object.entries(directory)
+                                    .sort(([a], [b]) => a.localeCompare(b, 'ko'))
+                                    .map(([sido, districts]) => [sido, Array.from(districts).sort((a, b) => a.localeCompare(b, 'ko'))])
+                            );
+                        });
+                    }
+                    return regionDirectoryPromise;
+                }
+
+                async function requestFuneralHalls(sido = '', sigungu = '') {
+                    let url = '../api/get_funeral_halls.php?per_page=1500';
+                    if (sido) url += `&sido=${encodeURIComponent(sido)}`;
+                    if (sigungu) url += `&sigungu=${encodeURIComponent(sigungu)}`;
+
+                    try {
+                        const response = await fetch(url, { cache: 'no-store' });
+                        const contentType = response.headers.get('content-type') || '';
+                        if (!response.ok || !contentType.includes('application/json')) throw new Error('API 응답 형식 오류');
+                        const data = await response.json();
+                        if (!data.success || !Array.isArray(data.halls)) throw new Error(data.message || '장례식장 조회 실패');
+                        return data.halls.map(normalizeFuneralHall);
+                    } catch (error) {
+                        const halls = await loadFuneralHallCache();
+                        return halls.filter((hall) => {
+                            if (sido && hall.addr_sido !== sido) return false;
+                            if (sigungu && hall.addr_sigungu !== sigungu) return false;
+                            return true;
+                        });
+                    }
+                }
+
+                async function loadSidoList() {
+                    const sidoSelect = document.getElementById('sido');
+                    if (!sidoSelect) return;
+                    sidoSelect.innerHTML = '<option value="">지역을 불러오는 중...</option>';
+
+                    try {
+                        const directory = await loadRegionDirectory();
+                        const sidoList = Object.keys(directory);
+                        sidoSelect.innerHTML = '<option value="">시/도를 선택하세요</option>';
+                        sidoList.forEach((sido) => {
+                            const option = document.createElement('option');
+                            option.value = sido;
+                            option.textContent = sido;
+                            sidoSelect.appendChild(option);
+                        });
+                    } catch (error) {
+                        sidoSelect.innerHTML = '<option value="">지역 정보를 불러올 수 없습니다</option>';
+                    }
+                }
+
+                async function loadSigunguList(sido) {
+                    const sigunguSelect = document.getElementById('sigungu');
+                    if (!sigunguSelect) return;
+                    if (!sido) {
+                        sigunguSelect.innerHTML = '<option value="">시/도를 먼저 선택하세요</option>';
+                        return;
+                    }
+
+                    sigunguSelect.innerHTML = '<option value="">시/군/구를 불러오는 중...</option>';
+                    try {
+                        const directory = await loadRegionDirectory();
+                        const districts = directory[sido] || [];
+                        sigunguSelect.innerHTML = '<option value="">시/군/구를 선택하세요</option>';
+                        districts.forEach((sigungu) => {
+                            const option = document.createElement('option');
+                            option.value = sigungu;
+                            option.textContent = sigungu;
+                            sigunguSelect.appendChild(option);
+                        });
+                    } catch (error) {
+                        sigunguSelect.innerHTML = '<option value="">지역 정보를 불러올 수 없습니다</option>';
+                    }
                 }
 
                 // URL 파라미터에서 estimate_id 가져오기
@@ -1342,7 +1710,7 @@
                 }
 
                 // 필터링된 장례식장 목록 로드
-                function loadFilteredFuneralHalls(sido, sigungu) {
+                async function loadFilteredFuneralHalls(sido, sigungu) {
                     const container = document.getElementById('funeralHallListContainer');
                     const section = document.getElementById('funeralHallListSection');
                     
@@ -1351,16 +1719,11 @@
                     container.innerHTML = '<div class="loading-message">장례식장 목록을 불러오는 중...</div>';
                     section.style.display = 'block';
                     
-                    let url = `../api/get_funeral_halls.php?per_page=1000`;
-                    if (sido) url += `&sido=${encodeURIComponent(sido)}`;
-                    if (sigungu) url += `&sigungu=${encodeURIComponent(sigungu)}`;
-                    
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success && data.halls && data.halls.length > 0) {
+                    try {
+                        const halls = await requestFuneralHalls(sido, sigungu);
+                        if (halls.length > 0) {
                                 let html = '';
-                                data.halls.forEach((hall) => {
+                                halls.forEach((hall) => {
                                     const hallName = hall.hall_name || '-';
                                     const hallAddress = hall.addr_full || hall.address || '-';
                                     html += `
@@ -1388,13 +1751,12 @@
                                         selectHallForEstimate(hallId, decodeHtmlEntities(name), decodeHtmlEntities(address));
                                     });
                                 });
-                            } else {
-                                container.innerHTML = '<div class="loading-message">해당 지역에 등록된 장례식장이 없습니다.</div>';
-                            }
-                        })
-                        .catch(error => {
-                            container.innerHTML = '<div class="error-message">장례식장 목록을 불러오는 중 오류가 발생했습니다.</div>';
-                        });
+                        } else {
+                            container.innerHTML = '<div class="data-empty-state">선택한 지역에 등록된 장례식장이 없습니다. 인접 지역을 선택하거나 상담 시 안내받을 수 있습니다.</div>';
+                        }
+                    } catch (error) {
+                        container.innerHTML = '<div class="data-empty-state">장례식장 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
+                    }
                 }
 
                 // initRegionSelects 함수
@@ -1409,13 +1771,18 @@
                         }
                         
                         loadSidoList();
+                        if (sidoSelect.dataset.regionInitialized === '1') {
+                            resolve();
+                            return;
+                        }
+                        sidoSelect.dataset.regionInitialized = '1';
                         
                         // 시/도 변경 시 시/군/구 목록 업데이트 및 장례식장 필터링
-                        sidoSelect.addEventListener('change', function() {
-                            loadSigunguList(this.value).then(() => {
-                                const sigunguValue = sigunguSelect.value;
-                                loadFilteredFuneralHalls(this.value, sigunguValue);
-                            });
+                        sidoSelect.addEventListener('change', async function() {
+                            await loadSigunguList(this.value);
+                            if (this.value) {
+                                loadFilteredFuneralHalls(this.value, '');
+                            }
                         });
                         
                         // 시/군/구 변경 시 장례식장 필터링
@@ -1426,12 +1793,6 @@
                         
                         resolve();
                     });
-                }
-
-                function formatDeceasedName(name) {
-                    const trimmed = (name || '').trim();
-                    if (!trimmed) return '-';
-                    return `故 ${trimmed} 님`;
                 }
 
                 // 견적서 정보로 폼 자동 채우기 및 장례식장 필터링
@@ -1452,11 +1813,15 @@
                         .then(data => {
                             if (data.success && data.estimate) {
                                 const estimate = data.estimate;
+                                const deathStatus = estimate.death_status || (estimate.death_date ? 'after' : 'before');
                                 
                                 // 폼 자동 채우기
+                                const deathStatusControl = document.querySelector(`input[name="deathStatus"][value="${deathStatus}"]`);
+                                if (deathStatusControl) deathStatusControl.checked = true;
+                                updateDeathStatusUI();
                                 document.getElementById('name').value = estimate.deceased_name || '';
                                 document.getElementById('relationship').value = estimate.relationship || '';
-                                document.getElementById('deathDate').value = estimate.death_date || '';
+                                if (deathStatus === 'after') document.getElementById('deathDate').value = estimate.death_date || '';
                                 document.getElementById('deathLocation').value = estimate.death_location || '';
                                 if (estimate.death_location_other) {
                                     document.getElementById('deathLocationOtherText').value = estimate.death_location_other;
@@ -1465,7 +1830,13 @@
                                 if (estimate.expected_visitors) {
                                     document.getElementById('expectedVisitors').value = estimate.expected_visitors;
                                 }
-                                document.getElementById('funeralPeriod').value = estimate.funeral_period || '';
+                                if ((estimate.funeral_period || '').startsWith('기타:')) {
+                                    document.getElementById('funeralPeriod').value = '기타';
+                                    document.getElementById('funeralPeriodOtherText').value = estimate.funeral_period.replace(/^기타:\s*/, '');
+                                    toggleFuneralPeriodOther('기타');
+                                } else {
+                                    document.getElementById('funeralPeriod').value = estimate.funeral_period === '3일' ? '3일장' : (estimate.funeral_period || '');
+                                }
                                 
                                 // 상조 상품 선택 로드
                                 loadFuneralProducts(estimate.funeral_product_id || null);
@@ -1473,41 +1844,20 @@
                                 // 견적서 정보 표시
                                 const infoDisplay = document.getElementById('estimateInfoDisplay');
                                 if (infoDisplay) {
-                                    document.getElementById('displayDeceasedName').textContent = formatDeceasedName(estimate.deceased_name);
+                                    document.getElementById('displayDeceasedName').textContent = formatEstimatePersonName(estimate.deceased_name, deathStatus);
                                     document.getElementById('displayRegion').textContent = (estimate.sido || '') + ' ' + (estimate.sigungu || '');
                                     document.getElementById('displayFuneralPeriod').textContent = estimate.funeral_period || '-';
                                     document.getElementById('displayExpectedVisitors').textContent = estimate.expected_visitors ? estimate.expected_visitors.toLocaleString('ko-KR') + '명' : '-';
                                     infoDisplay.style.display = 'block';
-                                }
-                                document.getElementById('religion').value = estimate.religion || '';
-                                if (estimate.religion_other) {
-                                    document.getElementById('religionOtherText').value = estimate.religion_other;
-                                    document.getElementById('religionOtherInput').style.display = 'block';
-                                }
-                                if (estimate.burial_site) {
-                                    document.getElementById('burialSite').value = estimate.burial_site;
                                 }
                                 document.getElementById('contactName').value = estimate.contact_name || '';
                                 document.getElementById('contactPhone').value = estimate.contact_phone || '';
                                 if (estimate.contact_email) {
                                     document.getElementById('contactEmail').value = estimate.contact_email;
                                 }
-                                
-                                // 준비된 서비스 체크박스 설정
-                                if (estimate.prepared_services && Array.isArray(estimate.prepared_services)) {
-                                    estimate.prepared_services.forEach(service => {
-                                        const checkbox = document.querySelector(`input[name="preparedServices"][value="${service}"]`);
-                                        if (checkbox) {
-                                            checkbox.checked = true;
-                                            if (service === 'other') {
-                                                toggleOtherServiceInput(true);
-                                            }
-                                        }
-                                    });
-                                }
-                                if (estimate.other_service_text) {
-                                    document.getElementById('otherServiceText').value = estimate.other_service_text;
-                                }
+                                document.getElementById('privacyConsent').checked = Number(estimate.privacy_consent) === 1;
+                                document.getElementById('contactConsent').checked = Number(estimate.contact_consent ?? estimate.sensitive_info_consent) === 1;
+                                document.getElementById('contactConsent').dispatchEvent(new Event('change', { bubbles: true }));
                                 
                                 // 지역 선택 초기화 및 자동 선택
                                 initRegionSelects().then(() => {
@@ -1534,67 +1884,8 @@
                         });
                 }
 
-                // 견적서 작성 버튼 클릭 - 장례식장 리스트 표시
-                let selectedEstimateHallId = null;
-                let selectedPriceItems = {};
-                
-                function showFuneralHallList(event) {
-                    if (event) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    
-                    const sido = document.getElementById('sido').value;
-                    const sigungu = document.getElementById('sigungu').value;
-                    
-                    if (!sido || !sigungu) {
-                        alert('지역(시/도, 시/군/구)을 먼저 선택해주세요.');
-                        return false;
-                    }
-                    
-                    const section = document.getElementById('funeralHallPriceSection');
-                    const regionInfo = document.getElementById('selectedRegionInfo');
-                    const hallList = document.getElementById('funeralHallListForEstimate');
-                    
-                    regionInfo.textContent = `선택된 지역: ${sido} ${sigungu}`;
-                    section.style.display = 'block';
-                    hallList.innerHTML = '<div class="loading-message">장례식장 목록을 불러오는 중...</div>';
-                    
-                    let url = `../api/get_funeral_halls.php?per_page=1000&sido=${encodeURIComponent(sido)}&sigungu=${encodeURIComponent(sigungu)}`;
-                    
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success && data.halls && data.halls.length > 0) {
-                                let html = '';
-                                data.halls.forEach((hall) => {
-                                    html += `
-                                        <div onclick="selectHallForEstimate(${hall.hall_id}, '${escapeHtml(hall.hall_name)}', '${escapeHtml(hall.addr_full || hall.address || '')}')" 
-                                             class="funeral-hall-card">
-                                            <h4>${escapeHtml(hall.hall_name || '-')}</h4>
-                                            <p><strong>주소:</strong> ${escapeHtml(hall.addr_full || hall.address || '-')}</p>
-                                            <p><strong>전화:</strong> ${escapeHtml(hall.tel || '-')}</p>
-                                        </div>
-                                    `;
-                                });
-                                hallList.innerHTML = html;
-                            } else {
-                                hallList.innerHTML = '<div class="loading-message" style="grid-column: 1 / -1;">해당 지역에 등록된 장례식장이 없습니다.</div>';
-                            }
-                            adjustUIForScreenRatio();
-                        })
-                        .catch(error => {
-                            hallList.innerHTML = '<div class="error-message" style="grid-column: 1 / -1;">장례식장 목록을 불러오는 중 오류가 발생했습니다.</div>';
-                        });
-                    
-                    setTimeout(() => {
-                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
-                }
-
                 // 장례식장 선택
                 function selectHallForEstimate(hallId, hallName, hallAddress) {
-                    selectedEstimateHallId = hallId;
                     const idInput = document.getElementById('funeralHallId');
                     const nameInput = document.getElementById('funeralHallName');
                     const addressInput = document.getElementById('funeralHallAddress');
@@ -1616,104 +1907,7 @@
                     }
                 }
 
-                // 장례식장 가격 정보 로드
-                function loadHallPriceForEstimate(hallId) {
-                    const container = document.getElementById('priceCategoriesContainer');
-                    container.innerHTML = '<div class="loading-message">가격 정보를 불러오는 중...</div>';
-                    
-                    fetch(`../api/get_funeral_hall_price.php?hall_id=${hallId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success && data.categories) {
-                                let html = '';
-                                
-                                data.categories.forEach(category => {
-                                    html += `
-                                        <div class="price-category">
-                                            <div class="price-category-header">
-                                                ${escapeHtml(category.category_name)}
-                                            </div>
-                                            <div>
-                                                <table class="price-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="price-th-select">선택</th>
-                                                            <th class="price-th-name">품명</th>
-                                                            <th class="price-th-type">품종</th>
-                                                            <th class="price-th-service">서비스내용</th>
-                                                            <th class="price-th-price">가격</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                    `;
-                                    
-                                    category.items.forEach((item, index) => {
-                                        html += `
-                                            <tr>
-                                                <td class="price-td-center">
-                                                    <input type="checkbox" 
-                                                           id="priceCheck_${item.price_id}" 
-                                                           class="price-checkbox"
-                                                           data-price-id="${item.price_id}"
-                                                           data-price="${item.price}"
-                                                           onchange="updateTotalPrice()">
-                                                </td>
-                                                <td class="price-product-name">${escapeHtml(item.product_name || item.category_name || '-')}</td>
-                                                <td class="price-product-type">${escapeHtml(item.product_type || '-')}</td>
-                                                <td class="price-service-content">${escapeHtml(item.service_content || '-')}</td>
-                                                <td class="price-td-right price-value">
-                                                    ${parseInt(item.price).toLocaleString('ko-KR')}원
-                                                </td>
-                                            </tr>
-                                        `;
-                                    });
-                                    
-                                    html += `
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    `;
-                                });
-                                
-                                container.innerHTML = html;
-                                updateTotalPrice();
-                                adjustUIForScreenRatio();
-                            } else {
-                                container.innerHTML = '<div class="loading-message">등록된 가격 정보가 없습니다.</div>';
-                            }
-                        })
-                        .catch(error => {
-                            container.innerHTML = '<div class="error-message">가격 정보를 불러오는 중 오류가 발생했습니다.</div>';
-                        });
-                }
-
-                // 총 요금 계산 및 업데이트
-                function updateTotalPrice() {
-                    const checkboxes = document.querySelectorAll('input[type="checkbox"][data-price-id]');
-                    let total = 0;
-                    
-                    checkboxes.forEach(checkbox => {
-                        if (checkbox.checked) {
-                            const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
-                            total += price;
-                        }
-                    });
-                    
-                    const totalDisplay = document.getElementById('totalPriceDisplay');
-                    if (totalDisplay) {
-                        totalDisplay.textContent = total.toLocaleString('ko-KR') + '원';
-                    }
-                }
-
-                // 선택된 장례식장 가격 정보 닫기
-                function closeSelectedHallPrice() {
-                    document.getElementById('selectedHallPriceInfo').style.display = 'none';
-                    selectedEstimateHallId = null;
-                    selectedPriceItems = {};
-                }
-
-                let funeralProducts = [];
+                var funeralProducts = [];
 
                 function loadFuneralProducts(selectedId = null) {
                     const grid = document.getElementById('funeralProductGrid');
@@ -1727,11 +1921,21 @@
                                 funeralProducts = data.products;
                                 renderFuneralProducts(selectedId);
                             } else {
-                                grid.innerHTML = '<div class="loading-message">상조 상품을 불러올 수 없습니다.</div>';
+                                funeralProducts = [
+                                    { product_id: 1, product_type: '무빈소', product_name: '무빈소 상품', price: 100, summary: '간소한 장례 진행을 위한 기본 구성' },
+                                    { product_id: 2, product_type: '일반', product_name: '일반 상품', price: 300, summary: '3일장 중심의 기본 의전과 용품 구성' },
+                                    { product_id: 3, product_type: 'VIP', product_name: 'VIP 상품', price: 500, summary: '확장된 의전과 프리미엄 용품 구성' }
+                                ];
+                                renderFuneralProducts(selectedId);
                             }
                         })
                         .catch(() => {
-                            grid.innerHTML = '<div class="loading-message">상조 상품을 불러오는 중 오류가 발생했습니다.</div>';
+                            funeralProducts = [
+                                { product_id: 1, product_type: '무빈소', product_name: '무빈소 상품', price: 100, summary: '간소한 장례 진행을 위한 기본 구성' },
+                                { product_id: 2, product_type: '일반', product_name: '일반 상품', price: 300, summary: '3일장 중심의 기본 의전과 용품 구성' },
+                                { product_id: 3, product_type: 'VIP', product_name: 'VIP 상품', price: 500, summary: '확장된 의전과 프리미엄 용품 구성' }
+                            ];
+                            renderFuneralProducts(selectedId);
                         });
                 }
 
@@ -1749,7 +1953,9 @@
                         return `
                             <label class="product-card ${isSelected ? 'selected' : ''}">
                                 <input type="radio" name="funeralProductId" value="${product.product_id}" ${isSelected ? 'checked' : ''} onchange="handleProductSelect(${product.product_id})">
-                                <button type="button" class="product-info-btn" onclick="openProductInfo(event, ${product.product_id})">i</button>
+                                <button type="button" class="product-info-btn" onclick="openProductInfo(event, ${product.product_id})" aria-label="상품 상세 정보 보기">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg>
+                                </button>
                                 <div class="product-title">${escapeHtml(product.product_name || product.product_type)}</div>
                                 <div class="product-price">${(product.price || 0).toLocaleString('ko-KR')}만원</div>
                                 <div class="product-summary">${escapeHtml(product.summary || '')}</div>
@@ -1785,6 +1991,154 @@
                     if (modal) modal.style.display = 'none';
                 }
 
+                /* 단계형 견적 작성 */
+                var currentWizardStep = 0;
+                var wizardStepCount = 3;
+
+                function getWizardStepSections(step) {
+                    return Array.from(document.querySelectorAll(`[data-wizard-step="${step}"]`));
+                }
+
+                function updateWizardReview() {
+                    const valueOf = (id) => document.getElementById(id)?.value?.trim() || '';
+                    const selectedProduct = document.querySelector('input[name="funeralProductId"]:checked');
+                    const selectedProductTitle = selectedProduct?.closest('.product-card')?.querySelector('.product-title')?.textContent?.trim() || '선택 정보 확인';
+                    const hallName = valueOf('funeralHallName');
+                    const deathStatus = getDeathStatus();
+                    const period = valueOf('funeralPeriod') === '기타'
+                        ? `기타${valueOf('funeralPeriodOtherText') ? ` · ${valueOf('funeralPeriodOtherText')}` : ''}`
+                        : valueOf('funeralPeriod');
+
+                    const reviewData = {
+                        reviewDeathStatus: deathStatus === 'before' ? '사망 전' : deathStatus === 'after' ? '사망 후' : '-',
+                        reviewName: formatEstimatePersonName(valueOf('name'), deathStatus),
+                        reviewRegion: [valueOf('sido'), valueOf('sigungu'), hallName].filter(Boolean).join(' · ') || '-',
+                        reviewPeriod: [period, selectedProductTitle].filter(Boolean).join(' · ') || '-',
+                        reviewVisitors: valueOf('expectedVisitors') ? `${Number(valueOf('expectedVisitors')).toLocaleString('ko-KR')}명` : '미입력',
+                        reviewContact: [valueOf('contactName'), valueOf('contactPhone')].filter(Boolean).join(' · ') || '-'
+                    };
+
+                    Object.entries(reviewData).forEach(([id, text]) => {
+                        const target = document.getElementById(id);
+                        if (target) target.textContent = text;
+                    });
+                }
+
+                function setWizardStep(step, shouldScroll = true) {
+                    currentWizardStep = Math.max(0, Math.min(wizardStepCount - 1, step));
+
+                    document.querySelectorAll('[data-wizard-step]').forEach((section) => {
+                        const isActiveSection = Number(section.dataset.wizardStep) === currentWizardStep;
+                        section.classList.toggle('is-active-step', isActiveSection);
+                        section.hidden = !isActiveSection;
+                    });
+
+                    document.querySelectorAll('[data-step-indicator]').forEach((indicator) => {
+                        const indicatorStep = Number(indicator.dataset.stepIndicator);
+                        indicator.classList.toggle('is-active', indicatorStep === currentWizardStep);
+                        indicator.classList.toggle('is-complete', indicatorStep < currentWizardStep);
+                        if (indicatorStep === currentWizardStep) {
+                            indicator.setAttribute('aria-current', 'step');
+                        } else {
+                            indicator.removeAttribute('aria-current');
+                        }
+                    });
+
+                    const previousButton = document.getElementById('wizardPrevBtn');
+                    const nextButton = document.getElementById('wizardNextBtn');
+                    const submitButton = document.getElementById('wizardSubmitBtn');
+                    const submitNote = document.getElementById('wizardSubmitNote');
+                    const consentPanel = document.getElementById('privacyConsentPanel');
+                    const stepStatus = document.getElementById('wizardStepStatus');
+                    const isFinalStep = currentWizardStep === wizardStepCount - 1;
+
+                    if (previousButton) previousButton.hidden = currentWizardStep === 0;
+                    if (nextButton) nextButton.hidden = isFinalStep;
+                    if (submitButton) submitButton.hidden = !isFinalStep;
+                    if (submitNote) submitNote.hidden = !isFinalStep;
+                    if (consentPanel) consentPanel.classList.toggle('is-visible', isFinalStep);
+                    if (stepStatus) stepStatus.textContent = `${currentWizardStep + 1} / ${wizardStepCount}`;
+
+                    if (isFinalStep) updateWizardReview();
+
+                    if (shouldScroll) {
+                        document.querySelector('.estimate-intro')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+
+                function validateWizardStep(step) {
+                    const sections = getWizardStepSections(step);
+                    const requiredControls = sections.flatMap((section) => Array.from(section.querySelectorAll('[required]')));
+
+                    for (const control of requiredControls) {
+                        control.classList.remove('wizard-field-error');
+                        if (!control.checkValidity()) {
+                            control.classList.add('wizard-field-error');
+                            control.reportValidity();
+                            control.focus({ preventScroll: true });
+                            control.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            return false;
+                        }
+                    }
+
+                    if (step === 0 && valueOrEmpty('deathLocation') === '기타' && !valueOrEmpty('deathLocationOtherText')) {
+                        alert('기타 장소를 입력해주세요.');
+                        document.getElementById('deathLocationOtherText')?.focus();
+                        return false;
+                    }
+
+                    if (step === 1 && valueOrEmpty('funeralPeriod') === '기타' && !valueOrEmpty('funeralPeriodOtherText')) {
+                        alert('기타 장례 기간을 입력해주세요.');
+                        document.getElementById('funeralPeriodOtherText')?.focus();
+                        return false;
+                    }
+
+                    if (step === 1 && !document.querySelector('input[name="funeralProductId"]:checked')) {
+                        alert('상조 상품을 선택해주세요. 상품 목록이 보이지 않는다면 잠시 후 다시 확인해주세요.');
+                        document.getElementById('funeralProductGrid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                function valueOrEmpty(id) {
+                    return document.getElementById(id)?.value?.trim() || '';
+                }
+
+                function setupEstimateWizard() {
+                    const previousButton = document.getElementById('wizardPrevBtn');
+                    const nextButton = document.getElementById('wizardNextBtn');
+                    const editButton = document.querySelector('[data-review-edit-step]');
+
+                    previousButton?.addEventListener('click', () => setWizardStep(currentWizardStep - 1));
+                    nextButton?.addEventListener('click', () => {
+                        if (validateWizardStep(currentWizardStep)) {
+                            setWizardStep(currentWizardStep + 1);
+                        }
+                    });
+                    editButton?.addEventListener('click', () => setWizardStep(Number(editButton.dataset.reviewEditStep || 0)));
+                    document.querySelectorAll('input[name="deathStatus"]').forEach((control) => {
+                        control.addEventListener('change', updateDeathStatusUI);
+                    });
+
+                    document.querySelectorAll('#estimateForm input, #estimateForm select, #estimateForm textarea').forEach((control) => {
+                        const handleWizardFieldChange = () => {
+                            control.classList.remove('wizard-field-error');
+                            if (currentWizardStep === wizardStepCount - 1) updateWizardReview();
+                        };
+
+                        control.addEventListener('input', handleWizardFieldChange);
+                        control.addEventListener('change', handleWizardFieldChange);
+                    });
+
+                    updateDeathStatusUI();
+                    setupConsentControls();
+                    setWizardStep(0, false);
+                }
+
+                setupEstimateWizard();
+
                 // 페이지 로드 시 견적서 데이터 로드 또는 일반 초기화
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', loadEstimateData);
@@ -1792,9 +2146,102 @@
                     loadEstimateData();
                 }
 
+                Object.assign(window, {
+                    toggleDeathLocationOther,
+                    toggleFuneralPeriodOther,
+                    formatPhoneNumber,
+                    closeProductInfo,
+                    selectHallForEstimate,
+                    handleProductSelect,
+                    openProductInfo
+                });
+
+                function isLocalPreviewHost() {
+                    return ['127.0.0.1', 'localhost', '::1'].includes(window.location.hostname);
+                }
+
+                function saveLocalEstimateRequest(payload) {
+                    const storageKey = 'leaverLifeLocalEstimateRequests';
+                    const records = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                    const now = new Date();
+                    const estimateId = Date.now();
+                    const record = {
+                        estimate_id: estimateId,
+                        death_status: payload.deathStatus,
+                        deceased_name: payload.deceasedName,
+                        relationship: payload.relationship,
+                        death_date: payload.deathDate,
+                        death_location: payload.deathLocation,
+                        death_location_other: payload.deathLocationOtherText,
+                        expected_visitors: payload.expectedVisitors ? Number(payload.expectedVisitors) : null,
+                        sido: payload.sido,
+                        sigungu: payload.sigungu,
+                        funeral_period: payload.funeralPeriod,
+                        funeral_product_id: payload.funeralProductId ? Number(payload.funeralProductId) : null,
+                        funeral_hall_id: payload.funeralHallId ? Number(payload.funeralHallId) : null,
+                        funeral_hall_name: payload.funeralHallName,
+                        funeral_hall_address: payload.funeralHallAddress,
+                        contact_name: payload.contactName,
+                        contact_phone: payload.contactPhone,
+                        contact_email: payload.contactEmail,
+                        privacy_consent: payload.privacyConsent ? 1 : 0,
+                        contact_consent: payload.contactConsent ? 1 : 0,
+                        sensitive_info_consent: payload.contactConsent ? 1 : 0,
+                        consent_version: payload.consentVersion,
+                        consented_at: now.toLocaleString('sv-SE'),
+                        status: 'pending',
+                        created_at: now.toLocaleString('sv-SE'),
+                        local_preview: true
+                    };
+                    records.unshift(record);
+                    localStorage.setItem(storageKey, JSON.stringify(records.slice(0, 100)));
+                    return { success: true, localPreview: true, estimate_id: estimateId };
+                }
+
+                async function sendEstimateRequest(payload) {
+                    try {
+                        const response = await fetch('../api/save_estimate_request.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const contentType = response.headers.get('content-type') || '';
+                        if (!contentType.includes('application/json')) {
+                            throw new Error('견적 접수 서버가 올바른 응답을 반환하지 않았습니다.');
+                        }
+                        const result = await response.json();
+                        if (!response.ok || !result.success) {
+                            throw new Error(result.message || '견적 요청을 저장하지 못했습니다.');
+                        }
+                        return result;
+                    } catch (error) {
+                        if (isLocalPreviewHost()) {
+                            return saveLocalEstimateRequest(payload);
+                        }
+                        throw error;
+                    }
+                }
+
                 // 폼 제출 처리
                 document.getElementById('estimateForm').addEventListener('submit', function(e) {
                     e.preventDefault();
+
+                    if (currentWizardStep < wizardStepCount - 1) {
+                        if (validateWizardStep(currentWizardStep)) {
+                            setWizardStep(currentWizardStep + 1);
+                        }
+                        return;
+                    }
+
+                    const privacyConsent = document.getElementById('privacyConsent');
+                    const contactConsent = document.getElementById('contactConsent');
+                    if (!privacyConsent?.checked || !contactConsent?.checked) {
+                        alert('개인정보 수집·이용과 견적 상담 연락에 모두 동의해주세요.');
+                        const uncheckedConsent = !privacyConsent?.checked ? privacyConsent : contactConsent;
+                        uncheckedConsent?.focus();
+                        uncheckedConsent?.closest('.consent-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return;
+                    }
                     
                     const formData = new FormData(this);
                     const data = {};
@@ -1811,6 +2258,7 @@
                     });
                     
                     const submitData = {
+                        deathStatus: data.deathStatus || '',
                         deceasedName: data.name || '',
                         relationship: data.relationship || '',
                         deathDate: data.deathDate || '',
@@ -1819,25 +2267,26 @@
                         expectedVisitors: document.getElementById('expectedVisitors')?.value || null,
                         sido: data.sido || '',
                         sigungu: data.sigungu || '',
-                        funeralPeriod: data.funeralPeriod || '',
-                        religion: data.religion || '',
-                        religionOtherText: document.getElementById('religionOtherText')?.value || null,
-                        preparedServices: formData.getAll('preparedServices'),
-                        otherServiceText: document.getElementById('otherServiceText')?.value || null,
-                        burialSite: data.burialSite || null,
+                        funeralPeriod: data.funeralPeriod === '기타'
+                            ? `기타: ${document.getElementById('funeralPeriodOtherText')?.value?.trim() || ''}`
+                            : (data.funeralPeriod || ''),
                         funeralProductId: data.funeralProductId || '',
                         funeralHallId: document.getElementById('funeralHallId')?.value || '',
                         funeralHallName: document.getElementById('funeralHallName')?.value || '',
                         funeralHallAddress: document.getElementById('funeralHallAddress')?.value || '',
                         contactName: data.contactName || '',
                         contactPhone: data.contactPhone || '',
-                        contactEmail: data.contactEmail || null
+                        contactEmail: data.contactEmail || null,
+                        privacyConsent: privacyConsent.checked,
+                        contactConsent: contactConsent.checked,
+                        consentVersion: '2026-07-18'
                     };
                     
-                    const requiredFields = ['deceasedName', 'relationship', 'deathDate', 'deathLocation', 
-                                          'sido', 'sigungu', 'funeralPeriod', 'religion', 
+                    const requiredFields = ['deathStatus', 'deceasedName', 'relationship', 'deathLocation',
+                                          'sido', 'sigungu', 'funeralPeriod',
                                           'funeralProductId',
                                           'contactName', 'contactPhone'];
+                    if (submitData.deathStatus === 'after') requiredFields.push('deathDate');
                     const missingFields = requiredFields.filter(field => !submitData[field] || submitData[field].trim() === '');
                     
                     if (missingFields.length > 0) {
@@ -1846,35 +2295,41 @@
                     }
                     
                     if (submitData.deathLocation === '기타' && !submitData.deathLocationOtherText) {
-                        alert('기타 사망 장소를 입력해주세요.');
+                        alert('기타 장소를 입력해주세요.');
                         document.getElementById('deathLocationOtherText').focus();
                         return;
                     }
-                    
-                    if (submitData.religion === '기타' && !submitData.religionOtherText) {
-                        alert('기타 종교를 입력해주세요.');
-                        document.getElementById('religionOtherText').focus();
+
+                    if (submitData.funeralPeriod.trim() === '기타:') {
+                        alert('기타 장례 기간을 입력해주세요.');
+                        document.getElementById('funeralPeriodOtherText').focus();
                         return;
                     }
                     
-                    fetch('../api/save_estimate_request.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(submitData)
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            alert('견적 요청이 접수되었습니다.\n전문 컨설턴트가 연락드리겠습니다.');
+                    const submitButton = document.getElementById('wizardSubmitBtn');
+                    const originalButtonText = submitButton?.textContent || '동의하고 견적 요청 완료';
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.textContent = '견적 요청을 접수하는 중...';
+                    }
+
+                    sendEstimateRequest(submitData)
+                        .then((result) => {
+                            const message = result.localPreview
+                                ? '로컬 미리보기에서 견적 요청이 임시 저장되었습니다.\n관리자 페이지의 견적 관리에서 확인할 수 있습니다.'
+                                : '견적 요청이 접수되었습니다.\n전문 컨설턴트가 연락드리겠습니다.';
+                            alert(message);
+                            localStorage.setItem('currentSection', 'home/home.html');
                             window.location.replace('../index.html');
-                        } else {
-                            alert('견적 요청 저장 중 오류가 발생했습니다.\n' + (result.message || ''));
-                        }
-                    })
-                    .catch(error => {
-                        alert('견적 요청 전송 중 오류가 발생했습니다.');
-                    });
+                        })
+                        .catch((error) => {
+                            alert(error.message || '견적 요청을 접수하지 못했습니다. 잠시 후 다시 시도해주세요.');
+                        })
+                        .finally(() => {
+                            if (submitButton) {
+                                submitButton.disabled = false;
+                                submitButton.textContent = originalButtonText;
+                            }
+                        });
                 });
             </script>

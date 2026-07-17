@@ -27,7 +27,7 @@ try {
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $per_page = isset($_GET['per_page']) ? (int)$_GET['per_page'] : 10;
     $page = max(1, $page);
-    $per_page = max(1, min(100, $per_page)); // 최소 1개, 최대 100개
+    $per_page = max(1, min(1500, $per_page)); // 지역 선택 화면에서는 전체 시설 목록을 한 번에 사용할 수 있음
     $offset = ($page - 1) * $per_page;
     
     // 기본 쿼리 (카운트용)
@@ -168,4 +168,3 @@ try {
     }
 }
 ?>
-

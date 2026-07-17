@@ -25,8 +25,8 @@ try {
     }
     
     // 필수 필드 검증
-    $required_fields = ['deceasedName', 'relationship', 'deathDate', 'deathLocation', 
-                       'sido', 'sigungu', 'funeralPeriod', 'religion', 
+    $required_fields = ['deathStatus', 'deceasedName', 'relationship', 'deathLocation',
+                       'sido', 'sigungu', 'funeralPeriod',
                        'funeralProductId', 'contactName', 'contactPhone'];
     
     foreach ($required_fields as $field) {
@@ -35,11 +35,27 @@ try {
             exit;
         }
     }
+
+    $death_status = in_array($data['deathStatus'], ['before', 'after'], true) ? $data['deathStatus'] : '';
+    if ($death_status === '') {
+        echo json_encode(['success' => false, 'message' => '사망 전/후 상태를 올바르게 선택해주세요.']);
+        exit;
+    }
+    if ($death_status === 'after' && (empty($data['deathDate']) || empty(trim($data['deathDate'])))) {
+        echo json_encode(['success' => false, 'message' => '사망 후 견적에는 사망일이 필요합니다.']);
+        exit;
+    }
+
+    // 필수 개인정보 처리 동의는 화면 검증과 별개로 서버에서도 확인
+    if (empty($data['privacyConsent']) || empty($data['contactConsent'])) {
+        echo json_encode(['success' => false, 'message' => '필수 개인정보 처리 동의가 확인되지 않았습니다.']);
+        exit;
+    }
     
     // 데이터 준비
     $deceased_name = trim($data['deceasedName']);
     $relationship = trim($data['relationship']);
-    $death_date = trim($data['deathDate']);
+    $death_date = $death_status === 'after' ? trim($data['deathDate']) : null;
     $death_location = trim($data['deathLocation']);
     $death_location_other = isset($data['deathLocationOtherText']) ? trim($data['deathLocationOtherText']) : null;
     $expected_visitors = isset($data['expectedVisitors']) && !empty($data['expectedVisitors']) ? (int)$data['expectedVisitors'] : null;
@@ -48,21 +64,17 @@ try {
     $sigungu = trim($data['sigungu']);
     $funeral_period = trim($data['funeralPeriod']);
     
-    $religion = trim($data['religion']);
-    $religion_other = isset($data['religionOtherText']) ? trim($data['religionOtherText']) : null;
-    
-    // 준비된 서비스 (JSON 배열로 저장)
-    $prepared_services = null;
-    if (isset($data['preparedServices']) && is_array($data['preparedServices']) && count($data['preparedServices']) > 0) {
-        $prepared_services = json_encode($data['preparedServices'], JSON_UNESCAPED_UNICODE);
-    }
-    $other_service_text = isset($data['otherServiceText']) ? trim($data['otherServiceText']) : null;
-    
-    $burial_site = isset($data['burialSite']) ? trim($data['burialSite']) : null;
+    $religion = '';
+    $religion_other = null;
+    $burial_site = null;
     
     $contact_name = trim($data['contactName']);
     $contact_phone = trim($data['contactPhone']);
     $contact_email = isset($data['contactEmail']) ? trim($data['contactEmail']) : null;
+    $privacy_consent = !empty($data['privacyConsent']) ? 1 : 0;
+    // 기존 컬럼을 견적 상담 연락 동의 기록으로 계속 사용
+    $sensitive_info_consent = !empty($data['contactConsent']) ? 1 : 0;
+    $consent_version = isset($data['consentVersion']) ? trim($data['consentVersion']) : '2026-07-18';
     $funeral_product_id = isset($data['funeralProductId']) && $data['funeralProductId'] !== '' ? (int)$data['funeralProductId'] : null;
     $funeral_product_source = $funeral_product_id ? 'user' : null;
     $funeral_hall_id = isset($data['funeralHallId']) && $data['funeralHallId'] !== '' ? (int)$data['funeralHallId'] : 0;
@@ -72,16 +84,23 @@ try {
     // SQL 쿼리 준비
     $stmt = $conn->prepare("
         INSERT INTO estimate_request 
-        (deceased_name, relationship, death_date, death_location, death_location_other, expected_visitors,
+        (deceased_name, relationship, death_status, death_date, death_location, death_location_other, expected_visitors,
          sido, sigungu, funeral_period, religion, religion_other,
-         prepared_services, other_service_text, burial_site,
-         contact_name, contact_phone, contact_email, funeral_product_id, funeral_product_source)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         burial_site,
+         contact_name, contact_phone, contact_email,
+         funeral_product_id, funeral_product_source,
+         privacy_consent, sensitive_info_consent, consent_version, consented_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     ");
+
+    if (!$stmt) {
+        throw new Exception('견적 요청 저장 쿼리를 준비하지 못했습니다: ' . $conn->error);
+    }
     
-    $stmt->bind_param("sssssisssssssssssis",
+    $stmt->bind_param("ssssssisssssssssisiis",
         $deceased_name,
         $relationship,
+        $death_status,
         $death_date,
         $death_location,
         $death_location_other,
@@ -91,14 +110,15 @@ try {
         $funeral_period,
         $religion,
         $religion_other,
-        $prepared_services,
-        $other_service_text,
         $burial_site,
         $contact_name,
         $contact_phone,
         $contact_email,
         $funeral_product_id,
-        $funeral_product_source
+        $funeral_product_source,
+        $privacy_consent,
+        $sensitive_info_consent,
+        $consent_version
     );
     
     if ($stmt->execute()) {

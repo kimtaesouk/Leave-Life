@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>한우리</title>
+    <title>Leave Life Admin</title>
     <script>
         (function () {
             const params = new URLSearchParams(window.location.search);
@@ -938,6 +938,1310 @@
             overflow-x: auto;
             margin-top: 20px;
         }
+
+        /* Leave Life 관리자 디자인 시스템 */
+        :root {
+            --admin-green-900: #173f33;
+            --admin-green-800: #205442;
+            --admin-green-700: #2d6953;
+            --admin-green-100: #e7f0ec;
+            --admin-green-50: #f4f8f6;
+            --admin-ink: #1f2f29;
+            --admin-muted: #66736e;
+            --admin-line: #dbe5e0;
+            --admin-bg: #f3f6f4;
+        }
+
+        body {
+            color: var(--admin-ink);
+            background: var(--admin-bg);
+            font-family: "Noto Sans KR", "Pretendard", "Segoe UI", sans-serif;
+        }
+
+        .header {
+            padding: 14px 30px;
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--admin-ink);
+            border-bottom: 1px solid var(--admin-line);
+            box-shadow: 0 8px 30px rgba(23, 63, 51, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+
+        .header-content {
+            max-width: 1480px;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-brand-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            color: #fff;
+            background: var(--admin-green-800);
+            box-shadow: 0 8px 18px rgba(32, 84, 66, 0.2);
+        }
+
+        .admin-brand-mark svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .admin-brand-copy strong {
+            display: block;
+            color: var(--admin-green-900);
+            font-size: 1.08rem;
+            letter-spacing: -0.02em;
+        }
+
+        .admin-brand-copy span {
+            display: block;
+            color: var(--admin-muted);
+            font-size: 0.78rem;
+        }
+
+        .user-name {
+            color: var(--admin-muted);
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            color: var(--admin-green-800);
+            background: var(--admin-green-50);
+            border-color: var(--admin-line);
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .logout-btn:hover {
+            color: #fff;
+            background: var(--admin-green-800);
+        }
+
+        .admin-layout {
+            max-width: 1480px;
+            margin-top: 24px;
+        }
+
+        .admin-sidebar {
+            border-color: var(--admin-line);
+            border-radius: 18px;
+            box-shadow: 0 10px 34px rgba(23, 63, 51, 0.07);
+        }
+
+        .admin-sidebar-header {
+            padding: 22px 20px;
+            background: linear-gradient(145deg, var(--admin-green-900), var(--admin-green-700));
+            border: 0;
+            border-radius: 18px 18px 0 0;
+        }
+
+        .admin-sidebar-header h2,
+        .admin-level {
+            color: #fff;
+        }
+
+        .admin-level {
+            opacity: 0.72;
+        }
+
+        .tree-group {
+            border-color: #edf2ef;
+        }
+
+        .tree-toggle {
+            color: var(--admin-muted);
+            font-size: 0.86rem;
+            letter-spacing: 0.04em;
+        }
+
+        .tree-item {
+            position: relative;
+            color: var(--admin-ink);
+            border-left: 3px solid transparent;
+        }
+
+        .tree-item::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #bdcbc5;
+            position: absolute;
+            left: 19px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .tree-item:hover,
+        .tree-item.active {
+            color: var(--admin-green-800);
+            background: var(--admin-green-50);
+            border-left-color: var(--admin-green-700);
+        }
+
+        .tree-item.active::before {
+            background: var(--admin-green-700);
+            box-shadow: 0 0 0 4px var(--admin-green-100);
+        }
+
+        .dashboard-card {
+            border: 1px solid var(--admin-line);
+            border-radius: 18px;
+            box-shadow: 0 10px 34px rgba(23, 63, 51, 0.06);
+        }
+
+        .dashboard-card h2,
+        .dashboard-card h3,
+        .funeral-hall-list-header h3 {
+            color: var(--admin-green-800) !important;
+        }
+
+        .save-btn {
+            background: var(--admin-green-800) !important;
+            border-radius: 10px;
+        }
+
+        .save-btn:hover {
+            background: var(--admin-green-900) !important;
+        }
+
+        .cancel-btn,
+        .back-btn {
+            background: #66736e;
+            border-radius: 10px;
+        }
+
+        .admin-dashboard-hero {
+            padding: 34px;
+            border-radius: 22px;
+            color: #fff;
+            background:
+                radial-gradient(circle at 88% 18%, rgba(255,255,255,0.18), transparent 28%),
+                linear-gradient(135deg, var(--admin-green-900), var(--admin-green-700));
+            box-shadow: 0 18px 50px rgba(23, 63, 51, 0.18);
+        }
+
+        .admin-dashboard-hero small {
+            display: block;
+            margin-bottom: 10px;
+            color: #bfd6cb;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+        }
+
+        .admin-dashboard-hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(1.65rem, 3vw, 2.35rem);
+            letter-spacing: -0.04em;
+        }
+
+        .admin-dashboard-hero p {
+            margin: 0;
+            color: rgba(255,255,255,0.78);
+        }
+
+        .admin-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .admin-quick-card {
+            min-height: 150px;
+            padding: 22px;
+            text-align: left;
+            color: var(--admin-ink);
+            background: #fff;
+            border: 1px solid var(--admin-line);
+            border-radius: 18px;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .admin-quick-card:hover {
+            transform: translateY(-3px);
+            border-color: #98b6a9;
+            box-shadow: 0 14px 30px rgba(23, 63, 51, 0.1);
+        }
+
+        .admin-quick-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 16px;
+            color: var(--admin-green-800);
+            background: var(--admin-green-100);
+            border-radius: 13px;
+        }
+
+        .admin-quick-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .admin-quick-card strong,
+        .admin-quick-card span {
+            display: block;
+        }
+
+        .admin-quick-card strong {
+            margin-bottom: 5px;
+            font-size: 1.02rem;
+        }
+
+        .admin-quick-card span {
+            color: var(--admin-muted);
+            font-size: 0.88rem;
+        }
+
+        .local-preview-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            padding: 4px 8px;
+            color: #8a5a14;
+            background: #fff4d6;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1180px) {
+            .admin-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 640px) {
+            .admin-quick-grid { grid-template-columns: 1fr; }
+            .admin-dashboard-hero { padding: 26px 22px; }
+        }
+
+        /* Professional operations UI */
+        :root {
+            --ops-ink: #17221e;
+            --ops-muted: #66736d;
+            --ops-line: #dfe5e2;
+            --ops-soft: #f4f7f5;
+            --ops-green: #1f5b45;
+            --ops-green-dark: #153f31;
+            --ops-green-light: #e8f1ed;
+            --ops-navy: #263a4a;
+            --ops-amber: #a96918;
+            --ops-red: #a64b43;
+        }
+
+        body {
+            color: var(--ops-ink);
+            background: #f2f5f3;
+            font-family: "Noto Sans KR", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            height: 70px;
+            background: rgba(255, 255, 255, .97);
+            border-bottom: 1px solid var(--ops-line);
+            box-shadow: none;
+            backdrop-filter: blur(14px);
+        }
+
+        .header-content {
+            width: 100%;
+            max-width: none;
+            height: 70px;
+            padding: 0 30px;
+        }
+
+        .admin-brand strong { color: #173f31; letter-spacing: -.025em; }
+        .admin-brand > span:last-child { color: #7a8781; }
+        .admin-brand-mark { background: #173f31; border-radius: 9px; }
+        .logout-btn { border-color: #ccd6d1; color: #3c4a44; background: #fff; }
+        .logout-btn:hover { color: #fff; background: #253b32; border-color: #253b32; }
+
+        .admin-layout {
+            width: 100%;
+            max-width: none;
+            min-height: calc(100vh - 70px);
+            margin: 0;
+            display: grid;
+            grid-template-columns: 244px minmax(0, 1fr);
+            gap: 0;
+        }
+
+        .admin-sidebar {
+            position: sticky;
+            top: 70px;
+            align-self: start;
+            height: calc(100vh - 70px);
+            margin: 0;
+            padding: 24px 16px;
+            color: #eef4f1;
+            background: #172620;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            overflow-y: auto;
+        }
+
+        .admin-sidebar-header { padding: 0 9px 20px; border-bottom: 1px solid rgba(255,255,255,.1); }
+        .admin-sidebar-header h2 { margin: 0 0 8px; color: #fff; font-size: 1rem; letter-spacing: -.02em; }
+        .admin-level { color: #9fb2aa; font-size: .78rem; }
+        .admin-tree { margin-top: 18px; }
+        .tree-group { margin-bottom: 11px; }
+        .tree-toggle {
+            padding: 8px 10px;
+            color: #91a69d;
+            font-size: .72rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .tree-toggle::after { color: #6f887d; }
+        .tree-items { gap: 3px; }
+        .tree-item {
+            min-height: 40px;
+            padding: 10px 12px;
+            color: #d6e1dc;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: .9rem;
+            font-weight: 600;
+        }
+        .tree-item:hover { color: #fff; background: rgba(255,255,255,.07); }
+        .tree-item.active { color: #fff; background: #2a5947; border-color: rgba(255,255,255,.08); box-shadow: inset 3px 0 0 #92c5ad; }
+
+        .admin-main {
+            min-width: 0;
+            width: 100%;
+            padding: 30px 34px 56px;
+            background: #f2f5f3;
+        }
+
+        .dashboard-card {
+            padding: 28px;
+            background: #fff;
+            border: 1px solid var(--ops-line);
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(30, 49, 41, .045);
+        }
+
+        .dashboard-card h2 { color: var(--ops-ink); font-size: 1.35rem; letter-spacing: -.03em; }
+        .dashboard-card h3,
+        .dashboard-card h4,
+        #funeralHallFormCard h3,
+        #funeralHallFormCard h4 { color: var(--ops-green-dark) !important; border-color: #b9cfc5 !important; }
+
+        .admin-main input:not([type="checkbox"]):not([type="radio"]),
+        .admin-main select,
+        .admin-main textarea {
+            min-height: 42px;
+            color: #26352f;
+            background: #fff;
+            border: 1px solid #ccd6d1 !important;
+            border-radius: 8px !important;
+            box-shadow: none !important;
+        }
+        .admin-main input:focus,
+        .admin-main select:focus,
+        .admin-main textarea:focus { border-color: #4e826d !important; outline: 3px solid rgba(46, 100, 77, .1) !important; }
+
+        .save-btn,
+        .accordion-actions button {
+            color: #fff !important;
+            background: var(--ops-green) !important;
+            border: 1px solid var(--ops-green) !important;
+            border-radius: 8px !important;
+            box-shadow: none !important;
+        }
+        .save-btn:hover,
+        .accordion-actions button:hover { background: var(--ops-green-dark) !important; }
+        .cancel-btn,
+        .back-btn { color: #405149 !important; background: #fff !important; border: 1px solid #cbd6d1 !important; border-radius: 8px !important; }
+
+        .admin-main table { border-collapse: separate !important; border-spacing: 0 !important; }
+        .admin-main table th {
+            padding: 11px 13px !important;
+            color: #52625b !important;
+            background: #f3f6f4 !important;
+            border: 0 !important;
+            border-bottom: 1px solid #dce4e0 !important;
+            font-size: .78rem !important;
+            font-weight: 800 !important;
+        }
+        .admin-main table td {
+            padding: 12px 13px !important;
+            border: 0 !important;
+            border-bottom: 1px solid #e8eeeb !important;
+            font-size: .87rem;
+        }
+        .admin-main table tbody tr:hover td { background: #f7faf8 !important; }
+
+        .ops-dashboard-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 24px;
+            padding: 2px 2px 0;
+        }
+        .ops-eyebrow,
+        .ops-panel-kicker { display: block; color: #6f8179; font-size: .69rem; font-weight: 900; letter-spacing: .13em; }
+        .ops-dashboard-header h1 { margin: 6px 0 6px; color: #17251f; font-size: 2rem; letter-spacing: -.055em; }
+        .ops-dashboard-header p { margin: 0; color: var(--ops-muted); font-size: .87rem; }
+        .ops-refresh-btn,
+        .ops-link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 38px;
+            padding: 0 14px;
+            color: #32443c;
+            background: #fff;
+            border: 1px solid #ccd7d2;
+            border-radius: 8px;
+            font-size: .82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .ops-refresh-btn svg { width: 17px; height: 17px; }
+        .ops-refresh-btn:hover,
+        .ops-link-btn:hover { color: #fff; background: #294e3f; border-color: #294e3f; }
+
+        .ops-metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 16px; }
+        .ops-metric-card {
+            position: relative;
+            min-height: 140px;
+            padding: 20px 21px;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid var(--ops-line);
+            border-radius: 12px;
+            box-shadow: 0 3px 14px rgba(28, 48, 39, .04);
+        }
+        .ops-metric-card::before { position: absolute; top: 0; left: 0; width: 4px; height: 100%; content: ""; background: #315e4b; }
+        .ops-metric-card.warning::before { background: #c18839; }
+        .ops-metric-card.success::before { background: #4b7d68; }
+        .ops-metric-card.neutral::before { background: #607786; }
+        .ops-metric-label { color: #5c6c65; font-size: .82rem; font-weight: 700; }
+        .ops-metric-card > strong { display: block; margin: 13px 0 4px; color: #17251f; font-size: 2rem; line-height: 1; letter-spacing: -.05em; }
+        .ops-metric-card > span { color: #89948f; font-size: .74rem; }
+
+        .ops-dashboard-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(290px, .82fr); gap: 16px; margin-bottom: 16px; }
+        .ops-dashboard-grid.secondary { grid-template-columns: minmax(0, 1.3fr) minmax(380px, 1fr); }
+        .ops-panel { min-width: 0; padding: 22px; background: #fff; border: 1px solid var(--ops-line); border-radius: 12px; box-shadow: 0 3px 14px rgba(28, 48, 39, .04); }
+        .ops-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+        .ops-panel-header h2 { margin: 4px 0 0; color: #1c2924; font-size: 1.06rem; letter-spacing: -.025em; }
+        .ops-table-wrap { overflow-x: auto; }
+        .ops-table { width: 100%; }
+        .ops-table th { white-space: nowrap; }
+        .ops-table tbody tr { cursor: pointer; }
+        .ops-table td:first-child { white-space: nowrap; }
+        .ops-table td strong { display: block; color: #21332b; font-size: .86rem; }
+        .ops-table td small { display: block; margin-top: 3px; color: #89958f; font-size: .7rem; }
+        .ops-date { color: #6f7c76; font-size: .74rem; }
+        .ops-empty { padding: 34px 16px !important; text-align: center; color: #89958f; }
+        .ops-empty.compact { padding: 20px 0 !important; }
+        .ops-status-chip { display: inline-flex; padding: 5px 9px; border-radius: 999px; font-size: .7rem; font-weight: 800; white-space: nowrap; }
+        .ops-status-chip.pending { color: #8b5814; background: #fff0d8; }
+        .ops-status-chip.contacted { color: #315b73; background: #e8f1f6; }
+        .ops-status-chip.completed { color: #275d47; background: #e7f2ed; }
+        .ops-status-chip.cancelled { color: #8a4944; background: #f8e9e7; }
+
+        .ops-status-list { display: grid; gap: 18px; }
+        .ops-status-row > div:first-child { display: grid; grid-template-columns: 10px 1fr auto; align-items: center; gap: 9px; margin-bottom: 8px; }
+        .ops-status-row strong { color: #394941; font-size: .82rem; }
+        .ops-status-row em { color: #68766f; font-size: .78rem; font-style: normal; font-weight: 700; }
+        .ops-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #b5792c; }
+        .ops-status-dot.contacted { background: #527b91; }
+        .ops-status-dot.completed { background: #3e765e; }
+        .ops-status-dot.cancelled { background: #a15b55; }
+        .ops-progress { height: 6px; overflow: hidden; background: #edf1ef; border-radius: 999px; }
+        .ops-progress span { display: block; height: 100%; min-width: 3px; background: #b5792c; border-radius: inherit; }
+        .ops-progress span.contacted { background: #527b91; }
+        .ops-progress span.completed { background: #3e765e; }
+        .ops-progress span.cancelled { background: #a15b55; }
+
+        .ops-trend-chart { display: grid; grid-template-columns: repeat(7, minmax(44px, 1fr)); gap: 12px; min-height: 210px; align-items: end; padding: 14px 4px 0; border-bottom: 1px solid #dfe6e2; }
+        .ops-trend-item { display: grid; grid-template-rows: 20px 145px 22px; gap: 5px; align-items: end; text-align: center; }
+        .ops-trend-item > strong { color: #4e6058; font-size: .72rem; }
+        .ops-trend-item > div { display: flex; height: 145px; align-items: flex-end; justify-content: center; background: linear-gradient(to top, rgba(32,91,69,.035), transparent); border-radius: 5px 5px 0 0; }
+        .ops-trend-item > div span { width: min(30px, 70%); background: linear-gradient(180deg, #5d927c, #285d49); border-radius: 5px 5px 1px 1px; }
+        .ops-trend-item small { color: #7a8882; font-size: .71rem; }
+
+        .ops-service-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+        .ops-service-grid button { min-width: 0; padding: 15px; text-align: left; background: #f7f9f8; border: 1px solid #e1e7e4; border-radius: 9px; cursor: pointer; }
+        .ops-service-grid button:hover { background: #eef4f1; border-color: #a9beb5; }
+        .ops-service-grid span,
+        .ops-service-grid strong,
+        .ops-service-grid small { display: block; }
+        .ops-service-grid span { overflow: hidden; color: #627169; font-size: .72rem; white-space: nowrap; text-overflow: ellipsis; }
+        .ops-service-grid strong { margin: 7px 0 4px; color: #1d3e31; font-size: 1.45rem; letter-spacing: -.04em; }
+        .ops-service-grid small { color: #8a9690; font-size: .67rem; }
+        .ops-region-block { margin-top: 20px; padding-top: 18px; border-top: 1px solid #e4eae7; }
+        .ops-region-block h3 { margin: 0 0 12px; color: #37473f; font-size: .8rem; }
+        .ops-region-list { display: grid; gap: 9px; }
+        .ops-region-row { display: grid; grid-template-columns: 18px minmax(72px, auto) 1fr 42px; align-items: center; gap: 8px; }
+        .ops-region-row > span { color: #8d9a94; font-size: .68rem; font-weight: 800; }
+        .ops-region-row > strong { overflow: hidden; color: #47564f; font-size: .72rem; white-space: nowrap; text-overflow: ellipsis; }
+        .ops-region-row > div { height: 5px; overflow: hidden; background: #edf1ef; border-radius: 999px; }
+        .ops-region-row i { display: block; height: 100%; background: #4c806a; border-radius: inherit; }
+        .ops-region-row em { color: #6b7972; font-size: .67rem; font-style: normal; text-align: right; }
+
+        /* Layout refinement: high-visibility navigation and collision-free forms */
+        .admin-layout {
+            grid-template-columns: 252px minmax(0, 1fr);
+        }
+
+        .admin-sidebar {
+            width: auto !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 22px 14px 28px;
+            color: #24352e;
+            background: #f8faf9;
+            border-right: 1px solid #dce5e1;
+            overflow-x: hidden;
+        }
+
+        .admin-sidebar-header {
+            padding: 17px 16px 16px;
+            background: #edf4f0;
+            border: 1px solid #d8e5df;
+            border-radius: 11px;
+        }
+
+        .admin-sidebar-header h2 {
+            margin: 0 0 7px;
+            color: #173f31;
+            font-size: 1rem;
+        }
+
+        .admin-level {
+            margin: 0;
+            overflow: hidden;
+            color: #677870;
+            font-size: .76rem;
+            line-height: 1.45;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .admin-tree {
+            margin-top: 18px;
+            padding: 0;
+        }
+
+        .tree-group {
+            margin: 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e9e5;
+        }
+
+        .tree-toggle {
+            display: flex !important;
+            width: 100%;
+            min-width: 0;
+            min-height: 34px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 6px 11px !important;
+            color: #687970;
+            background: transparent;
+            font-size: .7rem;
+            font-weight: 850;
+            letter-spacing: .075em;
+            line-height: 1.35;
+            text-transform: none;
+        }
+
+        .tree-toggle-label {
+            min-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .tree-toggle::after {
+            position: static !important;
+            display: block;
+            width: 7px;
+            height: 7px;
+            flex: 0 0 7px;
+            margin: -3px 3px 0 0;
+            content: "";
+            color: #70867c;
+            border-right: 1.5px solid currentColor;
+            border-bottom: 1.5px solid currentColor;
+            transform: rotate(45deg);
+            transform-origin: center;
+            transition: transform .18s ease;
+        }
+
+        .tree-group.collapsed .tree-toggle::after {
+            transform: rotate(-45deg);
+        }
+
+        .tree-items {
+            display: grid;
+            gap: 4px;
+            margin: 3px 0 0;
+            padding: 0;
+        }
+
+        .tree-group.collapsed .tree-items {
+            display: none;
+        }
+
+        .tree-item {
+            position: relative;
+            display: flex;
+            width: 100%;
+            min-width: 0;
+            min-height: 42px;
+            align-items: center;
+            padding: 9px 13px 9px 39px !important;
+            overflow: hidden;
+            color: #31443b;
+            background: transparent;
+            border: 1px solid transparent;
+            border-left: 1px solid transparent;
+            border-radius: 9px;
+            font-size: .88rem;
+            font-weight: 650;
+            line-height: 1.35;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-shadow: none;
+        }
+
+        .tree-item::before {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            width: 8px;
+            height: 8px;
+            content: "";
+            background: #b8c7c0;
+            border: 2px solid #f8faf9;
+            border-radius: 50%;
+            box-shadow: 0 0 0 1px #aebfb7;
+            transform: translateY(-50%);
+        }
+
+        .tree-item:hover {
+            color: #1c4a38;
+            background: #eef4f1;
+            border-color: #dbe7e1;
+        }
+
+        .tree-item.active {
+            color: #153f31;
+            background: #e2eee8;
+            border-color: #c6dbd1;
+            box-shadow: inset 3px 0 0 #2f6b54;
+        }
+
+        .tree-item.active::before {
+            background: #2f6b54;
+            border-color: #e2eee8;
+            box-shadow: 0 0 0 1px #2f6b54;
+        }
+
+        .admin-main {
+            overflow: hidden;
+        }
+
+        .admin-main > *,
+        .dashboard-card,
+        .dashboard-card form,
+        .admin-form-grid > *,
+        .admin-filter-grid > * {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .dashboard-card {
+            overflow: visible;
+        }
+
+        .admin-section-heading {
+            display: flex !important;
+            min-width: 0;
+            align-items: flex-start !important;
+            justify-content: space-between;
+            gap: 18px;
+            margin: 0 0 24px !important;
+            padding: 0 2px 18px;
+            border-bottom: 1px solid #e3e9e6;
+        }
+
+        .admin-section-heading > div {
+            min-width: 0;
+        }
+
+        .admin-section-heading h2 {
+            margin: 4px 0 6px;
+        }
+
+        .admin-section-heading p {
+            max-width: 720px;
+            margin: 0;
+            color: #718078;
+            font-size: .82rem;
+            line-height: 1.65;
+        }
+
+        .admin-section-kicker {
+            display: block;
+            color: #668076;
+            font-size: .65rem;
+            font-weight: 900;
+            letter-spacing: .12em;
+        }
+
+        .admin-form-panel,
+        .admin-filter-panel {
+            min-width: 0;
+            padding: 24px !important;
+            background: #f7f9f8 !important;
+            border: 1px solid #dfe7e3 !important;
+            border-radius: 12px !important;
+        }
+
+        .admin-form-panel--narrow {
+            max-width: 920px;
+        }
+
+        .admin-form-grid,
+        .admin-filter-grid {
+            min-width: 0;
+        }
+
+        .admin-form-grid--3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 18px !important;
+        }
+
+        .admin-form-grid--2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 18px !important;
+        }
+
+        .admin-filter-grid--estimate {
+            grid-template-columns: minmax(260px, 2fr) minmax(150px, 1fr) auto auto !important;
+        }
+
+        .admin-filter-grid--cost {
+            grid-template-columns: minmax(260px, 2fr) minmax(140px, 1fr) minmax(140px, 1fr) auto auto !important;
+        }
+
+        .admin-field,
+        .admin-form-grid > div,
+        .admin-filter-grid > div {
+            min-width: 0;
+        }
+
+        .admin-field label,
+        .admin-form-grid label,
+        .admin-filter-grid label {
+            display: block;
+            margin: 0 0 8px !important;
+            color: #3c4d45 !important;
+            font-size: .8rem;
+            font-weight: 750 !important;
+            line-height: 1.4;
+        }
+
+        .admin-main form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+        .admin-main form select,
+        .admin-main form textarea,
+        .admin-filter-grid input,
+        .admin-filter-grid select {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            padding: 10px 12px !important;
+            box-sizing: border-box;
+        }
+
+        .admin-main input::placeholder,
+        .admin-main textarea::placeholder {
+            color: #a0aaa5;
+        }
+
+        .admin-form-actions {
+            display: flex !important;
+            align-items: center;
+            justify-content: flex-end !important;
+            flex-wrap: wrap;
+            gap: 10px !important;
+            margin-top: 24px !important;
+            padding-top: 20px;
+            border-top: 1px solid #e1e8e4;
+        }
+
+        .save-btn,
+        .cancel-btn,
+        .back-btn {
+            display: inline-flex;
+            min-height: 42px;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 17px !important;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .admin-check-grid {
+            display: grid !important;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px !important;
+        }
+
+        .admin-check-grid label {
+            min-width: 0;
+            min-height: 44px;
+            padding: 10px 12px;
+            background: #fff;
+            border: 1px solid #dfe7e3;
+            border-radius: 9px;
+        }
+
+        .funeral-hall-list-header,
+        .funeral-hall-list-actions {
+            min-width: 0;
+        }
+
+        .funeral-hall-list-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .funeral-hall-list-actions #searchInput {
+            width: min(360px, 55vw) !important;
+            min-width: 220px !important;
+        }
+
+        .password-settings-layout {
+            display: grid;
+            grid-template-columns: minmax(220px, 280px) minmax(0, 680px);
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .password-security-note {
+            padding: 24px;
+            color: #dcebe4;
+            background: linear-gradient(145deg, #173f31, #245a45);
+            border-radius: 12px;
+        }
+
+        .password-security-icon {
+            display: inline-flex;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            color: #20513e;
+            background: #e7f1ec;
+            border-radius: 11px;
+        }
+
+        .password-security-icon svg {
+            width: 25px;
+            height: 25px;
+        }
+
+        .password-security-note strong {
+            display: block;
+            margin-bottom: 9px;
+            color: #fff;
+            font-size: .98rem;
+        }
+
+        .password-security-note p {
+            margin: 0;
+            color: #c3d7ce;
+            font-size: .78rem;
+            line-height: 1.7;
+        }
+
+        .password-security-note ul {
+            display: grid;
+            gap: 8px;
+            margin: 20px 0 0;
+            padding: 17px 0 0;
+            border-top: 1px solid rgba(255, 255, 255, .16);
+            list-style: none;
+        }
+
+        .password-security-note li {
+            position: relative;
+            padding-left: 17px;
+            color: #d9e7e0;
+            font-size: .75rem;
+        }
+
+        .password-security-note li::before {
+            position: absolute;
+            top: .5em;
+            left: 2px;
+            width: 6px;
+            height: 6px;
+            content: "";
+            background: #9cc8b5;
+            border-radius: 50%;
+        }
+
+        .password-settings-form {
+            min-width: 0;
+            padding: 25px;
+            background: #f7f9f8;
+            border: 1px solid #dfe7e3;
+            border-radius: 12px;
+        }
+
+        .password-current-field {
+            max-width: 100%;
+        }
+
+        .password-field-divider {
+            height: 1px;
+            margin: 23px 0;
+            background: #dfe7e3;
+        }
+
+        .header-content .user-info {
+            transform: translateY(-3px);
+        }
+
+        .estimate-detail-section {
+            scroll-margin-top: 92px;
+        }
+
+        .estimate-detail-surface {
+            padding: 28px;
+            background: #fff;
+            border: 1px solid #dfe7e3;
+            border-radius: 14px;
+            box-shadow: 0 10px 34px rgba(28, 48, 39, .07);
+        }
+
+        .estimate-detail-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #dfe7e3;
+        }
+
+        .estimate-detail-heading span,
+        .estimate-detail-eyebrow {
+            display: block;
+            color: #708178;
+            font-size: .65rem;
+            font-weight: 900;
+            letter-spacing: .13em;
+        }
+
+        .estimate-detail-heading h2 {
+            margin: 5px 0 0;
+            color: #193c2f;
+            font-size: 1.35rem;
+            letter-spacing: -.03em;
+        }
+
+        .estimate-detail-layout {
+            display: grid;
+            gap: 16px;
+        }
+
+        .estimate-detail-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(300px, .7fr);
+            gap: 20px;
+            padding: 25px;
+            color: #e7f1ec;
+            background: linear-gradient(135deg, #173f31, #2b634d);
+            border-radius: 12px;
+        }
+
+        .estimate-detail-hero h3 {
+            margin: 7px 0 7px;
+            color: #fff !important;
+            font-size: 1.5rem;
+            letter-spacing: -.035em;
+        }
+
+        .estimate-detail-hero p {
+            margin: 0;
+            color: #bfd4ca;
+            font-size: .78rem;
+        }
+
+        .estimate-detail-badges {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .estimate-detail-badge {
+            display: inline-flex;
+            min-height: 32px;
+            align-items: center;
+            padding: 6px 11px;
+            color: #173f31;
+            background: #e9f2ed;
+            border: 1px solid rgba(255,255,255,.28);
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 850;
+        }
+
+        .estimate-detail-badge.pending { color: #744b16; background: #fff0d8; }
+        .estimate-detail-badge.contacted { color: #315b73; background: #e8f1f6; }
+        .estimate-detail-badge.completed { color: #275d47; background: #e7f2ed; }
+        .estimate-detail-badge.cancelled { color: #8a4944; background: #f8e9e7; }
+
+        .estimate-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .estimate-detail-card {
+            min-width: 0;
+            padding: 22px;
+            background: #fff;
+            border: 1px solid #dfe7e3;
+            border-radius: 12px;
+        }
+
+        .estimate-detail-card.full {
+            grid-column: 1 / -1;
+        }
+
+        .estimate-detail-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 13px;
+            border-bottom: 1px solid #e3eae6;
+        }
+
+        .estimate-detail-card-head h3 {
+            margin: 0;
+            color: #263a31 !important;
+            font-size: .98rem;
+        }
+
+        .estimate-detail-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .estimate-detail-field {
+            min-width: 0;
+            padding: 13px 14px;
+            background: #f7f9f8;
+            border: 1px solid #e4eae7;
+            border-radius: 9px;
+        }
+
+        .estimate-detail-field label {
+            display: block;
+            margin-bottom: 5px;
+            color: #78867f;
+            font-size: .69rem;
+            font-weight: 750;
+        }
+
+        .estimate-detail-field strong {
+            display: block;
+            overflow-wrap: anywhere;
+            color: #26372f;
+            font-size: .88rem;
+        }
+
+        .estimate-consent-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .estimate-consent-record {
+            padding: 15px;
+            background: #f7f9f8;
+            border: 1px solid #e1e8e4;
+            border-radius: 9px;
+        }
+
+        .estimate-consent-record span,
+        .estimate-consent-record strong,
+        .estimate-consent-record small {
+            display: block;
+        }
+
+        .estimate-consent-record span { color: #75837c; font-size: .68rem; }
+        .estimate-consent-record strong { margin: 7px 0 4px; color: #9a493f; font-size: .92rem; }
+        .estimate-consent-record strong.is-agreed { color: #205442; }
+        .estimate-consent-record small { color: #8a9690; font-size: .66rem; line-height: 1.5; }
+
+        .estimate-detail-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e8e4;
+        }
+
+        @media (max-width: 1180px) {
+            .admin-form-grid--3 {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            .admin-filter-grid--estimate,
+            .admin-filter-grid--cost {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            .admin-filter-grid--estimate > div:first-child,
+            .admin-filter-grid--cost > div:first-child {
+                grid-column: 1 / -1;
+            }
+
+            .admin-filter-grid > button {
+                width: 100%;
+            }
+
+            .admin-check-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .password-settings-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .password-security-note,
+            .password-settings-form {
+                max-width: 760px;
+            }
+
+            .password-security-icon {
+                margin-bottom: 16px;
+            }
+
+            .estimate-detail-hero { grid-template-columns: 1fr; }
+            .estimate-detail-badges { justify-content: flex-start; }
+            .estimate-consent-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 1200px) {
+            .ops-dashboard-grid,
+            .ops-dashboard-grid.secondary { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 980px) {
+            .admin-layout { grid-template-columns: 224px minmax(0, 1fr); }
+            .admin-sidebar { position: sticky; top: 70px; height: calc(100vh - 70px); }
+            .admin-main { padding: 24px 22px 44px; }
+            .ops-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 820px) {
+            .header {
+                position: relative;
+                height: auto;
+                min-height: 70px;
+                padding: 0 !important;
+            }
+            .header-content {
+                height: auto;
+                min-height: 70px;
+                padding: 12px 16px !important;
+                flex-flow: row wrap !important;
+                align-items: center !important;
+                gap: 10px 14px !important;
+            }
+            .user-info { width: auto; margin-left: auto; transform: none !important; }
+            .admin-layout { display: block; min-height: 0; }
+            .admin-sidebar {
+                position: relative;
+                top: 0;
+                width: 100% !important;
+                height: auto;
+                padding: 14px 16px;
+                border-right: 0;
+                border-bottom: 1px solid #dce5e1;
+            }
+            .admin-sidebar-header { padding: 13px 15px; }
+            .admin-tree { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; margin-top: 12px; }
+            .tree-group { padding: 4px 0 8px; }
+            .admin-main { padding: 22px 16px 38px; }
+            .ops-dashboard-header { align-items: flex-start; flex-direction: column; }
+            .ops-metric-grid,
+            .ops-service-grid { grid-template-columns: 1fr; }
+            .ops-trend-chart { gap: 5px; }
+        }
+
+        @media (max-width: 720px) {
+            .dashboard-card { padding: 20px !important; }
+            .admin-form-panel,
+            .admin-filter-panel,
+            .password-settings-form { padding: 19px !important; }
+            .admin-form-grid--2,
+            .admin-form-grid--3,
+            .admin-filter-grid--estimate,
+            .admin-filter-grid--cost,
+            .admin-check-grid { grid-template-columns: 1fr !important; }
+            .admin-filter-grid--estimate > div:first-child,
+            .admin-filter-grid--cost > div:first-child { grid-column: auto; }
+            .admin-form-actions { align-items: stretch; flex-direction: column-reverse; }
+            .admin-form-actions .save-btn,
+            .admin-form-actions .cancel-btn { width: 100%; }
+            .funeral-hall-list-header { align-items: stretch; }
+            .funeral-hall-list-actions { width: 100%; }
+            .funeral-hall-list-actions #searchInput { width: 100% !important; min-width: 0 !important; }
+            .funeral-hall-list-actions .save-btn { width: 100%; }
+            .estimate-detail-surface { padding: 19px; }
+            .estimate-detail-grid,
+            .estimate-detail-fields { grid-template-columns: 1fr; }
+            .estimate-detail-heading { align-items: stretch; flex-direction: column; }
+            .estimate-detail-heading .cancel-btn { width: 100%; }
+        }
+
+        @media (max-width: 560px) {
+            .admin-brand-copy > span { display: none; }
+            .user-info .user-name,
+            .user-info .preview-badge { display: none; }
+            .admin-tree { grid-template-columns: 1fr; }
+            .admin-section-heading { padding-bottom: 14px; }
+            .password-security-note { padding: 20px; }
+        }
     </style>
     <script>
         // 화면 비율 감지 및 UI 조정 (관리자 페이지용)
@@ -1003,13 +2307,10 @@
             if (!adminReady) {
                 return;
             }
-            const view = (location.hash || '#estimate').replace('#', '');
+            const view = (location.hash || '#main').replace('#', '');
             switch (view) {
-                case 'contentMenu':
-                    showContentMenu(false);
-                    break;
-                case 'contentEdit':
-                    showContentMenu(false);
+                case 'main':
+                    showMainMenu(false);
                     break;
                 case 'userMenu':
                     showUserManagementMenu(false);
@@ -1033,7 +2334,7 @@
                     showEstimateManagement(false);
                     break;
                 default:
-                    showEstimateManagement(false);
+                    showMainMenu(false);
                     break;
             }
             setActiveTreeItem(view);
@@ -1050,7 +2351,15 @@
 <body class="auth-pending">
     <div class="header">
         <div class="header-content">
-            <h1>관리자 페이지</h1>
+            <div class="admin-brand">
+                <span class="admin-brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21V9"/><path d="M12 13C7 13 4 10 4 5c5 0 8 3 8 8Z"/><path d="M12 17c5 0 8-3 8-8-5 0-8 3-8 8Z"/></svg>
+                </span>
+                <span class="admin-brand-copy">
+                    <strong>Leave Life Admin</strong>
+                    <span>장례 서비스 운영센터</span>
+                </span>
+            </div>
             <div class="user-info">
                 <span class="user-name" id="userName">관리자</span>
                 <button class="logout-btn" onclick="logout()">로그아웃</button>
@@ -1066,19 +2375,19 @@
             </div>
             <div class="admin-tree" id="adminTree">
                 <div class="tree-group">
-                    <button class="tree-toggle" type="button">콘텐츠</button>
+                    <button class="tree-toggle" type="button" aria-expanded="true"><span class="tree-toggle-label">대시보드</span></button>
                     <ul class="tree-items">
-                        <li><button class="tree-item" id="menuContent" data-view="contentMenu" onclick="showContentMenu()">메인 페이지 콘텐츠 관리</button></li>
+                        <li><button class="tree-item" id="menuMain" data-view="main" onclick="showMainMenu()">운영 현황</button></li>
                     </ul>
                 </div>
                 <div class="tree-group">
-                    <button class="tree-toggle" type="button">견적 관리</button>
+                    <button class="tree-toggle" type="button" aria-expanded="true"><span class="tree-toggle-label">견적 관리</span></button>
                     <ul class="tree-items">
                         <li><button class="tree-item" id="menuEstimate" data-view="estimate" onclick="showEstimateManagement()">견적서 관리</button></li>
                     </ul>
                 </div>
                 <div class="tree-group">
-                    <button class="tree-toggle" type="button">운영 관리</button>
+                    <button class="tree-toggle" type="button" aria-expanded="true"><span class="tree-toggle-label">운영 관리</span></button>
                     <ul class="tree-items">
                         <li><button class="tree-item" id="menuFuneralHall" data-view="funeralHall" onclick="showFuneralHallForm()">장례식장 관리</button></li>
                         <li><button class="tree-item" id="menuCost" data-view="cost" onclick="showCostManagementForm()">비용 관리</button></li>
@@ -1086,75 +2395,119 @@
                     </ul>
                 </div>
                 <div class="tree-group">
-                    <button class="tree-toggle" type="button">시스템</button>
+                    <button class="tree-toggle" type="button" aria-expanded="true"><span class="tree-toggle-label">시스템</span></button>
                     <ul class="tree-items">
                         <li><button class="tree-item" id="menuAdminCreate" data-view="adminCreate" onclick="showAdminCreate()">관리자 추가</button></li>
                         <li><button class="tree-item" id="menuPassword" data-view="password" onclick="showPasswordChange()">비밀번호 변경</button></li>
-                        <li><button class="tree-item" id="menuSettings" data-view="settings" onclick="alert('추가 관리 기능을 구현하세요')">설정</button></li>
                     </ul>
                 </div>
             </div>
         </aside>
         <main class="admin-main">
-        <div id="mainMenu" style="display: none;"></div>
-        <!-- 콘텐츠 메뉴 선택 화면 -->
-        <div class="dashboard-card" id="contentMenuCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>메인 페이지 콘텐츠 관리</h2>
-            </div>
-            <p style="margin-bottom: 20px; color: #666;">수정할 메뉴를 선택하세요</p>
-            <div class="accordion-list">
-                <div class="accordion-item">
-                    <button type="button" class="accordion-header">한우리 소개</button>
-                    <div class="accordion-panel">
-                        <p style="margin-bottom: 12px; color: #666;">회사 소개 및 서비스 철학</p>
-                        <div class="accordion-actions">
-                            <button type="button" onclick="editContent('about/about.html', '한우리 소개')">페이지 열기</button>
-                        </div>
-                    </div>
+        <div id="mainMenu" style="display: none;">
+            <section class="ops-dashboard-header">
+                <div>
+                    <span class="ops-eyebrow">OPERATIONS DASHBOARD</span>
+                    <h1>운영 현황</h1>
+                    <p id="dashboardUpdatedAt">최신 운영 데이터를 불러오고 있습니다.</p>
                 </div>
-                <div class="accordion-item">
-                    <button type="button" class="accordion-header">장례 서비스 안내</button>
-                    <div class="accordion-panel">
-                        <p style="margin-bottom: 12px; color: #666;">장례 서비스 상세 안내</p>
-                        <div class="accordion-actions">
-                            <button type="button" onclick="editContent('service/service.html', '장례 서비스 안내')">페이지 열기</button>
+                <button type="button" class="ops-refresh-btn" onclick="loadDashboardData(true)" aria-label="운영 현황 새로고침">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M20 6v5h-5"/><path d="M4 18v-5h5"/><path d="M6.1 9A7 7 0 0 1 18 6l2 5M4 13l2 5a7 7 0 0 0 11.9-3"/></svg>
+                    새로고침
+                </button>
+            </section>
+
+            <section class="ops-metric-grid" aria-label="견적 요청 핵심 지표">
+                <article class="ops-metric-card primary">
+                    <div class="ops-metric-label">전체 견적 요청</div>
+                    <strong id="dashboardEstimateTotal">-</strong>
+                    <span>누적 접수 건수</span>
+                </article>
+                <article class="ops-metric-card warning">
+                    <div class="ops-metric-label">대기 중</div>
+                    <strong id="dashboardPending">-</strong>
+                    <span>상담 확인이 필요한 요청</span>
+                </article>
+                <article class="ops-metric-card success">
+                    <div class="ops-metric-label">처리 완료</div>
+                    <strong id="dashboardCompleted">-</strong>
+                    <span>완료된 견적 요청</span>
+                </article>
+                <article class="ops-metric-card neutral">
+                    <div class="ops-metric-label">오늘 접수</div>
+                    <strong id="dashboardToday">-</strong>
+                    <span>오늘 새로 들어온 요청</span>
+                </article>
+            </section>
+
+            <section class="ops-dashboard-grid">
+                <article class="ops-panel ops-recent-panel">
+                    <header class="ops-panel-header">
+                        <div>
+                            <span class="ops-panel-kicker">ESTIMATE REQUESTS</span>
+                            <h2>최근 견적 요청</h2>
                         </div>
+                        <button type="button" class="ops-link-btn" onclick="showEstimateManagement()">전체 보기</button>
+                    </header>
+                    <div class="ops-table-wrap">
+                        <table class="ops-table">
+                            <thead>
+                                <tr><th>접수</th><th>고인명</th><th>지역</th><th>요청자</th><th>상태</th></tr>
+                            </thead>
+                            <tbody id="dashboardRecentRequests">
+                                <tr><td colspan="5" class="ops-empty">최근 요청을 불러오는 중입니다.</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                <div class="accordion-item">
-                    <button type="button" class="accordion-header">장례 비용 · 견적</button>
-                    <div class="accordion-panel">
-                        <p style="margin-bottom: 12px; color: #666;">장례 비용 정보 및 견적</p>
-                        <div class="accordion-actions">
-                            <button type="button" onclick="editContent('estimate/estimate.html', '장례 비용 · 견적')">페이지 열기</button>
+                </article>
+
+                <article class="ops-panel ops-status-panel">
+                    <header class="ops-panel-header">
+                        <div>
+                            <span class="ops-panel-kicker">REQUEST STATUS</span>
+                            <h2>처리 상태</h2>
                         </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button type="button" class="accordion-header">장례 절차 가이드</button>
-                    <div class="accordion-panel">
-                        <p style="margin-bottom: 12px; color: #666;">장례 진행 절차 안내</p>
-                        <div class="accordion-actions">
-                            <button type="button" onclick="editContent('guide/guide.html', '장례 절차 가이드')">페이지 열기</button>
+                    </header>
+                    <div id="dashboardStatusOverview" class="ops-status-list"></div>
+                </article>
+            </section>
+
+            <section class="ops-dashboard-grid secondary">
+                <article class="ops-panel">
+                    <header class="ops-panel-header">
+                        <div>
+                            <span class="ops-panel-kicker">7 DAY TREND</span>
+                            <h2>최근 7일 접수 추이</h2>
                         </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button type="button" class="accordion-header">고객지원</button>
-                    <div class="accordion-panel">
-                        <p style="margin-bottom: 12px; color: #666;">상담 및 FAQ</p>
-                        <div class="accordion-actions">
-                            <button type="button" onclick="editContent('support/support.html', '고객지원')">페이지 열기</button>
+                    </header>
+                    <div id="dashboardTrendChart" class="ops-trend-chart"></div>
+                </article>
+
+                <article class="ops-panel">
+                    <header class="ops-panel-header">
+                        <div>
+                            <span class="ops-panel-kicker">SERVICE COVERAGE</span>
+                            <h2>운영 데이터 현황</h2>
                         </div>
+                    </header>
+                    <div class="ops-service-grid">
+                        <button type="button" onclick="showFuneralHallForm()"><span>등록 장례식장</span><strong id="dashboardHallCount">-</strong><small id="dashboardRegionCount">-개 시·도</small></button>
+                        <button type="button" onclick="showProductManagementForm()"><span>운영 상품</span><strong id="dashboardProductCount">-</strong><small id="dashboardActiveProductCount">-개 노출 중</small></button>
+                        <button type="button" onclick="showCostManagementForm()"><span>가격 등록 시설</span><strong id="dashboardPricedHallCount">-</strong><small id="dashboardPriceItemCount">-개 비용 항목</small></button>
                     </div>
-                </div>
-            </div>
+                    <div class="ops-region-block">
+                        <h3>요청이 많은 지역</h3>
+                        <div id="dashboardTopRegions" class="ops-region-list"></div>
+                    </div>
+                </article>
+            </section>
         </div>
+        <div id="contentMenuCard" style="display:none" aria-hidden="true"></div>
+        <div id="contentEditCard" style="display:none" aria-hidden="true"></div>
 
         <!-- 사용자 관리 메뉴 화면 -->
         <div class="dashboard-card" id="userManagementCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="admin-section-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>사용자 관리</h2>
             </div>
             <p style="margin-bottom: 20px; color: #666;">관리할 항목을 선택하세요</p>
@@ -1205,7 +2558,7 @@
             </div>
             
             <!-- 위쪽: 입력 폼 -->
-            <div style="margin-bottom: 40px; padding: 25px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+            <div class="admin-form-panel" style="margin-bottom: 40px; padding: 25px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
                 <h3 style="color: #667eea; margin-bottom: 20px; font-size: 1.3rem;">
                     <span id="formTitle">장례식장 정보 입력</span>
                 </h3>
@@ -1215,7 +2568,7 @@
                     <!-- 기본 정보 -->
                     <div style="margin-bottom: 25px;">
                         <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #667eea; padding-bottom: 5px;">기본 정보</h4>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div class="admin-form-grid admin-form-grid--3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                             <div>
                                 <label for="hallName" style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">장례식장 이름 <span style="color: red;">*</span></label>
                                 <input type="text" id="hallName" name="hall_name" required 
@@ -1249,7 +2602,7 @@
                     <!-- 회사 정보 -->
                     <div style="margin-bottom: 25px;">
                         <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #667eea; padding-bottom: 5px;">회사 정보</h4>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div class="admin-form-grid admin-form-grid--3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                             <div>
                                 <label for="representativename" style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">대표자명</label>
                                 <input type="text" id="representativename" name="representativename" 
@@ -1290,7 +2643,7 @@
                     <!-- 시설 정보 -->
                     <div style="margin-bottom: 25px;">
                         <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #667eea; padding-bottom: 5px;">시설 정보</h4>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div class="admin-form-grid admin-form-grid--3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                             <div>
                                 <label for="mortuaycnt" style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">영안실 수</label>
                                 <input type="number" id="mortuaycnt" name="mortuaycnt" min="0" max="255"
@@ -1323,7 +2676,7 @@
                     <!-- 시설 여부 -->
                     <div style="margin-bottom: 25px;">
                         <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #667eea; padding-bottom: 5px;">시설 여부</h4>
-                        <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                        <div class="admin-check-grid" style="display: flex; gap: 30px; flex-wrap: wrap;">
                             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                                 <input type="checkbox" id="mealroomyn" name="mealroomyn" value="1" style="width: 18px; height: 18px; cursor: pointer;">
                                 <span style="font-weight: 500; color: #333;">식당</span>
@@ -1347,7 +2700,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
+                    <div class="admin-form-actions" style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
                         <button type="button" id="cancelEditBtn" class="cancel-btn" onclick="resetFuneralHallForm()" style="display: none;">취소</button>
                         <button type="submit" class="save-btn" id="submitBtn">저장</button>
                     </div>
@@ -1376,13 +2729,13 @@
 
         <!-- 견적서 관리 -->
         <div class="dashboard-card" id="estimateManagementCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="admin-section-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>견적서 관리</h2>
             </div>
             
             <!-- 검색 및 필터 -->
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
-                <div style="display: grid; grid-template-columns: 2fr 1fr auto auto; gap: 15px; align-items: end;">
+            <div class="admin-filter-panel" style="margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+                <div class="admin-filter-grid admin-filter-grid--estimate" style="display: grid; grid-template-columns: 2fr 1fr auto auto; gap: 15px; align-items: end;">
                     <div>
                         <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">검색</label>
                         <input type="text" id="estimateSearchInput" placeholder="고인명, 담당자명, 연락처로 검색..." 
@@ -1417,18 +2770,21 @@
             </div>
 
             <!-- 견적서 상세 정보 -->
-            <div id="estimateDetailSection" style="display: none; margin-top: 30px;">
-                <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #667eea;">
-                        <h2 style="color: #667eea; margin: 0;">견적 요청 상세 정보</h2>
-                        <button onclick="closeEstimateDetail()" class="cancel-btn" style="padding: 8px 20px;">닫기</button>
+            <div id="estimateDetailSection" class="estimate-detail-section" style="display: none; margin-top: 30px;">
+                <div class="estimate-detail-surface">
+                    <div class="estimate-detail-heading">
+                        <div>
+                            <span>ESTIMATE REQUEST</span>
+                            <h2>견적 요청 상세 정보</h2>
+                        </div>
+                        <button onclick="closeEstimateDetail()" class="cancel-btn">닫기</button>
                     </div>
                     
                     <div id="estimateDetailContent">
                         <!-- 동적으로 채워짐 -->
                     </div>
                     
-                    <div style="margin-top: 30px; text-align: center;">
+                    <div class="estimate-detail-actions">
                         <button id="estimateCreateBtn" onclick="createEstimateFromRequest()" class="save-btn" style="padding: 15px 40px; font-size: 1.1rem;">
                             견적 작성
                         </button>
@@ -1482,13 +2838,13 @@
 
         <!-- 비용 관리 폼 -->
         <div class="dashboard-card" id="costManagementCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="admin-section-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>비용 관리</h2>
             </div>
             
             <!-- 검색 및 필터 -->
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto auto auto; gap: 15px; align-items: end;">
+            <div class="admin-filter-panel" style="margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+                <div class="admin-filter-grid admin-filter-grid--cost" style="display: grid; grid-template-columns: 2fr 1fr 1fr auto auto auto; gap: 15px; align-items: end;">
                     <div>
                         <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">검색</label>
                         <input type="text" id="costSearchInput" placeholder="장례식장명, 전화번호, 주소로 검색..." 
@@ -1553,15 +2909,15 @@
 
         <!-- 상조 상품 관리 -->
         <div class="dashboard-card" id="productManagementCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="admin-section-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>상조 상품 관리</h2>
             </div>
 
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+            <div class="admin-form-panel" style="margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
                 <h3 style="color: #667eea; margin-bottom: 15px;">상품 등록/수정</h3>
                 <form id="productForm" onsubmit="saveProduct(event); return false;">
                     <input type="hidden" id="productId" value="">
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div class="admin-form-grid admin-form-grid--3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                         <div>
                             <label style="display: block; margin-bottom: 6px; font-weight: 500;">상품 유형</label>
                             <input type="text" id="productType" list="productTypeList" required placeholder="예: 일반, VIP" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
@@ -1595,7 +2951,7 @@
                             <textarea id="productDetails" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
                         </div>
                     </div>
-                    <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <div class="admin-form-actions" style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
                         <button type="button" class="cancel-btn" onclick="resetProductForm()">초기화</button>
                         <button type="submit" class="save-btn">저장</button>
                     </div>
@@ -1612,42 +2968,46 @@
 
         <!-- 관리자 추가 -->
         <div class="dashboard-card" id="adminCreateCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>관리자 추가</h2>
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-section-kicker">ACCOUNT MANAGEMENT</span>
+                    <h2>관리자 추가</h2>
+                    <p>운영 권한에 맞는 계정을 생성합니다. 비밀번호는 8자 이상으로 설정해주세요.</p>
+                </div>
             </div>
 
-            <div style="margin-bottom: 20px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+            <div class="admin-form-panel admin-form-panel--narrow">
                 <form id="adminCreateForm" onsubmit="createAdminUser(event); return false;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">아이디</label>
+                    <div class="admin-form-grid admin-form-grid--2">
+                        <div class="admin-field">
+                            <label for="adminCreateUserid">아이디</label>
                             <input type="text" id="adminCreateUserid" required placeholder="예: admin01" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">이름</label>
+                        <div class="admin-field">
+                            <label for="adminCreateName">이름</label>
                             <input type="text" id="adminCreateName" required placeholder="예: 김태석" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">비밀번호</label>
+                        <div class="admin-field">
+                            <label for="adminCreatePassword">비밀번호</label>
                             <input type="password" id="adminCreatePassword" required placeholder="8자 이상" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">비밀번호 확인</label>
+                        <div class="admin-field">
+                            <label for="adminCreatePasswordConfirm">비밀번호 확인</label>
                             <input type="password" id="adminCreatePasswordConfirm" required placeholder="비밀번호 재입력" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">전화번호</label>
+                        <div class="admin-field">
+                            <label for="adminCreatePhone">전화번호</label>
                             <input type="text" id="adminCreatePhone" placeholder="예: 010-1234-5678" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">등급</label>
+                        <div class="admin-field">
+                            <label for="adminCreateRole">권한 등급</label>
                             <select id="adminCreateRole" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 <option value="2">관리자</option>
                                 <option value="3">조회 전용</option>
                             </select>
                         </div>
                     </div>
-                    <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <div class="admin-form-actions">
                         <button type="button" class="cancel-btn" onclick="resetAdminCreateForm()">초기화</button>
                         <button type="submit" class="save-btn">생성</button>
                     </div>
@@ -1657,73 +3017,50 @@
 
         <!-- 관리자 비밀번호 변경 -->
         <div class="dashboard-card" id="passwordChangeCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>비밀번호 변경</h2>
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-section-kicker">ACCOUNT SECURITY</span>
+                    <h2>비밀번호 변경</h2>
+                    <p>관리자 계정을 안전하게 보호할 수 있도록 현재 비밀번호를 확인한 뒤 새 비밀번호를 설정합니다.</p>
+                </div>
             </div>
-            <div style="margin-bottom: 20px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
-                <form id="passwordChangeForm" onsubmit="updateAdminPassword(event); return false;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">현재 비밀번호</label>
-                            <input type="password" id="currentPassword" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            <div class="password-settings-layout">
+                <aside class="password-security-note" aria-label="비밀번호 설정 안내">
+                    <span class="password-security-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 5 6v5c0 4.6 2.8 8.1 7 10 4.2-1.9 7-5.4 7-10V6l-7-3Z"/><path d="m9.4 12 1.7 1.7 3.7-4"/></svg>
+                    </span>
+                    <strong>안전한 비밀번호 기준</strong>
+                    <p>8자 이상으로 설정하고, 다른 서비스에서 사용하지 않는 비밀번호를 권장합니다.</p>
+                    <ul>
+                        <li>현재 비밀번호 확인</li>
+                        <li>새 비밀번호 8자 이상</li>
+                        <li>새 비밀번호 재입력 확인</li>
+                    </ul>
+                </aside>
+                <form id="passwordChangeForm" class="password-settings-form" onsubmit="updateAdminPassword(event); return false;">
+                    <div class="admin-field password-current-field">
+                        <label for="currentPassword">현재 비밀번호</label>
+                        <input type="password" id="currentPassword" required autocomplete="current-password" placeholder="현재 비밀번호를 입력하세요">
+                    </div>
+                    <div class="password-field-divider" aria-hidden="true"></div>
+                    <div class="admin-form-grid admin-form-grid--2">
+                        <div class="admin-field">
+                            <label for="newPassword">새 비밀번호</label>
+                            <input type="password" id="newPassword" required minlength="8" autocomplete="new-password" placeholder="8자 이상 입력하세요">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">새 비밀번호</label>
-                            <input type="password" id="newPassword" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <div class="admin-field">
+                            <label for="confirmPassword">새 비밀번호 확인</label>
+                            <input type="password" id="confirmPassword" required minlength="8" autocomplete="new-password" placeholder="새 비밀번호를 다시 입력하세요">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 6px; font-weight: 500;">새 비밀번호 확인</label>
-                            <input type="password" id="confirmPassword" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                        </div>
-                        <div style="display: flex; align-items: flex-end; gap: 10px;">
-                            <button type="button" class="cancel-btn" onclick="resetPasswordForm()">초기화</button>
-                            <button type="submit" class="save-btn">변경</button>
-                        </div>
+                    </div>
+                    <div class="admin-form-actions">
+                        <button type="button" class="cancel-btn" onclick="resetPasswordForm()">입력 초기화</button>
+                        <button type="submit" class="save-btn">비밀번호 변경</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- 콘텐츠 편집 화면 -->
-        <div class="dashboard-card" id="contentEditCard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 id="editTitle">콘텐츠 편집</h2>
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 500;">파일 경로:</label>
-                <input type="text" id="editFilePath" readonly style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; background-color: #f5f5f5;">
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 500;">콘텐츠 편집:</label>
-                <!-- 툴바 -->
-                <div id="editorToolbar" style="border: 1px solid #ddd; border-bottom: none; background-color: #f8f9fa; padding: 10px; border-radius: 5px 5px 0 0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-                    <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="굵게"><strong>B</strong></button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="기울임"><em>I</em></button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="밑줄"><u>U</u></button>
-                    <div style="width: 1px; height: 24px; background-color: #ddd;"></div>
-                    <select id="fontSizeSelect" class="toolbar-select" onchange="changeFontSize(this.value)" title="글자 크기">
-                        <option value="">글자 크기</option>
-                        <option value="12px">12px</option>
-                        <option value="14px">14px</option>
-                        <option value="16px">16px</option>
-                        <option value="18px">18px</option>
-                        <option value="20px">20px</option>
-                        <option value="24px">24px</option>
-                        <option value="28px">28px</option>
-                        <option value="32px">32px</option>
-                    </select>
-                    <div style="width: 1px; height: 24px; background-color: #ddd;"></div>
-                    <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="insertImage(this)">
-                    <button type="button" class="toolbar-btn" onclick="document.getElementById('imageUpload').click()" title="이미지 삽입">📷 이미지</button>
-                </div>
-                <!-- 에디터 영역 -->
-                <div id="editContent" contenteditable="true" style="width: 100%; min-height: 500px; padding: 15px; border: 1px solid #ddd; border-radius: 0 0 5px 5px; background-color: white; outline: none; font-size: 16px; line-height: 1.6;"></div>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="save-btn" onclick="saveContent()">저장</button>
-                <button class="cancel-btn" onclick="showContentMenu()">취소</button>
-            </div>
-        </div>
     </div>
 
     <!-- 견적서 PDF 템플릿 (렌더링용, 숨김) -->
@@ -1808,6 +3145,20 @@
 
         let adminRole = 0;
 
+        function isLocalAdminPreview() {
+            return ['127.0.0.1', 'localhost', '::1'].includes(window.location.hostname);
+        }
+
+        function enableLocalAdminPreview() {
+            adminRole = 1;
+            adminReady = true;
+            applyAdminPermissions(adminRole);
+            document.body.classList.remove('auth-pending');
+            const userName = document.getElementById('userName');
+            if (userName) userName.innerHTML = '로컬 관리자 <span class="local-preview-badge">미리보기</span>';
+            applyViewFromHash();
+        }
+
         function updateAdminLevelLabel() {
             const label = document.getElementById('adminLevelLabel');
             if (label) {
@@ -1819,10 +3170,12 @@
         function initAdminTree() {
             const toggles = document.querySelectorAll('.tree-toggle');
             toggles.forEach(toggle => {
+                const group = toggle.closest('.tree-group');
+                toggle.setAttribute('aria-expanded', group && group.classList.contains('collapsed') ? 'false' : 'true');
                 toggle.addEventListener('click', () => {
-                    const group = toggle.closest('.tree-group');
                     if (group) {
                         group.classList.toggle('collapsed');
+                        toggle.setAttribute('aria-expanded', group.classList.contains('collapsed') ? 'false' : 'true');
                     }
                 });
             });
@@ -1861,6 +3214,10 @@
                 const group = activeItem.closest('.tree-group');
                 if (group && group.classList.contains('collapsed')) {
                     group.classList.remove('collapsed');
+                    const toggle = group.querySelector('.tree-toggle');
+                    if (toggle) {
+                        toggle.setAttribute('aria-expanded', 'true');
+                    }
                 }
             }
         }
@@ -1912,14 +3269,8 @@
         }
 
         function handleMobileContentTarget() {
-            const path = sessionStorage.getItem('mobileContentPath');
-            const title = sessionStorage.getItem('mobileContentTitle');
-            if (!path || !title) {
-                return;
-            }
             sessionStorage.removeItem('mobileContentPath');
             sessionStorage.removeItem('mobileContentTitle');
-            editContent(path, title);
         }
 
         // 관리자 로그인 확인
@@ -1966,8 +3317,12 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    window.location.href = 'login.html';
+                    if (isLocalAdminPreview()) {
+                        enableLocalAdminPreview();
+                    } else {
+                        console.error('Error:', error);
+                        window.location.href = 'login.html';
+                    }
                 });
         }
 
@@ -1998,12 +3353,18 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading user info:', error);
+                    if (!isLocalAdminPreview()) {
+                        console.error('Error loading user info:', error);
+                    }
                 });
         }
 
         // 로그아웃
         function logout() {
+            if (isLocalAdminPreview()) {
+                window.location.href = '../index.html';
+                return;
+            }
             if (confirm('로그아웃하시겠습니까?')) {
                 fetch('../api/logout.php')
                     .then(response => response.json())
@@ -2040,24 +3401,209 @@
             if (updateHash) {
                 location.hash = 'main';
             }
+            loadDashboardData();
         }
 
-        // 콘텐츠 메뉴 표시
-        function showContentMenu(updateHash = true) {
-            if (!requireRole([1])) return;
-            document.getElementById('mainMenu').style.display = 'none';
-            document.getElementById('contentMenuCard').style.display = 'block';
-            document.getElementById('contentEditCard').style.display = 'none';
-            document.getElementById('userManagementCard').style.display = 'none';
-            document.getElementById('funeralHallFormCard').style.display = 'none';
-            document.getElementById('costManagementCard').style.display = 'none';
-            document.getElementById('estimateManagementCard').style.display = 'none';
-            document.getElementById('productManagementCard').style.display = 'none';
-            document.getElementById('adminCreateCard').style.display = 'none';
-            document.getElementById('passwordChangeCard').style.display = 'none';
-            if (updateHash) {
-                location.hash = 'contentMenu';
+        let dashboardLoadPromise = null;
+
+        function parseDashboardDate(value) {
+            if (!value) return null;
+            const parsed = new Date(String(value).replace(' ', 'T'));
+            return Number.isNaN(parsed.getTime()) ? null : parsed;
+        }
+
+        function dashboardDateKey(value) {
+            const date = value instanceof Date ? value : parseDashboardDate(value);
+            if (!date) return '';
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        async function buildLocalDashboardData() {
+            const [halls, products] = await Promise.all([
+                loadAdminHallCache().catch(() => []),
+                loadAdminProducts().catch(() => getLocalProductFallback())
+            ]);
+            const records = getLocalEstimateRecords()
+                .slice()
+                .sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+            const todayKey = dashboardDateKey(new Date());
+            const countStatus = status => records.filter(item => (item.status || 'pending') === status).length;
+            const regions = new Set(halls.map(item => item.addr_sido).filter(Boolean));
+            const trend = [];
+            for (let offset = 6; offset >= 0; offset -= 1) {
+                const date = new Date();
+                date.setHours(0, 0, 0, 0);
+                date.setDate(date.getDate() - offset);
+                const key = dashboardDateKey(date);
+                trend.push({ date: key, count: records.filter(item => dashboardDateKey(item.created_at) === key).length });
             }
+            const regionMap = {};
+            records.forEach(item => {
+                const label = [item.sido, item.sigungu].filter(Boolean).join(' ');
+                if (label) regionMap[label] = (regionMap[label] || 0) + 1;
+            });
+            return {
+                success: true,
+                summary: {
+                    estimate_total: records.length,
+                    pending: countStatus('pending'),
+                    contacted: countStatus('contacted'),
+                    completed: countStatus('completed'),
+                    cancelled: countStatus('cancelled'),
+                    today_count: records.filter(item => dashboardDateKey(item.created_at) === todayKey).length,
+                    hall_count: halls.length,
+                    region_count: regions.size,
+                    product_count: products.length,
+                    active_product_count: products.filter(item => Number(item.is_active) === 1).length,
+                    priced_hall_count: 0,
+                    price_item_count: 0
+                },
+                recent_estimates: records.slice(0, 10),
+                request_trend: trend,
+                top_regions: Object.entries(regionMap)
+                    .map(([label, count]) => ({ label, count }))
+                    .sort((a, b) => b.count - a.count)
+                    .slice(0, 5),
+                generated_at: new Date().toLocaleString('sv-SE')
+            };
+        }
+
+        function setDashboardMetric(id, value) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = Number(value || 0).toLocaleString('ko-KR');
+        }
+
+        function getDashboardStatus(status) {
+            const map = {
+                pending: { label: '대기', className: 'pending' },
+                contacted: { label: '연락 완료', className: 'contacted' },
+                completed: { label: '완료', className: 'completed' },
+                cancelled: { label: '취소', className: 'cancelled' }
+            };
+            return map[status] || map.pending;
+        }
+
+        function openDashboardEstimate(estimateId) {
+            showEstimateManagement();
+            setTimeout(() => showEstimateDetail(Number(estimateId)), 180);
+        }
+
+        function renderDashboardData(data) {
+            const summary = data.summary || {};
+            setDashboardMetric('dashboardEstimateTotal', summary.estimate_total);
+            setDashboardMetric('dashboardPending', summary.pending);
+            setDashboardMetric('dashboardCompleted', summary.completed);
+            setDashboardMetric('dashboardToday', summary.today_count);
+            setDashboardMetric('dashboardHallCount', summary.hall_count);
+            setDashboardMetric('dashboardProductCount', summary.product_count);
+            setDashboardMetric('dashboardPricedHallCount', summary.priced_hall_count);
+
+            const regionCount = document.getElementById('dashboardRegionCount');
+            const activeProductCount = document.getElementById('dashboardActiveProductCount');
+            const priceItemCount = document.getElementById('dashboardPriceItemCount');
+            if (regionCount) regionCount.textContent = `${Number(summary.region_count || 0).toLocaleString('ko-KR')}개 시·도`;
+            if (activeProductCount) activeProductCount.textContent = `${Number(summary.active_product_count || 0).toLocaleString('ko-KR')}개 노출 중`;
+            if (priceItemCount) priceItemCount.textContent = `${Number(summary.price_item_count || 0).toLocaleString('ko-KR')}개 비용 항목`;
+
+            const updatedAt = document.getElementById('dashboardUpdatedAt');
+            if (updatedAt) {
+                updatedAt.textContent = `최종 집계 ${formatDateTime(data.generated_at)} · 새로고침하면 최신 데이터가 반영됩니다.`;
+            }
+
+            const recentBody = document.getElementById('dashboardRecentRequests');
+            const recent = Array.isArray(data.recent_estimates) ? data.recent_estimates.slice(0, 10) : [];
+            if (recentBody) {
+                recentBody.innerHTML = recent.length ? recent.map(item => {
+                    const status = getDashboardStatus(item.status);
+                    return `
+                        <tr tabindex="0" onclick="openDashboardEstimate(${Number(item.estimate_id)})" onkeydown="if(event.key==='Enter') openDashboardEstimate(${Number(item.estimate_id)})">
+                            <td><span class="ops-date">${escapeHtml(formatDateTime(item.created_at))}</span></td>
+                            <td><strong>${escapeHtml(formatEstimatePersonName(item))}</strong><small>${escapeHtml(item.funeral_period || '-')}</small></td>
+                            <td>${escapeHtml([item.sido, item.sigungu].filter(Boolean).join(' ') || '-')}</td>
+                            <td>${escapeHtml(item.contact_name || '-')}</td>
+                            <td><span class="ops-status-chip ${status.className}">${status.label}</span></td>
+                        </tr>`;
+                }).join('') : '<tr><td colspan="5" class="ops-empty">아직 접수된 견적 요청이 없습니다.</td></tr>';
+            }
+
+            const statusOverview = document.getElementById('dashboardStatusOverview');
+            if (statusOverview) {
+                const total = Math.max(1, Number(summary.estimate_total || 0));
+                const statuses = [
+                    ['pending', '대기', Number(summary.pending || 0)],
+                    ['contacted', '연락 완료', Number(summary.contacted || 0)],
+                    ['completed', '완료', Number(summary.completed || 0)],
+                    ['cancelled', '취소', Number(summary.cancelled || 0)]
+                ];
+                statusOverview.innerHTML = statuses.map(([key, label, count]) => `
+                    <div class="ops-status-row">
+                        <div><span class="ops-status-dot ${key}"></span><strong>${label}</strong><em>${count.toLocaleString('ko-KR')}건</em></div>
+                        <div class="ops-progress"><span class="${key}" style="width:${Math.round((count / total) * 100)}%"></span></div>
+                    </div>`).join('');
+            }
+
+            const trendChart = document.getElementById('dashboardTrendChart');
+            const trend = Array.isArray(data.request_trend) ? data.request_trend : [];
+            if (trendChart) {
+                const maxCount = Math.max(1, ...trend.map(item => Number(item.count || 0)));
+                trendChart.innerHTML = trend.map(item => {
+                    const date = parseDashboardDate(item.date);
+                    const label = date ? `${date.getMonth() + 1}/${date.getDate()}` : item.date;
+                    const count = Number(item.count || 0);
+                    const height = count === 0 ? 5 : Math.max(14, Math.round((count / maxCount) * 100));
+                    return `<div class="ops-trend-item"><strong>${count}</strong><div><span style="height:${height}%"></span></div><small>${escapeHtml(label)}</small></div>`;
+                }).join('');
+            }
+
+            const topRegions = document.getElementById('dashboardTopRegions');
+            const regions = Array.isArray(data.top_regions) ? data.top_regions : [];
+            if (topRegions) {
+                const maxRegion = Math.max(1, ...regions.map(item => Number(item.count || 0)));
+                topRegions.innerHTML = regions.length ? regions.map((item, index) => `
+                    <div class="ops-region-row">
+                        <span>${index + 1}</span><strong>${escapeHtml(item.label || '-')}</strong>
+                        <div><i style="width:${Math.max(8, Math.round((Number(item.count || 0) / maxRegion) * 100))}%"></i></div>
+                        <em>${Number(item.count || 0).toLocaleString('ko-KR')}건</em>
+                    </div>`).join('') : '<div class="ops-empty compact">집계할 지역 데이터가 없습니다.</div>';
+            }
+        }
+
+        function showDashboardError(message) {
+            const updatedAt = document.getElementById('dashboardUpdatedAt');
+            if (updatedAt) updatedAt.textContent = message || '운영 현황을 불러오지 못했습니다.';
+        }
+
+        function loadDashboardData(force = false) {
+            if (dashboardLoadPromise && !force) return dashboardLoadPromise;
+            showDashboardError('최신 운영 데이터를 불러오고 있습니다.');
+            dashboardLoadPromise = fetch('../api/get_admin_dashboard.php?t=' + Date.now(), { cache: 'no-store' })
+                .then(response => {
+                    const contentType = response.headers.get('content-type') || '';
+                    if (!response.ok || !contentType.includes('application/json')) throw new Error('대시보드 API 응답 오류');
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) throw new Error(data.message || '운영 현황 조회 실패');
+                    renderDashboardData(data);
+                    return data;
+                })
+                .catch(async error => {
+                    if (isLocalAdminPreview()) {
+                        const fallback = await buildLocalDashboardData();
+                        renderDashboardData(fallback);
+                        return fallback;
+                    }
+                    console.error('Dashboard error:', error);
+                    showDashboardError('운영 현황을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+                    return null;
+                })
+                .finally(() => {
+                    dashboardLoadPromise = null;
+                });
+            return dashboardLoadPromise;
         }
 
         // 사용자 관리 메뉴 표시
@@ -2104,6 +3650,62 @@
         let estimateCurrentPage = 1;
         const estimateItemsPerPage = 20;
 
+        function getLocalEstimateRecords() {
+            if (!isLocalAdminPreview()) return [];
+            try {
+                const records = JSON.parse(localStorage.getItem('leaverLifeLocalEstimateRequests') || '[]');
+                return Array.isArray(records) ? records : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function renderLocalEstimateList(listContainer, search = '', filterStatus = '') {
+            const query = String(search || '').toLowerCase();
+            const records = getLocalEstimateRecords().filter((estimate) => {
+                const searchText = [estimate.deceased_name, estimate.contact_name, estimate.contact_phone, estimate.sido, estimate.sigungu]
+                    .filter(Boolean).join(' ').toLowerCase();
+                if (query && !searchText.includes(query)) return false;
+                if (filterStatus && estimate.status !== filterStatus) return false;
+                return true;
+            });
+
+            if (!records.length) {
+                listContainer.innerHTML = '<div style="text-align:center; color:#66736e; padding:42px 20px;"><strong style="display:block; color:#205442; margin-bottom:6px;">아직 저장된 견적 요청이 없습니다.</strong>로컬 견적 화면에서 완료한 요청이 여기에 표시됩니다.</div>';
+                return;
+            }
+
+            listContainer.innerHTML = `
+                <div style="padding:14px 16px; color:#5d6d66; background:#f4f8f6; border-bottom:1px solid #dbe5e0; font-size:.88rem;">
+                    로컬 미리보기 요청 ${records.length}건 · 운영 서버에는 아직 전송되지 않은 테스트 데이터입니다.
+                </div>
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; background:#fff;">
+                        <thead><tr style="background:#eef4f1; color:#205442;">
+                            <th style="padding:12px; text-align:left;">구분 · 성함</th>
+                            <th style="padding:12px; text-align:left;">지역 · 장례식장</th>
+                            <th style="padding:12px; text-align:left;">요청자</th>
+                            <th style="padding:12px; text-align:left;">연락처</th>
+                            <th style="padding:12px; text-align:center;">상태</th>
+                            <th style="padding:12px; text-align:center;">등록일시</th>
+                        </tr></thead>
+                        <tbody>
+                            ${records.map((estimate) => `
+                                <tr onclick="showEstimateDetail(${Number(estimate.estimate_id)})" style="cursor:pointer; border-top:1px solid #edf2ef;">
+                                    <td style="padding:13px 12px; font-weight:700;"><small style="display:block; margin-bottom:3px; color:#73827a; font-weight:700;">${getEstimateDeathStatus(estimate) === 'before' ? '사망 전' : '사망 후'}</small>${escapeHtml(formatEstimatePersonName(estimate))}</td>
+                                    <td style="padding:13px 12px; color:#66736e;">${escapeHtml([estimate.sido, estimate.sigungu, estimate.funeral_hall_name].filter(Boolean).join(' · ') || '-')}</td>
+                                    <td style="padding:13px 12px;">${escapeHtml(estimate.contact_name || '-')}</td>
+                                    <td style="padding:13px 12px; color:#66736e;">${escapeHtml(estimate.contact_phone || '-')}</td>
+                                    <td style="padding:13px 12px; text-align:center;"><span style="padding:5px 9px; color:#205442; background:#e7f0ec; border-radius:999px; font-size:.8rem; font-weight:700;">대기중</span></td>
+                                    <td style="padding:13px 12px; text-align:center; color:#66736e; white-space:nowrap;">${escapeHtml(estimate.created_at || '-')}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
         // 견적서 목록 로드
         function loadEstimateList(page = 1, searchTerm = '', status = '') {
             estimateCurrentPage = page;
@@ -2136,13 +3738,13 @@
                                     <thead>
                                         <tr style="background-color: #f0f0f0;">
                                             <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">번호</th>
-                                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">고인명</th>
+                                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">구분</th>
+                                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">성함</th>
                                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">관계</th>
                                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">사망일</th>
-                                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">사망장소</th>
+                                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">장소</th>
                                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">지역</th>
                                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">장례기간</th>
-                                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">종교</th>
                                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">담당자</th>
                                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">연락처</th>
                                             <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">상태</th>
@@ -2196,13 +3798,13 @@
                                     onmouseover="this.style.backgroundColor='#e3f2fd'" 
                                     onmouseout="this.style.backgroundColor='${bgColor}'">
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #666; text-align: center; white-space: nowrap;">${startIndex + index + 1}</td>
-                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-weight: 500; white-space: nowrap;">${escapeHtml(formatDeceasedName(estimate.deceased_name))}</td>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #496057; font-weight: 700; white-space: nowrap;">${getEstimateDeathStatus(estimate) === 'before' ? '사망 전' : '사망 후'}</td>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-weight: 500; white-space: nowrap;">${escapeHtml(formatEstimatePersonName(estimate))}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${escapeHtml(estimate.relationship || '-')}</td>
-                                    <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${estimate.death_date || '-'}</td>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${getEstimateDeathStatus(estimate) === 'before' ? '해당 없음' : (estimate.death_date || '-')}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${escapeHtml(estimate.death_location || '-')}${estimate.death_location_other ? ' (' + escapeHtml(estimate.death_location_other) + ')' : ''}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${escapeHtml(estimate.sido || '-')} ${escapeHtml(estimate.sigungu || '')}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${escapeHtml(estimate.funeral_period || '-')}</td>
-                                    <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${escapeHtml(estimate.religion || '-')}${estimate.religion_other ? ' (' + escapeHtml(estimate.religion_other) + ')' : ''}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-weight: 500; white-space: nowrap;">${escapeHtml(estimate.contact_name || '-')}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #666; white-space: nowrap;">${escapeHtml(estimate.contact_phone || '-')}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; text-align: center; white-space: nowrap;">
@@ -2227,12 +3829,20 @@
                             renderEstimatePagination(data.total_pages, page, search, filterStatus);
                         }
                     } else {
-                        listContainer.innerHTML = '<div style="text-align: center; color: #dc3545; padding: 20px;">목록을 불러올 수 없습니다.</div>';
+                        if (isLocalAdminPreview()) {
+                            renderLocalEstimateList(listContainer, search, filterStatus);
+                        } else {
+                            listContainer.innerHTML = '<div style="text-align: center; color: #b64c3b; padding: 20px;">목록을 불러올 수 없습니다.</div>';
+                        }
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    listContainer.innerHTML = '<div style="text-align: center; color: #dc3545; padding: 20px;">목록을 불러오는 중 오류가 발생했습니다.</div>';
+                    if (isLocalAdminPreview()) {
+                        renderLocalEstimateList(listContainer, search, filterStatus);
+                    } else {
+                        console.error('Error:', error);
+                        listContainer.innerHTML = '<div style="text-align: center; color: #b64c3b; padding: 20px;">목록을 불러오는 중 오류가 발생했습니다.</div>';
+                    }
                 });
         }
 
@@ -2329,6 +3939,14 @@
             document.getElementById('estimateHallPriceSection').style.display = 'none';
             selectedEstimateForHall = null;
             selectedEstimateHallId = null;
+
+            const localEstimate = getLocalEstimateRecords().find((estimate) => Number(estimate.estimate_id) === Number(estimateId));
+            if (localEstimate) {
+                selectedEstimateForHall = localEstimate;
+                persistEstimateContext(localEstimate);
+                displayEstimateDetail(localEstimate);
+                return;
+            }
             
             fetch(`../api/get_estimate_requests.php?estimate_id=${estimateId}`)
                 .then(response => response.json())
@@ -2360,180 +3978,71 @@
                 'completed': '완료',
                 'cancelled': '취소'
             }[estimate.status] || estimate.status;
-            const statusColor = {
-                'pending': '#ffc107',
-                'contacted': '#17a2b8',
-                'completed': '#28a745',
-                'cancelled': '#dc3545'
-            }[estimate.status] || '#6c757d';
-            const statusTextColor = {
-                'pending': '#ffc107',
-                'contacted': '#17a2b8',
-                'completed': '#28a745',
-                'cancelled': '#dc3545'
-            }[estimate.status] || '#6c757d';
+            const statusClass = ['pending', 'contacted', 'completed', 'cancelled'].includes(estimate.status) ? estimate.status : 'pending';
+            const deathStatus = getEstimateDeathStatus(estimate);
+            const personLabel = deathStatus === 'before' ? '환우명' : '고인 성함';
+            const privacyAgreed = Number(estimate.privacy_consent) === 1;
+            const contactAgreed = Number(estimate.contact_consent ?? estimate.sensitive_info_consent) === 1;
+            const placeText = [estimate.death_location, estimate.death_location_other].filter(Boolean).join(' · ') || '-';
 
             if (createButton) {
                 createButton.textContent = estimate.status === 'completed' ? '견적 수정' : '견적 작성';
             }
-            
-            // 준비된 서비스 텍스트 생성
-            let preparedServicesText = '-';
-            if (estimate.prepared_services && Array.isArray(estimate.prepared_services) && estimate.prepared_services.length > 0) {
-                const serviceNames = {
-                    'portraitPhoto': '영정사진',
-                    'shroud': '수의',
-                    'clothes': '옷',
-                    'other': '기타'
-                };
-                preparedServicesText = estimate.prepared_services.map(s => serviceNames[s] || s).join(', ');
-                if (estimate.other_service_text) {
-                    preparedServicesText += ` (${escapeHtml(estimate.other_service_text)})`;
-                }
-            }
-            
-            // 장지 텍스트 생성
-            const burialSiteText = {
-                'cemetery': '공원묘지',
-                'natural': '자연장지',
-                'columbarium': '봉안당',
-                'home': '가정 보관'
-            }[estimate.burial_site] || estimate.burial_site || '-';
-            
             detailContent.innerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 25px;">
-                    <!-- 기본 정보 카드 -->
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3 style="margin: 0; font-size: 1.3rem; font-weight: 600;">기본 정보</h3>
-                            <span style="padding: 6px 14px; background-color: ${statusTextColor}; color: white; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                ${statusText}
-                            </span>
+                <div class="estimate-detail-layout">
+                    <section class="estimate-detail-hero">
+                        <div>
+                            <span class="estimate-detail-eyebrow">REQUEST #${escapeHtml(String(estimate.estimate_id || '-'))}</span>
+                            <h3>${escapeHtml(formatEstimatePersonName(estimate))}</h3>
+                            <p>${escapeHtml(estimate.created_at || '-')} 접수 · ${escapeHtml([estimate.sido, estimate.sigungu].filter(Boolean).join(' ') || '지역 미지정')}</p>
                         </div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                            <div>
-                                <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">고인 성함</div>
-                                <div style="font-size: 1.1rem; font-weight: 600;">${escapeHtml(formatDeceasedName(estimate.deceased_name))}</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">고인과의 관계</div>
-                                <div style="font-size: 1.1rem; font-weight: 600;">${escapeHtml(estimate.relationship || '-')}</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">사망일</div>
-                                <div style="font-size: 1.1rem; font-weight: 600;">${estimate.death_date || '-'}</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">사망 장소</div>
-                                <div style="font-size: 1.1rem; font-weight: 600;">
-                                    ${escapeHtml(estimate.death_location || '-')}${estimate.death_location_other ? ' <span style="font-size: 0.9rem; opacity: 0.8;">(' + escapeHtml(estimate.death_location_other) + ')</span>' : ''}
-                                </div>
-                            </div>
-                            <div>
-                                <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">예상 조문객 수</div>
-                                <div style="font-size: 1.1rem; font-weight: 600;">${estimate.expected_visitors ? estimate.expected_visitors.toLocaleString('ko-KR') + '명' : '-'}</div>
-                            </div>
+                        <div class="estimate-detail-badges">
+                            <span class="estimate-detail-badge">${deathStatus === 'before' ? '사망 전 상담' : '사망 후 상담'}</span>
+                            <span class="estimate-detail-badge ${statusClass}">${escapeHtml(statusText || '-')}</span>
                         </div>
-                    </div>
-                    
-                    <!-- 지역 및 장례 정보 카드 -->
-                    <div style="background-color: white; border: 2px solid #e9ecef; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h3 style="color: #667eea; margin: 0 0 20px 0; font-size: 1.2rem; font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #667eea;">지역 및 장례 정보</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">지역</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                                    ${escapeHtml(estimate.sido || '-')} ${escapeHtml(estimate.sigungu || '')}
-                                </div>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">장례 기간</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                                    ${escapeHtml(estimate.funeral_period || '-')}
-                                </div>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">종교</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                                    ${escapeHtml(estimate.religion || '-')}${estimate.religion_other ? ' <span style="font-size: 0.85rem; color: #666;">(' + escapeHtml(estimate.religion_other) + ')</span>' : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 준비된 서비스 카드 -->
-                    <div style="background-color: white; border: 2px solid #e9ecef; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h3 style="color: #667eea; margin: 0 0 20px 0; font-size: 1.2rem; font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #667eea;">준비된 서비스</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">준비된 서비스</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea; min-height: 50px;">
-                                    ${preparedServicesText.split(', ').map(s => `<div style="margin-bottom: 5px;">• ${s}</div>`).join('')}
-                                </div>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">장지 선택</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                                    ${burialSiteText}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 연락처 정보 카드 -->
-                    <div style="background-color: white; border: 2px solid #e9ecef; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h3 style="color: #667eea; margin: 0 0 20px 0; font-size: 1.2rem; font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #667eea;">연락처 정보</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">담당자 성함</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                                    ${escapeHtml(estimate.contact_name || '-')}
-                                </div>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">연락처</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                                    ${escapeHtml(estimate.contact_phone || '-')}
-                                </div>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500; color: #666; margin-bottom: 8px; font-size: 0.9rem;">이메일</div>
-                                <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                                    ${escapeHtml(estimate.contact_email || '-')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </section>
 
-                    <!-- 상조 상품 정보 카드 -->
-                    <div style="background-color: white; border: 2px solid #e9ecef; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h3 style="color: #667eea; margin: 0 0 20px 0; font-size: 1.2rem; font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #667eea;">상조 상품</h3>
-                        <div style="font-size: 1rem; color: #333; padding: 12px; background-color: #f8f9fa; border-radius: 6px; border-left: 4px solid #667eea;">
-                            <span id="estimateDetailProductName">${productSummary}</span>
-                        </div>
+                    <div class="estimate-detail-grid">
+                        <section class="estimate-detail-card">
+                            <div class="estimate-detail-card-head"><h3>기본 정보</h3></div>
+                            <div class="estimate-detail-fields">
+                                <div class="estimate-detail-field"><label>${personLabel}</label><strong>${escapeHtml(formatEstimatePersonName(estimate))}</strong></div>
+                                <div class="estimate-detail-field"><label>관계</label><strong>${escapeHtml(estimate.relationship || '-')}</strong></div>
+                                <div class="estimate-detail-field"><label>사망일</label><strong>${deathStatus === 'before' ? '해당 없음' : escapeHtml(estimate.death_date || '-')}</strong></div>
+                                <div class="estimate-detail-field"><label>장소</label><strong>${escapeHtml(placeText)}</strong></div>
+                                <div class="estimate-detail-field"><label>예상 조문객</label><strong>${estimate.expected_visitors ? Number(estimate.expected_visitors).toLocaleString('ko-KR') + '명' : '-'}</strong></div>
+                            </div>
+                        </section>
+
+                        <section class="estimate-detail-card">
+                            <div class="estimate-detail-card-head"><h3>장례 및 연락 정보</h3></div>
+                            <div class="estimate-detail-fields">
+                                <div class="estimate-detail-field"><label>장례 지역</label><strong>${escapeHtml([estimate.sido, estimate.sigungu].filter(Boolean).join(' ') || '-')}</strong></div>
+                                <div class="estimate-detail-field"><label>장례 기간</label><strong>${escapeHtml(estimate.funeral_period || '-')}</strong></div>
+                                <div class="estimate-detail-field"><label>요청자</label><strong>${escapeHtml(estimate.contact_name || '-')}</strong></div>
+                                <div class="estimate-detail-field"><label>연락처</label><strong>${escapeHtml(estimate.contact_phone || '-')}</strong></div>
+                                <div class="estimate-detail-field"><label>이메일</label><strong>${escapeHtml(estimate.contact_email || '-')}</strong></div>
+                            </div>
+                        </section>
+
+                        <section class="estimate-detail-card full">
+                            <div class="estimate-detail-card-head"><h3>개인정보 동의 기록</h3><span class="estimate-detail-eyebrow">CONSENT RECORD</span></div>
+                            <div class="estimate-consent-grid">
+                                <div class="estimate-consent-record"><span>개인정보 수집·이용</span><strong class="${privacyAgreed ? 'is-agreed' : ''}">${privacyAgreed ? '동의' : '미동의'}</strong><small>${privacyAgreed ? '필수 동의가 확인되었습니다.' : '동의 값이 저장되지 않았습니다.'}</small></div>
+                                <div class="estimate-consent-record"><span>견적 상담 연락</span><strong class="${contactAgreed ? 'is-agreed' : ''}">${contactAgreed ? '동의' : '미동의'}</strong><small>${contactAgreed ? '상담 연락 동의가 확인되었습니다.' : '연락 동의 값이 저장되지 않았습니다.'}</small></div>
+                                <div class="estimate-consent-record"><span>동의 버전 · 일시</span><strong class="${estimate.consented_at ? 'is-agreed' : ''}">${escapeHtml(estimate.consent_version || '기록 없음')}</strong><small>${escapeHtml(estimate.consented_at || '동의 일시 기록 없음')}</small></div>
+                            </div>
+                        </section>
+
+                        <section class="estimate-detail-card full">
+                            <div class="estimate-detail-card-head"><h3>선택 상조 상품</h3></div>
+                            <div class="estimate-detail-field"><label>상품</label><strong id="estimateDetailProductName">${productSummary}</strong></div>
+                        </section>
                     </div>
                 </div>
             `;
             
             detailSection.style.display = 'block';
-            
-            // 등록일시를 버튼 위에 동적으로 추가 (기존 것 제거 후 추가)
-            setTimeout(() => {
-                const buttonContainer = detailSection.querySelector('div[style*="margin-top: 30px"]');
-                if (buttonContainer) {
-                    // 기존 등록일시 제거
-                    const existingDateDiv = buttonContainer.querySelector('div[style*="margin-bottom: 15px"]');
-                    if (existingDateDiv) {
-                        existingDateDiv.remove();
-                    }
-                    
-                    // 새 등록일시 추가
-                    const dateDiv = document.createElement('div');
-                    dateDiv.style.cssText = 'margin-bottom: 15px; color: #666; font-size: 0.9rem;';
-                    dateDiv.textContent = estimate.created_at || '-';
-                    buttonContainer.insertBefore(dateDiv, buttonContainer.firstChild);
-                }
-            }, 0);
             
             detailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -3061,10 +4570,15 @@
             return {
                 '견적번호': estimate.estimate_id || '-',
                 '작성일': new Date().toLocaleString('ko-KR'),
-                '고인 성함': formatDeceasedName(estimate.deceased_name),
+                '현재 상황': getEstimateDeathStatus(estimate) === 'before' ? '사망 전' : '사망 후',
+                [getEstimateDeathStatus(estimate) === 'before' ? '환우명' : '고인 성함']: formatEstimatePersonName(estimate),
                 '담당자 성함': estimate.contact_name || '-',
                 '연락처': estimate.contact_phone || '-',
                 '이메일': estimate.contact_email || '-',
+                '개인정보 수집·이용 동의': Number(estimate.privacy_consent) === 1 ? '동의' : '미동의',
+                '견적 상담 연락 동의': Number(estimate.contact_consent ?? estimate.sensitive_info_consent) === 1 ? '동의' : '미동의',
+                '동의문 버전': estimate.consent_version || '-',
+                '동의 일시': estimate.consented_at || '-',
                 '장례 기간': estimate.funeral_period || '-',
                 '지역': region || '-',
                 '장례식장': selectedEstimateHallName || '-',
@@ -3192,12 +4706,36 @@
             };
         }
 
+        function getLocalProductFallback() {
+            return [
+                { product_id: 1, product_type: '무빈소', product_name: '무빈소 상품', price: 100, summary: '간소한 장례 진행을 위한 기본 구성', is_active: 1 },
+                { product_id: 2, product_type: '일반', product_name: '일반 상품', price: 300, summary: '3일장 중심의 기본 의전과 용품 구성', is_active: 1 },
+                { product_id: 3, product_type: 'VIP', product_name: 'VIP 상품', price: 500, summary: '확장된 의전과 프리미엄 용품 구성', is_active: 1 }
+            ];
+        }
+
+        async function loadAdminProducts() {
+            try {
+                const response = await fetch('../api/get_funeral_products.php?include_inactive=1', { cache: 'no-store' });
+                const contentType = response.headers.get('content-type') || '';
+                if (!response.ok || !contentType.includes('application/json')) {
+                    throw new Error('상품 API가 JSON으로 응답하지 않았습니다.');
+                }
+                const data = await response.json();
+                if (!data.success || !Array.isArray(data.products)) {
+                    throw new Error(data.message || '상품 목록을 불러올 수 없습니다.');
+                }
+                return data.products;
+            } catch (error) {
+                if (isLocalAdminPreview()) return getLocalProductFallback();
+                throw error;
+            }
+        }
+
         async function fetchFuneralProduct(productId) {
             try {
-                const response = await fetch('../api/get_funeral_products.php?include_inactive=1');
-                const data = await response.json();
-                if (!data.success || !data.products) return null;
-                return data.products.find(item => Number(item.product_id) === Number(productId)) || null;
+                const products = await loadAdminProducts();
+                return products.find(item => Number(item.product_id) === Number(productId)) || null;
             } catch (error) {
                 console.error('Product fetch error:', error);
                 return null;
@@ -3210,16 +4748,10 @@
             const container = document.getElementById('estimateProductSelectContainer');
             if (!container) return;
 
-            fetch('../api/get_funeral_products.php?include_inactive=1')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success || !data.products) {
-                        container.innerHTML = '<div style="color: #dc3545;">상조 상품을 불러올 수 없습니다.</div>';
-                        return;
-                    }
-
-                    estimateProductList = data.products;
-                    const products = data.products.filter(item => item.is_active === 1 || Number(item.product_id) === Number(selectedEstimateForHall?.funeral_product_id));
+            loadAdminProducts()
+                .then(allProducts => {
+                    estimateProductList = allProducts;
+                    const products = allProducts.filter(item => Number(item.is_active) === 1 || Number(item.product_id) === Number(selectedEstimateForHall?.funeral_product_id));
                     if (products.length === 0) {
                         container.innerHTML = '<div style="color: #999;">등록된 상조 상품이 없습니다.</div>';
                         return;
@@ -3256,7 +4788,7 @@
                 })
                 .catch(error => {
                     console.error('Product selector error:', error);
-                    container.innerHTML = '<div style="color: #dc3545;">상조 상품을 불러오는 중 오류가 발생했습니다.</div>';
+                    container.innerHTML = '<div style="color: #b64c3b;">상조 상품을 불러오는 중 오류가 발생했습니다.</div>';
                 });
         }
 
@@ -3905,17 +5437,17 @@
             }
         }
 
-        // 검색 초기화
-        function resetSearch() {
-            document.getElementById('searchInput').value = '';
-            loadFuneralHallList('', 1);
+        function getEstimateDeathStatus(estimate) {
+            if (estimate && ['before', 'after'].includes(estimate.death_status)) {
+                return estimate.death_status;
+            }
+            return estimate && estimate.death_date ? 'after' : 'before';
         }
 
-        // 고인명 표기 (故 ... 님)
-        function formatDeceasedName(name) {
-            const trimmed = (name || '').trim();
-            if (!trimmed) return '-';
-            return `故 ${trimmed} 님`;
+        function formatEstimatePersonName(estimate) {
+            const name = String(estimate?.deceased_name || '').trim();
+            if (!name) return '-';
+            return getEstimateDeathStatus(estimate) === 'before' ? `${name} 님` : `故 ${name} 님`;
         }
 
         // HTML 이스케이프 함수
@@ -3936,6 +5468,74 @@
         // 현재 페이지 번호 (전역 변수)
         let currentPage = 1;
         const itemsPerPage = 10;
+
+        let adminHallCachePromise = null;
+
+        function loadAdminHallCache() {
+            if (!adminHallCachePromise) {
+                adminHallCachePromise = fetch('../data/funeral_halls.json?t=20260717', { cache: 'no-store' })
+                    .then(response => {
+                        if (!response.ok) throw new Error('장례식장 캐시를 불러올 수 없습니다.');
+                        return response.json();
+                    })
+                    .then(data => (Array.isArray(data.halls) ? data.halls : []).map(hall => {
+                        const fullAddress = String(hall.addr_full || hall.addr_detail || '').trim();
+                        const addressParts = fullAddress.split(/\s+/).filter(Boolean);
+                        return {
+                            ...hall,
+                            addr_sido: String(hall.addr_sido || addressParts[0] || '').trim(),
+                            addr_sigungu: String(hall.addr_sigungu || addressParts[1] || '').trim(),
+                            addr_full: fullAddress
+                        };
+                    }));
+            }
+            return adminHallCachePromise;
+        }
+
+        async function renderLocalFuneralHallList(listContainer, paginationContainer, searchTerm = '', page = 1) {
+            try {
+                const query = String(searchTerm || '').toLowerCase();
+                const allHalls = await loadAdminHallCache();
+                const filtered = allHalls.filter(hall => {
+                    if (!query) return true;
+                    return [hall.hall_name, hall.tel, hall.addr_full, hall.addr_sido, hall.addr_sigungu]
+                        .filter(Boolean).join(' ').toLowerCase().includes(query);
+                });
+                const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+                const safePage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+                const halls = filtered.slice((safePage - 1) * itemsPerPage, safePage * itemsPerPage);
+
+                listContainer.innerHTML = `
+                    <div style="padding:12px 16px; color:#5d6d66; background:#f4f8f6; border-bottom:1px solid #dbe5e0; font-size:.88rem;">
+                        운영 데이터 캐시 ${filtered.length.toLocaleString('ko-KR')}개 · 로컬 미리보기에서는 조회만 가능합니다.
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; background:#fff;">
+                            <thead><tr style="background:#eef4f1; color:#205442;">
+                                <th style="padding:12px; text-align:left;">장례식장명</th>
+                                <th style="padding:12px; text-align:left;">지역</th>
+                                <th style="padding:12px; text-align:left;">전화번호</th>
+                                <th style="padding:12px; text-align:left;">주소</th>
+                            </tr></thead>
+                            <tbody>${halls.map(hall => `
+                                <tr style="border-top:1px solid #edf2ef;">
+                                    <td style="padding:12px; font-weight:700; white-space:nowrap;">${escapeHtml(hall.hall_name || '-')}</td>
+                                    <td style="padding:12px; color:#66736e; white-space:nowrap;">${escapeHtml([hall.addr_sido, hall.addr_sigungu].filter(Boolean).join(' ') || '-')}</td>
+                                    <td style="padding:12px; color:#66736e; white-space:nowrap;">${escapeHtml(hall.tel || '-')}</td>
+                                    <td style="padding:12px; color:#66736e;">${escapeHtml(hall.addr_full || hall.addr_detail || '-')}</td>
+                                </tr>
+                            `).join('')}</tbody>
+                        </table>
+                    </div>`;
+
+                paginationContainer.innerHTML = `
+                    <button type="button" class="back-btn" ${safePage <= 1 ? 'disabled' : ''} onclick="loadFuneralHallList('${escapeHtml(searchTerm)}', ${safePage - 1})">이전</button>
+                    <span style="color:#66736e; font-weight:700;">${safePage} / ${totalPages}</span>
+                    <button type="button" class="save-btn" ${safePage >= totalPages ? 'disabled' : ''} onclick="loadFuneralHallList('${escapeHtml(searchTerm)}', ${safePage + 1})">다음</button>`;
+            } catch (error) {
+                listContainer.innerHTML = '<div style="text-align:center; color:#b64c3b; padding:30px;">장례식장 정보를 불러오지 못했습니다.</div>';
+            }
+        }
 
         // 장례식장 목록 로드 및 표시
         function loadFuneralHallList(searchTerm = '', page = 1) {
@@ -4021,12 +5621,20 @@
                             renderPagination(data.total_pages, page, searchTerm);
                         }
                     } else {
-                        listContainer.innerHTML = '<div style="text-align: center; color: #dc3545; padding: 20px;">목록을 불러올 수 없습니다.</div>';
+                        if (isLocalAdminPreview()) {
+                            renderLocalFuneralHallList(listContainer, paginationContainer, searchTerm, page);
+                        } else {
+                            listContainer.innerHTML = '<div style="text-align: center; color: #b64c3b; padding: 20px;">목록을 불러올 수 없습니다.</div>';
+                        }
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    listContainer.innerHTML = '<div style="text-align: center; color: #dc3545; padding: 20px;">목록을 불러오는 중 오류가 발생했습니다.</div>';
+                    if (isLocalAdminPreview()) {
+                        renderLocalFuneralHallList(listContainer, paginationContainer, searchTerm, page);
+                    } else {
+                        console.error('Error:', error);
+                        listContainer.innerHTML = '<div style="text-align: center; color: #b64c3b; padding: 20px;">목록을 불러오는 중 오류가 발생했습니다.</div>';
+                    }
                 });
         }
 
@@ -4101,6 +5709,69 @@
         const costItemsPerPage = 20;
         let selectedCostHallId = null;
 
+        function normalizeCostHall(hall) {
+            const address = String(hall.address || hall.addr_full || hall.addr_detail || '').trim();
+            const parts = address.split(/\s+/).filter(Boolean);
+            return {
+                ...hall,
+                address,
+                addr_sido: String(hall.addr_sido || parts[0] || '').trim(),
+                addr_sigungu: String(hall.addr_sigungu || parts[1] || '').trim()
+            };
+        }
+
+        async function requestCostHallDirectory(sido = '') {
+            let url = '../api/get_funeral_halls.php?per_page=1500';
+            if (sido) url += `&sido=${encodeURIComponent(sido)}`;
+            try {
+                const response = await fetch(url, { cache: 'no-store' });
+                const contentType = response.headers.get('content-type') || '';
+                if (!response.ok || !contentType.includes('application/json')) throw new Error('장례식장 API 응답 오류');
+                const data = await response.json();
+                if (!data.success || !Array.isArray(data.halls)) throw new Error(data.message || '장례식장 목록 조회 실패');
+                return data.halls.map(normalizeCostHall);
+            } catch (error) {
+                if (!isLocalAdminPreview()) throw error;
+                const halls = (await loadAdminHallCache()).map(normalizeCostHall);
+                return sido ? halls.filter(hall => hall.addr_sido === sido) : halls;
+            }
+        }
+
+        async function requestCostHallPage(page, searchTerm, sido, sigungu) {
+            let url = `../api/get_funeral_halls.php?page=${page}&per_page=${costItemsPerPage}`;
+            if (searchTerm) url += `&search=${encodeURIComponent(searchTerm)}`;
+            if (sido) url += `&sido=${encodeURIComponent(sido)}`;
+            if (sigungu) url += `&sigungu=${encodeURIComponent(sigungu)}`;
+            try {
+                const response = await fetch(url, { cache: 'no-store' });
+                const contentType = response.headers.get('content-type') || '';
+                if (!response.ok || !contentType.includes('application/json')) throw new Error('장례식장 API 응답 오류');
+                const data = await response.json();
+                if (!data.success || !Array.isArray(data.halls)) throw new Error(data.message || '장례식장 목록 조회 실패');
+                data.halls = data.halls.map(normalizeCostHall);
+                return data;
+            } catch (error) {
+                if (!isLocalAdminPreview()) throw error;
+                const query = String(searchTerm || '').toLowerCase();
+                const allHalls = (await loadAdminHallCache()).map(normalizeCostHall);
+                const filtered = allHalls.filter(hall => {
+                    if (sido && hall.addr_sido !== sido) return false;
+                    if (sigungu && hall.addr_sigungu !== sigungu) return false;
+                    if (!query) return true;
+                    return [hall.hall_name, hall.tel, hall.address].filter(Boolean).join(' ').toLowerCase().includes(query);
+                });
+                const totalPages = Math.max(1, Math.ceil(filtered.length / costItemsPerPage));
+                const safePage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+                return {
+                    success: true,
+                    halls: filtered.slice((safePage - 1) * costItemsPerPage, safePage * costItemsPerPage),
+                    total_count: filtered.length,
+                    total_pages: totalPages,
+                    current_page: safePage
+                };
+            }
+        }
+
         // 비용 관리 폼 표시
         function showCostManagementForm(updateHash = true) {
             if (!requireRole([1])) return;
@@ -4127,30 +5798,21 @@
 
         // 시/도 목록 로드 (비용 관리용)
         function loadCostSidoList() {
-            fetch('../api/get_funeral_halls.php?per_page=1000')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.halls) {
-                        const sidoSet = new Set();
-                        data.halls.forEach(hall => {
-                            if (hall.address && hall.address.includes(' ')) {
-                                const sido = hall.address.split(' ')[0];
-                                if (sido) sidoSet.add(sido);
-                            }
-                        });
-                        
-                        const sidoSelect = document.getElementById('costSidoSelect');
-                        sidoSelect.innerHTML = '<option value="">전체</option>';
-                        Array.from(sidoSet).sort().forEach(sido => {
-                            const option = document.createElement('option');
-                            option.value = sido;
-                            option.textContent = sido;
-                            sidoSelect.appendChild(option);
-                        });
-                    }
+            return requestCostHallDirectory()
+                .then(halls => {
+                    const sidoSet = new Set(halls.map(hall => hall.addr_sido).filter(Boolean));
+                    const sidoSelect = document.getElementById('costSidoSelect');
+                    sidoSelect.innerHTML = '<option value="">전체</option>';
+                    Array.from(sidoSet).sort().forEach(sido => {
+                        const option = document.createElement('option');
+                        option.value = sido;
+                        option.textContent = sido;
+                        sidoSelect.appendChild(option);
+                    });
                 })
                 .catch(error => {
                     console.error('Error loading sido list:', error);
+                    document.getElementById('costSidoSelect').innerHTML = '<option value="">전체</option>';
                 });
         }
 
@@ -4163,31 +5825,20 @@
                 return Promise.resolve();
             }
             
-            return fetch(`../api/get_funeral_halls.php?per_page=1000&sido=${encodeURIComponent(sido)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.halls) {
-                        const sigunguSet = new Set();
-                        data.halls.forEach(hall => {
-                            if (hall.address && hall.address.startsWith(sido + ' ')) {
-                                const parts = hall.address.split(' ');
-                                if (parts.length > 1) {
-                                    sigunguSet.add(parts[1]);
-                                }
-                            }
-                        });
-                        
-                        sigunguSelect.innerHTML = '<option value="">전체</option>';
-                        Array.from(sigunguSet).sort().forEach(sigungu => {
-                            const option = document.createElement('option');
-                            option.value = sigungu;
-                            option.textContent = sigungu;
-                            sigunguSelect.appendChild(option);
-                        });
-                    }
+            return requestCostHallDirectory(sido)
+                .then(halls => {
+                    const sigunguSet = new Set(halls.map(hall => hall.addr_sigungu).filter(Boolean));
+                    sigunguSelect.innerHTML = '<option value="">전체</option>';
+                    Array.from(sigunguSet).sort().forEach(sigungu => {
+                        const option = document.createElement('option');
+                        option.value = sigungu;
+                        option.textContent = sigungu;
+                        sigunguSelect.appendChild(option);
+                    });
                 })
                 .catch(error => {
                     console.error('Error loading sigungu list:', error);
+                    sigunguSelect.innerHTML = '<option value="">전체</option>';
                 });
         }
 
@@ -4212,13 +5863,7 @@
             listContainer.innerHTML = '<div style="text-align: center; color: #999; padding: 20px; grid-column: 1 / -1;">목록을 불러오는 중...</div>';
             paginationContainer.innerHTML = '';
             
-            let url = `../api/get_funeral_halls.php?page=${page}&per_page=${costItemsPerPage}`;
-            if (searchTerm) url += `&search=${encodeURIComponent(searchTerm)}`;
-            if (sido) url += `&sido=${encodeURIComponent(sido)}`;
-            if (sigungu) url += `&sigungu=${encodeURIComponent(sigungu)}`;
-            
-            fetch(url)
-                .then(response => response.json())
+            requestCostHallPage(page, searchTerm, sido, sigungu)
                 .then(data => {
                     if (data.success && data.halls) {
                         if (data.halls.length === 0) {
@@ -4465,108 +6110,6 @@
             document.getElementById('costSidoSelect').value = '';
             document.getElementById('costSigunguSelect').innerHTML = '<option value="">전체</option>';
             loadCostHallList(1);
-        }
-
-        // 가격 항목 행 추가
-        let priceItemRowIndex = 0;
-        function addPriceItemRow() {
-            priceItemRowIndex++;
-            const container = document.getElementById('priceItemsContainer');
-            
-            const rowDiv = document.createElement('div');
-            rowDiv.className = 'price-item-row';
-            rowDiv.id = `priceItemRow_${priceItemRowIndex}`;
-            rowDiv.style.cssText = 'margin-bottom: 20px; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 5px;';
-            
-            rowDiv.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="color: #667eea; margin: 0;">항목 ${priceItemRowIndex}</h3>
-                    <button type="button" onclick="removePriceItemRow(${priceItemRowIndex})" 
-                            style="padding: 6px 12px; background-color: #dc3545; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 0.9rem;">
-                        삭제
-                    </button>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem;">카테고리 <span style="color: red;">*</span></label>
-                        <select id="category2_${priceItemRowIndex}" name="category2_${priceItemRowIndex}" required 
-                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.95rem; cursor: pointer;">
-                            <option value="">카테고리를 선택하세요</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem;">단위 <span style="color: red;">*</span></label>
-                        <select id="unit_${priceItemRowIndex}" name="unit_${priceItemRowIndex}" required 
-                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.95rem; cursor: pointer;">
-                            <option value="">단위 선택</option>
-                            <option value="일">일</option>
-                            <option value="회">회</option>
-                            <option value="kg">kg</option>
-                            <option value="박스">박스</option>
-                            <option value="1개">1개</option>
-                            <option value="시간">시간</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem;">기본 단위</label>
-                        <input type="text" id="defaultQty_${priceItemRowIndex}" name="defaultQty_${priceItemRowIndex}" 
-                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.95rem;"
-                               placeholder="예: 1">
-                    </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem;">가격 <span style="color: red;">*</span></label>
-                        <input type="text" id="price_${priceItemRowIndex}" name="price_${priceItemRowIndex}" required 
-                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.95rem;"
-                               placeholder="예: 10,000"
-                               oninput="formatPrice(this)">
-                    </div>
-                </div>
-            `;
-            
-            container.appendChild(rowDiv);
-            
-            // 대분류 목록 로드
-            loadMainCategories(priceItemRowIndex);
-        }
-
-        // 카테고리 목록 로드
-        function loadMainCategories(rowIndex) {
-            fetch('../api/get_price_categories.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.categories) {
-                        const select = document.getElementById(`category2_${rowIndex}`);
-                        if (select) {
-                            select.innerHTML = '<option value="">카테고리를 선택하세요</option>';
-                            
-                            data.categories.forEach(category => {
-                                const option = document.createElement('option');
-                                option.value = category.category_id;
-                                option.textContent = category.category_name;
-                                select.appendChild(option);
-                            });
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        // 중분류 목록 로드 (호환성을 위해 유지하지만 실제로는 사용하지 않음)
-        function loadSubCategories(rowIndex, parentId) {
-            // 실제로는 사용하지 않지만 호환성을 위해 유지
-        }
-
-        // 가격 항목 행 삭제
-        function removePriceItemRow(rowIndex) {
-            const row = document.getElementById(`priceItemRow_${rowIndex}`);
-            if (row) {
-                row.remove();
-            }
         }
 
         // 가격 포맷팅 (세자리마다 콤마)
@@ -4990,165 +6533,6 @@
             });
         }
 
-        // 가격 항목 저장
-        function savePriceItems() {
-            const hallId = document.getElementById('costHallSelect').value;
-            if (!hallId) {
-                alert('장례식장을 선택해주세요.');
-                return;
-            }
-
-            const rows = document.querySelectorAll('.price-item-row');
-            if (rows.length === 0) {
-                alert('추가된 항목이 없습니다.');
-                return;
-            }
-
-            // 항목 데이터 수집
-            const items = [];
-            let hasError = false;
-            
-            rows.forEach((row, index) => {
-                const rowId = row.id.replace('priceItemRow_', '');
-                const categoryId = document.getElementById(`category2_${rowId}`).value;
-                const unit = document.getElementById(`unit_${rowId}`).value;
-                const defaultQty = document.getElementById(`defaultQty_${rowId}`).value;
-                const price = document.getElementById(`price_${rowId}`).value;
-                
-                // 필수 항목 검증
-                if (!categoryId) {
-                    alert(`항목 ${index + 1}: 중분류를 선택해주세요.`);
-                    hasError = true;
-                    return;
-                }
-                
-                if (!unit) {
-                    alert(`항목 ${index + 1}: 단위를 선택해주세요.`);
-                    hasError = true;
-                    return;
-                }
-                
-                if (!price || price.trim() === '') {
-                    alert(`항목 ${index + 1}: 가격을 입력해주세요.`);
-                    hasError = true;
-                    return;
-                }
-                
-                items.push({
-                    category_id: parseInt(categoryId),
-                    unit: unit,
-                    default_qty: defaultQty ? defaultQty.trim() : null,
-                    price: price.trim()
-                });
-            });
-            
-            if (hasError) {
-                return;
-            }
-            
-            if (items.length === 0) {
-                alert('저장할 항목이 없습니다.');
-                return;
-            }
-            
-            // 저장 요청
-            const saveBtn = document.querySelector('#costManagementCard .save-btn');
-            const originalText = saveBtn.textContent;
-            saveBtn.disabled = true;
-            saveBtn.textContent = '저장 중...';
-            
-            fetch('../api/save_funeral_hall_price.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    hall_id: parseInt(hallId),
-                    items: items
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message || '저장되었습니다.');
-                    // 폼 초기화
-                    resetCostForm();
-                    // 사용자 관리 메뉴로 돌아가기
-                    showUserManagementMenu();
-                } else {
-                    let errorMsg = data.message || '저장 중 오류가 발생했습니다.';
-                    if (data.errors && data.errors.length > 0) {
-                        errorMsg += '\n\n오류 목록:\n' + data.errors.join('\n');
-                    }
-                    alert(errorMsg);
-                }
-                saveBtn.disabled = false;
-                saveBtn.textContent = originalText;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('저장 중 오류가 발생했습니다.');
-                saveBtn.disabled = false;
-                saveBtn.textContent = originalText;
-            });
-        }
-
-        // 시/도 목록 로드
-        function loadSidoList() {
-            fetch('../api/get_region_codes.php?region_level=1')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.regions) {
-                        const sidoSelect = document.getElementById('sidoSelect');
-                        sidoSelect.innerHTML = '<option value="">시/도를 선택하세요</option>';
-                        
-                        data.regions.forEach(region => {
-                            const option = document.createElement('option');
-                            option.value = region.region_code;
-                            option.textContent = region.region_name;
-                            sidoSelect.appendChild(option);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading sido list:', error);
-                    alert('시/도 목록을 불러오는 중 오류가 발생했습니다.');
-                });
-        }
-
-        // 시/군/구 목록 로드
-        function loadSigunguList(sidoCode) {
-            const sigunguSelect = document.getElementById('sigunguSelect');
-            
-            if (!sidoCode) {
-                sigunguSelect.innerHTML = '<option value="">시/도 선택 후 표시됩니다</option>';
-                return;
-            }
-            
-            sigunguSelect.innerHTML = '<option value="">로딩 중...</option>';
-            
-            fetch(`../api/get_region_codes.php?region_level=2&parent_code=${sidoCode}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.regions) {
-                        sigunguSelect.innerHTML = '<option value="">시/군/구를 선택하세요</option>';
-                        
-                        data.regions.forEach(region => {
-                            const option = document.createElement('option');
-                            option.value = region.region_code;
-                            option.textContent = region.region_name;
-                            sigunguSelect.appendChild(option);
-                        });
-                    } else {
-                        sigunguSelect.innerHTML = '<option value="">해당 지역의 시/군/구가 없습니다</option>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading sigungu list:', error);
-                    sigunguSelect.innerHTML = '<option value="">시/군/구 목록을 불러오는 중 오류가 발생했습니다</option>';
-                });
-        }
-
         // 사업자번호 하이픈 자동 입력
         function formatCompanyNo(input) {
             let value = input.value.replace(/[^0-9]/g, ''); // 숫자만 남기기
@@ -5294,22 +6678,20 @@
             const listContainer = document.getElementById('productList');
             listContainer.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">목록을 불러오는 중...</div>';
 
-            fetch('../api/get_funeral_products.php?include_inactive=1')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success || !data.products) {
-                        listContainer.innerHTML = '<div style="text-align: center; color: #dc3545; padding: 20px;">목록을 불러올 수 없습니다.</div>';
-                        return;
-                    }
-
-                    productListCache = data.products;
+            loadAdminProducts()
+                .then(products => {
+                    productListCache = products;
                     updateProductTypeOptions(productListCache);
                     if (productListCache.length === 0) {
                         listContainer.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">등록된 상품이 없습니다.</div>';
                         return;
                     }
 
+                    const previewNotice = isLocalAdminPreview()
+                        ? '<div style="padding:12px 16px; color:#5d6d66; background:#f4f8f6; border-bottom:1px solid #dbe5e0; font-size:.88rem;">로컬 미리보기 상품 3개 · 운영 서버 연결 전에는 조회만 가능합니다.</div>'
+                        : '';
                     let html = `
+                        ${previewNotice}
                         <div style="overflow-x: auto;">
                             <table style="width: 100%; border-collapse: collapse; background-color: white; table-layout: auto;">
                                 <thead>
@@ -5319,8 +6701,6 @@
                                         <th style="padding: 12px; border: 1px solid #ddd;">가격(만원)</th>
                                         <th style="padding: 12px; border: 1px solid #ddd;">요약</th>
                                         <th style="padding: 12px; border: 1px solid #ddd;">노출</th>
-                                        <th style="padding: 12px; border: 1px solid #ddd;">전화번호</th>
-                                        <th style="padding: 12px; border: 1px solid #ddd;">등록일시</th>
                                         <th style="padding: 12px; border: 1px solid #ddd;">관리</th>
                                     </tr>
                                 </thead>
@@ -5336,8 +6716,10 @@
                                 <td style="padding: 12px; border: 1px solid #ddd;">${escapeHtml(product.summary || '')}</td>
                                 <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">${product.is_active ? '노출' : '숨김'}</td>
                                 <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
-                                    <button class="save-btn" style="padding: 6px 12px; margin-right: 6px;" onclick="editProduct(${product.product_id})">수정</button>
-                                    <button class="cancel-btn" style="padding: 6px 12px;" onclick="deleteProduct(${product.product_id})">삭제</button>
+                                    ${isLocalAdminPreview()
+                                        ? '<span style="color:#5d6d66; font-size:.86rem;">조회 전용</span>'
+                                        : `<button class="save-btn" style="padding: 6px 12px; margin-right: 6px;" onclick="editProduct(${product.product_id})">수정</button>
+                                           <button class="cancel-btn" style="padding: 6px 12px;" onclick="deleteProduct(${product.product_id})">삭제</button>`}
                                 </td>
                             </tr>
                         `;
@@ -5353,7 +6735,7 @@
                 })
                 .catch(error => {
                     console.error('Product list error:', error);
-                    listContainer.innerHTML = '<div style="text-align: center; color: #dc3545; padding: 20px;">목록을 불러오는 중 오류가 발생했습니다.</div>';
+                    listContainer.innerHTML = '<div style="text-align: center; color: #b64c3b; padding: 20px;">목록을 불러오는 중 오류가 발생했습니다.</div>';
                 });
         }
 
@@ -5621,148 +7003,6 @@
             return date.toLocaleString('ko-KR');
         }
 
-        // 콘텐츠 편집 화면 표시
-        function editContent(filePath, title) {
-            document.getElementById('editTitle').textContent = title + ' 편집';
-            document.getElementById('editFilePath').value = filePath;
-            document.getElementById('contentMenuCard').style.display = 'none';
-            document.getElementById('contentEditCard').style.display = 'block';
-            location.hash = 'contentEdit';
-            
-            // 파일 내용 로드
-            fetch('../' + filePath + '?t=' + Date.now())
-                .then(response => response.text())
-                .then(html => {
-                    // HTML 조각이므로 그대로 사용
-                    let content = html.trim();
-                    
-                    // contentEditable div에 내용 설정
-                    const editor = document.getElementById('editContent');
-                    editor.innerHTML = content;
-                    console.log('콘텐츠 로드 완료:', filePath);
-                })
-                .catch(error => {
-                    console.error('Error loading content:', error);
-                    alert('콘텐츠를 불러오는 중 오류가 발생했습니다.');
-                });
-        }
-
-        // 텍스트 포맷팅
-        function formatText(command) {
-            document.execCommand(command, false, null);
-            document.getElementById('editContent').focus();
-        }
-
-        // 글자 크기 변경
-        function changeFontSize(size) {
-            if (size) {
-                document.execCommand('fontSize', false, '3');
-                const selection = window.getSelection();
-                if (selection.rangeCount > 0) {
-                    const range = selection.getRangeAt(0);
-                    const span = document.createElement('span');
-                    span.style.fontSize = size;
-                    try {
-                        range.surroundContents(span);
-                    } catch(e) {
-                        span.appendChild(range.extractContents());
-                        range.insertNode(span);
-                    }
-                }
-            }
-            document.getElementById('fontSizeSelect').value = '';
-            document.getElementById('editContent').focus();
-        }
-
-        // 이미지 삽입
-        function insertImage(input) {
-            if (input.files && input.files[0]) {
-                const formData = new FormData();
-                formData.append('image', input.files[0]);
-
-                fetch('../api/upload_content_image.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const img = document.createElement('img');
-                        img.src = '../images/' + data.filename;
-                        img.style.maxWidth = '100%';
-                        img.style.height = 'auto';
-                        
-                        const editor = document.getElementById('editContent');
-                        const selection = window.getSelection();
-                        if (selection.rangeCount > 0) {
-                            const range = selection.getRangeAt(0);
-                            range.insertNode(img);
-                        } else {
-                            editor.appendChild(img);
-                        }
-                    } else {
-                        alert(data.message || '이미지 업로드에 실패했습니다.');
-                    }
-                    input.value = '';
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('이미지 업로드 중 오류가 발생했습니다.');
-                    input.value = '';
-                });
-            }
-        }
-
-        // 콘텐츠 저장
-        function saveContent() {
-            const filePath = document.getElementById('editFilePath').value;
-            const editor = document.getElementById('editContent');
-            const content = editor.innerHTML.trim();
-            
-            if (!filePath) {
-                alert('파일 경로가 없습니다.');
-                return;
-            }
-
-            if (!content) {
-                alert('저장할 내용이 없습니다.');
-                return;
-            }
-
-            if (!confirm('변경사항을 저장하시겠습니까?')) {
-                return;
-            }
-
-            console.log('저장할 파일:', filePath);
-            console.log('저장할 내용 길이:', content.length);
-
-            const formData = new FormData();
-            formData.append('file_path', filePath);
-            formData.append('content', content);
-
-            fetch('../api/save_content.php?t=' + Date.now(), {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('저장 응답:', data);
-                if (data.success) {
-                    alert('저장되었습니다.');
-                    // 저장 후 약간의 지연을 두고 메뉴로 이동 (브라우저 캐시 문제 회피)
-                    setTimeout(() => {
-                        showContentMenu();
-                    }, 100);
-                } else {
-                    alert(data.message || '저장 중 오류가 발생했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('저장 중 오류가 발생했습니다: ' + error.message);
-            });
-        }
     </script>
 </body>
 </html>
-

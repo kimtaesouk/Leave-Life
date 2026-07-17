@@ -29,12 +29,6 @@ try {
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             
-            // JSON 필드 파싱
-            $prepared_services = null;
-            if (!empty($row['prepared_services'])) {
-                $prepared_services = json_decode($row['prepared_services'], true);
-            }
-            
             $doc_dir = __DIR__ . '/../uploads/estimate_docs';
             $pdf_filename = "estimate_{$row['estimate_id']}.pdf";
             $xlsx_filename = "estimate_{$row['estimate_id']}.xlsx";
@@ -49,6 +43,7 @@ try {
 
             $estimate = [
                 'estimate_id' => $row['estimate_id'],
+                'death_status' => isset($row['death_status']) && $row['death_status'] !== '' ? $row['death_status'] : (!empty($row['death_date']) ? 'after' : 'before'),
                 'deceased_name' => $row['deceased_name'],
                 'relationship' => $row['relationship'],
                 'death_date' => $row['death_date'],
@@ -58,14 +53,14 @@ try {
                 'sido' => $row['sido'],
                 'sigungu' => $row['sigungu'],
                 'funeral_period' => $row['funeral_period'],
-                'religion' => $row['religion'],
-                'religion_other' => $row['religion_other'],
-                'prepared_services' => $prepared_services,
-                'other_service_text' => $row['other_service_text'],
-                'burial_site' => $row['burial_site'],
                 'contact_name' => $row['contact_name'],
                 'contact_phone' => $row['contact_phone'],
                 'contact_email' => $row['contact_email'],
+                'privacy_consent' => isset($row['privacy_consent']) ? (int)$row['privacy_consent'] : 0,
+                'contact_consent' => isset($row['sensitive_info_consent']) ? (int)$row['sensitive_info_consent'] : 0,
+                'sensitive_info_consent' => isset($row['sensitive_info_consent']) ? (int)$row['sensitive_info_consent'] : 0,
+                'consent_version' => $row['consent_version'] ?? null,
+                'consented_at' => $row['consented_at'] ?? null,
                 'funeral_product_id' => isset($row['funeral_product_id']) ? (int)$row['funeral_product_id'] : null,
                 'funeral_product_source' => $row['funeral_product_source'] ?? null,
                 'status' => $row['status'],
@@ -167,12 +162,6 @@ try {
     
     $estimates = [];
     while ($row = $result->fetch_assoc()) {
-        // JSON 필드 파싱
-        $prepared_services = null;
-        if (!empty($row['prepared_services'])) {
-            $prepared_services = json_decode($row['prepared_services'], true);
-        }
-        
         $doc_dir = __DIR__ . '/../uploads/estimate_docs';
         $pdf_filename = "estimate_{$row['estimate_id']}.pdf";
         $xlsx_filename = "estimate_{$row['estimate_id']}.xlsx";
@@ -187,6 +176,7 @@ try {
 
         $estimates[] = [
             'estimate_id' => $row['estimate_id'],
+            'death_status' => isset($row['death_status']) && $row['death_status'] !== '' ? $row['death_status'] : (!empty($row['death_date']) ? 'after' : 'before'),
             'deceased_name' => $row['deceased_name'],
             'relationship' => $row['relationship'],
             'death_date' => $row['death_date'],
@@ -196,14 +186,14 @@ try {
             'sido' => $row['sido'],
             'sigungu' => $row['sigungu'],
             'funeral_period' => $row['funeral_period'],
-            'religion' => $row['religion'],
-            'religion_other' => $row['religion_other'],
-            'prepared_services' => $prepared_services,
-            'other_service_text' => $row['other_service_text'],
-            'burial_site' => $row['burial_site'],
             'contact_name' => $row['contact_name'],
             'contact_phone' => $row['contact_phone'],
             'contact_email' => $row['contact_email'],
+            'privacy_consent' => isset($row['privacy_consent']) ? (int)$row['privacy_consent'] : 0,
+            'contact_consent' => isset($row['sensitive_info_consent']) ? (int)$row['sensitive_info_consent'] : 0,
+            'sensitive_info_consent' => isset($row['sensitive_info_consent']) ? (int)$row['sensitive_info_consent'] : 0,
+            'consent_version' => $row['consent_version'] ?? null,
+            'consented_at' => $row['consented_at'] ?? null,
             'funeral_product_id' => isset($row['funeral_product_id']) ? (int)$row['funeral_product_id'] : null,
             'funeral_product_source' => $row['funeral_product_source'] ?? null,
             'status' => $row['status'],

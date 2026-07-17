@@ -2,11 +2,13 @@
 CREATE TABLE IF NOT EXISTS estimate_request (
     estimate_id INT AUTO_INCREMENT PRIMARY KEY,
     -- 기본 정보
-    deceased_name VARCHAR(100) NOT NULL COMMENT '고인 성함',
-    relationship VARCHAR(50) NOT NULL COMMENT '고인과의 관계',
-    death_date DATE NOT NULL COMMENT '사망일',
-    death_location VARCHAR(50) NOT NULL COMMENT '사망 장소',
-    death_location_other TEXT COMMENT '사망 장소 기타',
+    deceased_name VARCHAR(100) NOT NULL COMMENT '환우명 또는 고인 성함',
+    relationship VARCHAR(50) NOT NULL COMMENT '관계',
+    death_status VARCHAR(10) NOT NULL DEFAULT 'after' COMMENT '현재 상황 (before, after)',
+    death_date DATE NULL COMMENT '사망일 (사망 후인 경우)',
+    death_location VARCHAR(50) NOT NULL COMMENT '장소',
+    death_location_other TEXT COMMENT '기타 장소',
+    expected_visitors INT NULL COMMENT '예상 조문객 수',
     -- 지역 선택
     sido VARCHAR(50) NOT NULL COMMENT '시/도',
     sigungu VARCHAR(50) NOT NULL COMMENT '시/군/구',
@@ -23,6 +25,11 @@ CREATE TABLE IF NOT EXISTS estimate_request (
     contact_name VARCHAR(100) NOT NULL COMMENT '담당자 성함',
     contact_phone VARCHAR(20) NOT NULL COMMENT '연락처',
     contact_email VARCHAR(100) COMMENT '이메일',
+    -- 개인정보 처리 동의
+    privacy_consent TINYINT(1) NOT NULL DEFAULT 0 COMMENT '개인정보 수집·이용 동의',
+    sensitive_info_consent TINYINT(1) NOT NULL DEFAULT 0 COMMENT '견적 상담 연락 동의 (기존 컬럼명 유지)',
+    consent_version VARCHAR(20) COMMENT '동의문 버전',
+    consented_at DATETIME COMMENT '동의 일시',
     -- 상조 상품
     funeral_product_id INT COMMENT '상조 상품 ID',
     funeral_product_source VARCHAR(10) COMMENT '상조 상품 선택 주체 (user/admin)',

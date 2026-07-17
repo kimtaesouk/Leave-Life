@@ -1,72 +1,229 @@
-            <div class="home-hero">
-                <h1>어렵지 않은 장례 안내</h1>
-                <p>지금 필요한 것만 간단히 선택하면 됩니다. 복잡한 설명 없이, 단계별로 안내해드립니다.</p>
+<div class="home-page">
+    <section class="home-hero" aria-labelledby="homeHeroTitle">
+        <div class="hero-inner">
+            <div class="hero-copy">
+                <p class="hero-eyebrow">Leave Life · Funeral Care</p>
+                <h1 class="hero-title" id="homeHeroTitle">
+                    장례 준비,
+                    <strong>Leave Life에서 차근차근</strong>
+                </h1>
+                <p class="hero-description">
+                    갑작스러운 순간에도 당황하지 않도록 필요한 정보와 서비스를 한곳에서 확인하고 준비하세요.
+                    전문 장례지도사가 처음부터 끝까지 함께합니다.
+                </p>
                 <div class="hero-actions">
-                    <a class="cta-button cta-primary" href="#" onclick="loadContent('estimate/estimate.html'); return false;">견적 시작하기</a>
-                    <a class="cta-button cta-secondary" href="#" onclick="loadContent('support/support.html'); return false;">장례 에티켓 보기</a>
+                    <a class="button button-primary" href="#" onclick="loadContent('estimate/estimate.html'); return false;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>
+                        </svg>
+                        장례 비용 확인하기
+                    </a>
+                    <a class="button button-secondary" href="#" onclick="loadContent('guide/guide.html'); return false;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/><path d="M8 9h.01M12 9h.01M16 9h.01"/>
+                        </svg>
+                        절차부터 알아보기
+                    </a>
                 </div>
-                <div class="home-note">필수 항목만 입력해도 견적을 받을 수 있습니다.</div>
+                <div class="hero-support-note">24시간 전문 상담사가 필요한 순간 바로 안내해드립니다.</div>
             </div>
+        </div>
+    </section>
 
-            <div class="content-grid">
-                <div class="content-card">
-                    <h3>1. 간단 정보</h3>
-                    <p>기본 정보와 연락처만 입력합니다.</p>
+    <div class="quick-services-wrap" aria-label="주요 서비스 바로가기">
+        <div class="quick-services">
+            <a class="quick-service" href="#" onclick="loadContent('estimate/estimate.html'); return false;">
+                <span class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <path d="M4 21h16M6 21V8l6-4 6 4v13M9 11h2M13 11h2M9 15h2M13 15h2"/>
+                    </svg>
+                </span>
+                <span class="quick-copy"><strong>장례 비용 · 견적</strong><span>상황별 예상 비용 확인</span></span>
+            </a>
+            <a class="quick-service" href="#" onclick="loadContent('guide/guide.html'); return false;">
+                <span class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 2v4M16 2v4M8 10h8M8 14h5"/>
+                    </svg>
+                </span>
+                <span class="quick-copy"><strong>장례 절차 안내</strong><span>처음부터 발인까지</span></span>
+            </a>
+            <a class="quick-service" href="#" onclick="loadContent('about/about.html'); return false;">
+                <span class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <path d="M3 20h18M5 20V7l7-4 7 4v13M8 10h8M9 14h6M10 18h4"/>
+                    </svg>
+                </span>
+                <span class="quick-copy"><strong>Leave Life 서비스</strong><span>전문 인력과 연계 지원</span></span>
+            </a>
+            <a class="quick-service" href="#" onclick="loadContent('support/support.html'); return false;">
+                <span class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h5"/>
+                    </svg>
+                </span>
+                <span class="quick-copy"><strong>장례 에티켓</strong><span>조문 예절과 준비 안내</span></span>
+            </a>
+        </div>
+    </div>
+
+    <section class="section section-soft" aria-labelledby="processTitle">
+        <div class="section-inner">
+            <header class="section-heading">
+                <p class="section-eyebrow">STEP BY STEP</p>
+                <h2 class="section-title" id="processTitle">Leave Life 이용 절차</h2>
+                <p class="section-description">복잡한 장례 준비를 꼭 필요한 다섯 단계로 나누어 차분하게 안내합니다.</p>
+            </header>
+
+            <div class="process-layout">
+                <div class="process-grid">
+                    <article class="process-card">
+                        <span class="process-number">01</span>
+                        <span class="process-icon">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M38 20c0 10-14 23-14 23S10 30 10 20a14 14 0 1 1 28 0Z"/><circle cx="24" cy="20" r="5"/>
+                            </svg>
+                        </span>
+                        <h3>상황 · 지역 입력</h3>
+                        <p>장례 일정과 희망 지역 등 기본 정보를 입력합니다.</p>
+                    </article>
+                    <article class="process-card">
+                        <span class="process-number">02</span>
+                        <span class="process-icon">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <rect x="8" y="11" width="32" height="29" rx="3"/><path d="M15 7v8M33 7v8M8 20h32M15 27h5M27 27h6M15 33h5M27 33h6"/>
+                            </svg>
+                        </span>
+                        <h3>시설 · 일정 확인</h3>
+                        <p>이용 가능한 장례 시설과 기간을 확인합니다.</p>
+                    </article>
+                    <article class="process-card">
+                        <span class="process-number">03</span>
+                        <span class="process-icon">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M8 12h22M8 20h18M8 28h14"/><circle cx="32" cy="30" r="8"/><path d="m38 36 6 6"/>
+                            </svg>
+                        </span>
+                        <h3>서비스 비교</h3>
+                        <p>필요한 장례 상품과 지원 내용을 살펴봅니다.</p>
+                    </article>
+                    <article class="process-card">
+                        <span class="process-number">04</span>
+                        <span class="process-icon">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M11 6h22l5 5v31H11z"/><path d="M32 6v7h7M17 21h14M17 28h10M30 39l12-12 3 3-12 12-5 1Z"/>
+                            </svg>
+                        </span>
+                        <h3>상담 정보 입력</h3>
+                        <p>연락 가능한 정보와 요청사항을 입력합니다.</p>
+                    </article>
+                    <article class="process-card">
+                        <span class="process-number">05</span>
+                        <span class="process-icon">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <circle cx="24" cy="24" r="17"/><path d="m16 24 6 6 11-13"/>
+                            </svg>
+                        </span>
+                        <h3>접수 · 안내 완료</h3>
+                        <p>전문 상담사가 확인 후 빠르게 연락드립니다.</p>
+                    </article>
                 </div>
-                <div class="content-card">
-                    <h3>2. 지역/기간 선택</h3>
-                    <p>장례 지역과 기간을 선택합니다.</p>
+
+                <aside class="support-panel">
+                    <h3>도움이 필요하신가요?</h3>
+                    <p>24시간 전문 상담사가<br>차분하고 친절하게 안내해드립니다.</p>
+                    <a class="support-phone" href="tel:1588-0000">1588-0000</a>
+                    <div class="support-actions">
+                        <a href="#" onclick="loadContent('estimate/estimate.html'); return false;">견적 상담</a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" aria-labelledby="trustTitle">
+        <div class="section-inner">
+            <h2 class="sr-only" id="trustTitle">Leave Life 서비스의 약속</h2>
+            <div class="trust-strip">
+                <div class="trust-item">
+                    <span class="trust-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-5"/>
+                        </svg>
+                    </span>
+                    <span class="trust-copy"><strong>투명한 비용 안내</strong><span>필요 항목과 예상 비용을 명확하게</span></span>
                 </div>
-                <div class="content-card">
-                    <h3>3. 접수 완료</h3>
-                    <p>전문 상담사가 안내를 진행합니다.</p>
+                <div class="trust-item">
+                    <span class="trust-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+                        </svg>
+                    </span>
+                    <span class="trust-copy"><strong>24시간 상담</strong><span>긴급한 순간에도 빠르게 연결</span></span>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                            <circle cx="12" cy="8" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+                        </svg>
+                    </span>
+                    <span class="trust-copy"><strong>전문 장례지도사</strong><span>상담부터 발인까지 밀착 동행</span></span>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                            <rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>
+                        </svg>
+                    </span>
+                    <span class="trust-copy"><strong>안전한 정보 관리</strong><span>상담 정보는 필요한 범위에서 보호</span></span>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <h2>준비 체크리스트</h2>
-            <ul class="step-info-list" aria-label="장례 준비 체크리스트">
-                <li>
-                    <div class="step-info-item">
-                        <span class="step-info-title">사망진단서</span>
-                    </div>
-                    <div class="step-details show" role="region" aria-live="polite">
-                        병원 또는 의사를 통해 발급받습니다.
-                    </div>
-                </li>
-                <li>
-                    <div class="step-info-item">
-                        <span class="step-info-title">신분증 및 가족 서류</span>
-                    </div>
-                    <div class="step-details show" role="region" aria-live="polite">
-                        신고인 신분증, 가족관계 증명서 등을 준비합니다.
-                    </div>
-                </li>
-                <li>
-                    <div class="step-info-item">
-                        <span class="step-info-title">장례 일정</span>
-                    </div>
-                    <div class="step-details show" role="region" aria-live="polite">
-                        3일장/5일장 등 기간을 결정합니다.
-                    </div>
-                </li>
-            </ul>
+    <section class="section section-soft" aria-labelledby="serviceTitle">
+        <div class="section-inner">
+            <header class="section-heading">
+                <p class="section-eyebrow">OUR CARE</p>
+                <h2 class="section-title" id="serviceTitle">마음까지 살피는 장례 서비스</h2>
+                <p class="section-description">정보를 찾는 순간부터 모든 절차가 끝난 뒤까지 한결같이 함께하겠습니다.</p>
+            </header>
+            <div class="service-cards">
+                <a class="service-card" href="#" onclick="loadContent('service/service.html'); return false;">
+                    <span class="service-card-index">01 · GUIDANCE</span>
+                    <h3>전문 상담과 안내</h3>
+                    <p>상황에 맞는 장례 방식과 필요한 준비를 전문 장례지도사가 이해하기 쉽게 설명합니다.</p>
+                    <span class="service-card-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                    </span>
+                </a>
+                <a class="service-card" href="#" onclick="loadContent('estimate/estimate.html'); return false;">
+                    <span class="service-card-index">02 · ESTIMATE</span>
+                    <h3>한눈에 보는 비용</h3>
+                    <p>장례 지역, 기간, 인원과 필요한 서비스를 기준으로 예상 항목을 차근차근 확인합니다.</p>
+                    <span class="service-card-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                    </span>
+                </a>
+                <a class="service-card" href="#" onclick="loadContent('guide/guide.html'); return false;">
+                    <span class="service-card-index">03 · TOGETHER</span>
+                    <h3>마지막까지 동행</h3>
+                    <p>장례식장 예약과 의전, 입관, 발인, 장지 이동 등 모든 과정을 세심하게 지원합니다.</p>
+                    <span class="service-card-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
 
-            <h2>자주 묻는 질문</h2>
-            <ul class="step-info-list" aria-label="자주 묻는 질문">
-                <li>
-                    <div class="step-info-item">
-                        <span class="step-info-title">견적은 비용이 발생하나요?</span>
-                    </div>
-                    <div class="step-details show" role="region" aria-live="polite">
-                        아니요. 견적 요청은 무료이며 상담 목적으로만 사용됩니다.
-                    </div>
-                </li>
-                <li>
-                    <div class="step-info-item">
-                        <span class="step-info-title">긴급 상황도 가능한가요?</span>
-                    </div>
-                    <div class="step-details show" role="region" aria-live="polite">
-                        24시간 상담이 가능하며 즉시 안내해드립니다.
-                    </div>
-                </li>
-            </ul>
+    <section class="home-cta-band" aria-label="장례 상담 신청">
+        <div class="home-cta-inner">
+            <div class="home-cta-copy">
+                <h2>무엇부터 준비해야 할지 막막하신가요?</h2>
+                <p>Leave Life 전문 상담사가 지금 필요한 것부터 차분하게 안내해드립니다.</p>
+            </div>
+            <a class="button button-secondary" href="#" onclick="loadContent('estimate/estimate.html'); return false;">무료 상담 신청하기</a>
+        </div>
+    </section>
+</div>

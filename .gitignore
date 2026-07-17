@@ -1,6 +1,7 @@
 .vscode/
 __pycache__/
 venv/
+.deps/
 uploads/
 crawled_data/
 *.pyc
