@@ -270,10 +270,10 @@
 
             <div class="page-footer">
                 <div class="page-footer-content">
-                    <p class="data-source-note">정보제공처: 보건복지부 e하늘 장사정보서비스</p>
+                    <p class="data-source-note"><span>공공 데이터 출처</span><strong>보건복지부 · e하늘 장사정보서비스</strong></p>
                     <div class="footer-banners">
-                        <img src="../images/170x42en.gif" alt="e하늘 장사정보서비스 배너">
-                        <img src="../images/%EB%B3%B4%EA%B1%B4%EB%B3%B5%EC%A7%80%EB%B6%80_%EA%B5%AD_%EC%A2%8C%EC%9A%B0.jpg" alt="보건복지부 배너">
+                        <span class="footer-mark-box"><img src="../images/%EB%B3%B4%EA%B1%B4%EB%B3%B5%EC%A7%80%EB%B6%80_%EA%B5%AD_%EC%A2%8C%EC%9A%B0.jpg" alt="보건복지부"></span>
+                        <span class="footer-mark-box"><img src="../images/170x42en.gif" alt="e하늘 장사정보서비스"></span>
                     </div>
                 </div>
             </div>
@@ -334,32 +334,73 @@
                 }
 
                 .page-footer {
-                    margin: 10px 0 30px 0;
-                    text-align: center;
+                    margin: 34px 0 42px;
                 }
 
                 .page-footer-content {
                     max-width: 800px;
                     margin: 0 auto;
-                    padding: 0 15px;
+                    padding: 22px 15px 0;
+                    border-top: 1px solid var(--border);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 24px;
                 }
 
                 .footer-banners {
-                    margin-bottom: 10px;
                     display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
                     align-items: center;
-                    gap: 10px 14px;
+                    justify-content: flex-end;
+                    gap: 12px;
+                    flex: 0 0 auto;
                 }
 
-                .footer-banners img {
-                    height: 50px;
+                .footer-mark-box {
+                    width: 178px;
+                    height: 52px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 6px 10px;
+                    background: #fff;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    box-sizing: border-box;
+                }
+
+                .footer-mark-box img {
+                    display: block;
+                    max-width: 100%;
+                    max-height: 38px;
                     width: auto;
+                    height: auto;
                     object-fit: contain;
-                    background-color: transparent;
-                    padding: 0;
-                    border-radius: 4px;
+                }
+
+                .page-footer .data-source-note {
+                    margin: 0;
+                    text-align: left;
+                    line-height: 1.45;
+                }
+
+                .page-footer .data-source-note span,
+                .page-footer .data-source-note strong {
+                    display: block;
+                }
+
+                .page-footer .data-source-note span {
+                    margin-bottom: 3px;
+                    color: var(--accent-strong);
+                    font-size: 0.72rem;
+                    font-weight: 700;
+                    letter-spacing: 0.08em;
+                }
+
+                .page-footer .data-source-note strong {
+                    color: var(--text);
+                    font-size: 0.88rem;
+                    font-weight: 600;
                 }
                 
                 .section-title {
@@ -1304,6 +1345,21 @@
                 }
                 
                 @media (max-width: 768px) {
+                    .page-footer-content {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 16px;
+                    }
+
+                    .footer-banners {
+                        width: 100%;
+                        justify-content: flex-start;
+                    }
+
+                    .footer-mark-box {
+                        width: min(178px, calc(50% - 6px));
+                    }
+
                     .estimate-form {
                         max-width: 100%;
                         padding: 0 10px;
@@ -1368,6 +1424,27 @@
                 }
                 
                 @media (max-width: 480px) {
+                    .page-footer {
+                        margin-bottom: 32px;
+                    }
+
+                    .page-footer-content {
+                        align-items: center;
+                    }
+
+                    .page-footer .data-source-note {
+                        text-align: center;
+                    }
+
+                    .footer-banners {
+                        justify-content: center;
+                    }
+
+                    .footer-mark-box {
+                        flex: 1 1 0;
+                        min-width: 0;
+                    }
+
                     .form-section {
                         padding: 15px;
                     }
