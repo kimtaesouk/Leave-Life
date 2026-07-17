@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상조 상품 관리</title>
+    <link rel="stylesheet" href="mobile-shared.css">
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" type="button" aria-label="메뉴 열기" onclick="MobileUI.toggleMenu()">☰</button>
+                <h1>상조 상품 관리</h1>
+            </div>
+            <div class="user" id="mobileUser">관리자</div>
+        </div>
+
+        <div class="drawer-overlay" onclick="MobileUI.closeMenu()"></div>
+        <aside class="drawer">
+            <h3>메뉴</h3>
+            <div class="menu">
+                <button onclick="MobileUI.goMobile('mobile.html')">홈</button>
+                <button onclick="MobileUI.goMobile('mobile-estimate.html')">견적서 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-funeralhall.html')">장례식장 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-cost.html')">비용 관리</button>
+                <button id="adminCreateBtn" onclick="MobileUI.goMobile('mobile-admin-create.html')">관리자 추가</button>
+                <button onclick="MobileUI.goMobile('mobile-password.html')">비밀번호 변경</button>
+                <button onclick="MobileUI.logout()">로그아웃</button>
+            </div>
+        </aside>
+
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2>상품 등록/수정</h2>
+                </div>
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    <div class="form-group">
+                        <label for="productType">상품 유형</label>
+                        <input type="text" id="productType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productName">상품명</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice">가격(만원)</label>
+                        <input type="number" id="productPrice" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productSummary">요약</label>
+                        <input type="text" id="productSummary">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDetails">상세</label>
+                        <textarea id="productDetails" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productActive">노출 여부</label>
+                        <select id="productActive">
+                            <option value="1">노출</option>
+                            <option value="0">숨김</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productSortOrder">정렬 순서</label>
+                        <input type="number" id="productSortOrder" min="0" value="0">
+                    </div>
+                    <div class="actions">
+                        <button class="btn-outline" type="button" onclick="resetProductForm()">초기화</button>
+                        <button class="btn-primary" type="submit">저장</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>상품 목록</h2>
+                </div>
+                <div class="table-wrap" id="productList">
+                    <div class="list-item"><div class="list-title">상품을 불러오는 중...</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="mobile-shared.js"></script>
+    <script>
+        let productCache = {};
+
+        function loadProducts(onLoaded) {
+            const list = document.getElementById('productList');
+            if (!list) return;
+            fetch('../api/get_funeral_products.php?include_inactive=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success || !Array.isArray(data.products)) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">상품을 불러올 수 없습니다.</div></div>';
+                        return;
+                    }
+                    if (data.products.length === 0) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">등록된 상품이 없습니다.</div></div>';
+                        return;
+                    }
+                    productCache = {};
+                    data.products.forEach(item => {
+                        productCache[item.product_id] = item;
+                    });
+                    list.innerHTML = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>유형</th>
+                                    <th>상품명</th>
+                                    <th>가격(만원)</th>
+                                    <th>요약</th>
+                                    <th>노출</th>
+                                    <th>정렬</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.products.slice(0, 50).map(item => {
+                                    const price = Number.isFinite(item.price) ? `${item.price.toLocaleString('ko-KR')}` : '-';
+                                    return `
+                                        <tr>
+                                            <td>${MobileUI.escapeHtml(item.product_type || '-')}</td>
+                                            <td>${MobileUI.escapeHtml(item.product_name || '-')}</td>
+                                            <td style="text-align:right;">${MobileUI.escapeHtml(price)}</td>
+                                            <td>${MobileUI.escapeHtml(item.summary || '')}</td>
+                                            <td style="text-align:center;">${item.is_active === 1 ? '노출' : '숨김'}</td>
+                                            <td style="text-align:center;">${MobileUI.escapeHtml(item.sort_order ?? 0)}</td>
+                                            <td style="text-align:center;">
+                                                <button class="table-action-btn" type="button" onclick="editProductById(${item.product_id})">수정</button>
+                                                <button class="table-action-btn" type="button" onclick="deleteProduct(${item.product_id})" style="margin-left:6px;">삭제</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    if (typeof onLoaded === 'function') {
+                        onLoaded();
+                    }
+                })
+                .catch(() => {
+                    list.innerHTML = '<div class="list-item"><div class="list-title">상품을 불러올 수 없습니다.</div></div>';
+                });
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+            const targetId = Number(params.get('product_id') || 0);
+            MobileUI.initAdmin({
+                onReady: () => loadProducts(() => {
+                    if (targetId) {
+                        editProductById(targetId);
+                    }
+                })
+            });
+        });
+
+        function resetProductForm() {
+            document.getElementById('productId').value = '';
+            document.getElementById('productType').value = '';
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productSummary').value = '';
+            document.getElementById('productDetails').value = '';
+            document.getElementById('productActive').value = '1';
+            document.getElementById('productSortOrder').value = '0';
+        }
+
+        function editProductById(productId) {
+            const item = productCache[productId];
+            if (!item) return;
+            document.getElementById('productId').value = item.product_id || '';
+            document.getElementById('productType').value = item.product_type || '';
+            document.getElementById('productName').value = item.product_name || '';
+            document.getElementById('productPrice').value = item.price || '';
+            document.getElementById('productSummary').value = item.summary || '';
+            document.getElementById('productDetails').value = item.details || '';
+            document.getElementById('productActive').value = String(item.is_active ?? 1);
+            document.getElementById('productSortOrder').value = item.sort_order || 0;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteProduct(productId) {
+            if (!confirm('상품을 삭제하시겠습니까?')) {
+                return;
+            }
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            fetch('../api/delete_funeral_product.php', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success ? '삭제되었습니다.' : (data.message || '삭제 중 오류가 발생했습니다.'));
+                    if (data.success) {
+                        loadProducts();
+                    }
+                })
+                .catch(() => { alert('삭제 중 오류가 발생했습니다.'); });
+        }
+
+        document.getElementById('productForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('product_id', document.getElementById('productId').value);
+            formData.append('product_type', document.getElementById('productType').value.trim());
+            formData.append('product_name', document.getElementById('productName').value.trim());
+            formData.append('price', document.getElementById('productPrice').value.trim());
+            formData.append('summary', document.getElementById('productSummary').value.trim());
+            formData.append('details', document.getElementById('productDetails').value.trim());
+            formData.append('is_active', document.getElementById('productActive').value);
+            formData.append('sort_order', document.getElementById('productSortOrder').value);
+
+            fetch('../api/save_funeral_product.php', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success ? '저장되었습니다.' : (data.message || '저장 중 오류가 발생했습니다.'));
+                    if (data.success) {
+                        resetProductForm();
+                        loadProducts();
+                    }
+                })
+                .catch(() => { alert('저장 중 오류가 발생했습니다.'); });
+        });
+    </script>
+</body>
+</html>

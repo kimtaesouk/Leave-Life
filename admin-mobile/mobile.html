@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <link rel="stylesheet" href="mobile-shared.css">
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" type="button" aria-label="메뉴 열기" onclick="MobileUI.toggleMenu()">☰</button>
+                <h1>관리자 페이지</h1>
+            </div>
+            <div class="user" id="mobileUser">관리자</div>
+        </div>
+
+        <div class="drawer-overlay" id="drawerOverlay" onclick="MobileUI.closeMenu()"></div>
+        <aside class="drawer" id="drawerPanel">
+            <h3>메뉴</h3>
+            <div class="menu">
+                <button onclick="MobileUI.goMobile('mobile-estimate.html')">견적서 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-funeralhall.html')">장례식장 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-cost.html')">비용 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-product.html')">상품 관리</button>
+                <button id="adminCreateBtn" onclick="MobileUI.goMobile('mobile-admin-create.html')">관리자 추가</button>
+                <button onclick="MobileUI.goMobile('mobile-password.html')">비밀번호 변경</button>
+                <button onclick="MobileUI.logout()">로그아웃</button>
+            </div>
+        </aside>
+
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2>견적서 관리</h2>
+                    <button class="add-button" type="button" aria-label="견적서 관리 이동" onclick="MobileUI.goMobile('mobile-estimate.html')">+</button>
+                </div>
+                <div class="table-wrap" id="recentEstimateList">
+                    <div class="list-item">
+                        <div class="list-title">최근 견적을 불러오는 중...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>상조 상품 관리</h2>
+                    <button class="add-button" type="button" aria-label="상품 관리 이동" onclick="MobileUI.goMobile('mobile-product.html')">+</button>
+                </div>
+                <div class="table-wrap" id="recentProductList">
+                    <div class="list-item">
+                        <div class="list-title">상품을 불러오는 중...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="mobile-shared.js"></script>
+    <script>
+
+        function loadRecentEstimates() {
+            const list = document.getElementById('recentEstimateList');
+            if (!list) return;
+            fetch('../api/get_estimate_requests.php?per_page=5&page=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success || !Array.isArray(data.estimates)) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">견적을 불러올 수 없습니다.</div></div>';
+                        return;
+                    }
+                    if (data.estimates.length === 0) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">최근 견적이 없습니다.</div></div>';
+                        return;
+                    }
+                    const statusMap = {
+                        pending: '대기중',
+                        contacted: '연락완료',
+                        completed: '완료',
+                        cancelled: '취소'
+                    };
+                    list.innerHTML = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">번호</th>
+                                    <th style="text-align:left;">고인명</th>
+                                    <th style="text-align:left;">관계</th>
+                                    <th style="text-align:left;">사망일</th>
+                                    <th style="text-align:left;">사망장소</th>
+                                    <th style="text-align:left;">지역</th>
+                                    <th style="text-align:left;">장례기간</th>
+                                    <th style="text-align:left;">종교</th>
+                                    <th style="text-align:left;">담당자</th>
+                                    <th style="text-align:left;">연락처</th>
+                                    <th style="text-align:center;">상태</th>
+                                    <th style="text-align:center;">등록일시</th>
+                                    <th style="text-align:center;">PDF</th>
+                                    <th style="text-align:center;">엑셀</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.estimates.map((item, index) => {
+                                    const statusText = statusMap[item.status] || item.status || '-';
+                                    const pdfLink = item.pdf_url
+                                        ? `<a href="${item.pdf_url}" target="_blank" onclick="event.stopPropagation()" style="color:#667eea;text-decoration:underline;">보기</a>`
+                                        : '-';
+                                    const excelLink = item.excel_url
+                                        ? `<a href="${item.excel_url}" target="_blank" onclick="event.stopPropagation()" style="color:#667eea;text-decoration:underline;">보기</a>`
+                                        : '-';
+                                    return `
+                                        <tr onclick="MobileUI.goMobile('mobile-estimate.html?estimate_id=${item.estimate_id}')">
+                                            <td style="text-align:center;">${index + 1}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.deceased_name || '-')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.relationship || '-')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.death_date || '-')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.death_location || '-')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.sido || '-')} ${MobileUI.escapeHtml(item.sigungu || '')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.funeral_period || '-')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.religion || '-')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.contact_name || '-')}</td>
+                                            <td style="text-align:left;">${MobileUI.escapeHtml(item.contact_phone || '-')}</td>
+                                            <td style="text-align:center;">${MobileUI.escapeHtml(statusText)}</td>
+                                            <td style="text-align:center;">${MobileUI.escapeHtml(item.created_at || '-')}</td>
+                                            <td style="text-align:center;">${pdfLink}</td>
+                                            <td style="text-align:center;">${excelLink}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                })
+                .catch(() => {
+                    list.innerHTML = '<div class="list-item"><div class="list-title">견적을 불러올 수 없습니다.</div></div>';
+                });
+        }
+
+        function loadRecentProducts() {
+            const list = document.getElementById('recentProductList');
+            if (!list) return;
+            fetch('../api/get_funeral_products.php?include_inactive=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success || !Array.isArray(data.products)) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">상품을 불러올 수 없습니다.</div></div>';
+                        return;
+                    }
+                    const items = data.products.slice(0, 5);
+                    if (items.length === 0) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">등록된 상품이 없습니다.</div></div>';
+                        return;
+                    }
+                    list.innerHTML = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>유형</th>
+                                    <th>상품명</th>
+                                    <th>가격(만원)</th>
+                                    <th>요약</th>
+                                    <th>노출</th>
+                                    <th>전화번호</th>
+                                    <th>등록일시</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${items.map(item => {
+                                    const price = Number.isFinite(item.price) ? item.price.toLocaleString('ko-KR') : '-';
+                                    return `
+                                        <tr onclick="MobileUI.goMobile('mobile-product.html?product_id=${item.product_id}')">
+                                            <td>${MobileUI.escapeHtml(item.product_type || '-')}</td>
+                                            <td>${MobileUI.escapeHtml(item.product_name || '-')}</td>
+                                            <td style="text-align:right;">${MobileUI.escapeHtml(price)}</td>
+                                            <td>${MobileUI.escapeHtml(item.summary || '')}</td>
+                                            <td style="text-align:center;">${item.is_active ? '노출' : '숨김'}</td>
+                                            <td style="text-align:center;">-</td>
+                                            <td style="text-align:center;">-</td>
+                                            <td style="text-align:center;">
+                                                <button class="table-action-btn" type="button" onclick="event.stopPropagation(); MobileUI.goMobile('mobile-product.html?product_id=${item.product_id}')">이동</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                })
+                .catch(() => {
+                    list.innerHTML = '<div class="list-item"><div class="list-title">상품을 불러올 수 없습니다.</div></div>';
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            MobileUI.initAdmin({
+                onReady: () => {
+                    loadRecentEstimates();
+                    loadRecentProducts();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

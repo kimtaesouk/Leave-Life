@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장례식장 관리</title>
+    <link rel="stylesheet" href="mobile-shared.css">
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" type="button" aria-label="메뉴 열기" onclick="MobileUI.toggleMenu()">☰</button>
+                <h1>장례식장 관리</h1>
+            </div>
+            <div class="user" id="mobileUser">관리자</div>
+        </div>
+
+        <div class="drawer-overlay" onclick="MobileUI.closeMenu()"></div>
+        <aside class="drawer">
+            <h3>메뉴</h3>
+            <div class="menu">
+                <button onclick="MobileUI.goMobile('mobile.html')">홈</button>
+                <button onclick="MobileUI.goMobile('mobile-estimate.html')">견적서 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-cost.html')">비용 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-product.html')">상품 관리</button>
+                <button id="adminCreateBtn" onclick="MobileUI.goMobile('mobile-admin-create.html')">관리자 추가</button>
+                <button onclick="MobileUI.goMobile('mobile-password.html')">비밀번호 변경</button>
+                <button onclick="MobileUI.logout()">로그아웃</button>
+            </div>
+        </aside>
+
+        <div class="container">
+            <div class="card" id="noAccessCard" style="display:none;">
+                <div class="notice">최고관리자만 접근할 수 있습니다.</div>
+            </div>
+
+            <div class="card" id="hallFormCard">
+                <div class="card-header">
+                    <h2>장례식장 등록/수정</h2>
+                </div>
+                <form id="hallForm">
+                    <input type="hidden" id="hallId">
+                    <div class="form-group">
+                        <label for="hallName">장례식장 이름</label>
+                        <input type="text" id="hallName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hallTel">전화번호</label>
+                        <input type="text" id="hallTel" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hallAddress">주소</label>
+                        <input type="text" id="hallAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hallRepresentative">대표자명</label>
+                        <input type="text" id="hallRepresentative">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallCompanyNo">사업자번호</label>
+                        <input type="text" id="hallCompanyNo">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallHomepage">홈페이지</label>
+                        <input type="text" id="hallHomepage">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallBusinessDate">개업일</label>
+                        <input type="date" id="hallBusinessDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallMortuayCnt">안치실수</label>
+                        <input type="number" id="hallMortuayCnt" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallCharnelCnt">봉안시설수</label>
+                        <input type="number" id="hallCharnelCnt" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallParkCnt">주차대수</label>
+                        <input type="number" id="hallParkCnt" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>시설</label>
+                        <div class="menu">
+                            <button type="button" onclick="toggleFacility('mealroomyn')">식당</button>
+                            <button type="button" onclick="toggleFacility('waitroomyn')">유족대기실</button>
+                            <button type="button" onclick="toggleFacility('imparyn')">장애인편의</button>
+                            <button type="button" onclick="toggleFacility('parkyn')">주차장</button>
+                            <button type="button" onclick="toggleFacility('superyn')">매점</button>
+                        </div>
+                        <input type="hidden" id="facilityMealroomyn" value="0">
+                        <input type="hidden" id="facilityWaitroomyn" value="0">
+                        <input type="hidden" id="facilityImparyn" value="0">
+                        <input type="hidden" id="facilityParkyn" value="0">
+                        <input type="hidden" id="facilitySuperyn" value="0">
+                    </div>
+                    <div class="actions">
+                        <button class="btn-outline" type="button" onclick="resetHallForm()">초기화</button>
+                        <button class="btn-primary" type="submit">저장</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card" id="hallListCard">
+                <div class="card-header">
+                    <h2>장례식장 목록</h2>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="hallSearchInput" placeholder="장례식장 검색">
+                </div>
+                <div class="actions">
+                    <button class="btn-outline" type="button" onclick="resetHallSearch()">초기화</button>
+                    <button class="btn-primary" type="button" onclick="loadHalls(1)">검색</button>
+                </div>
+                <div class="list" id="hallList" style="margin-top: 12px;"></div>
+                <div class="actions" id="hallPagination" style="margin-top: 12px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="mobile-shared.js"></script>
+    <script>
+        let hallPage = 1;
+        const hallPerPage = 10;
+        let hallCache = {};
+        const facilityState = {
+            mealroomyn: 0,
+            waitroomyn: 0,
+            imparyn: 0,
+            parkyn: 0,
+            superyn: 0
+        };
+
+        function toggleFacility(key) {
+            facilityState[key] = facilityState[key] ? 0 : 1;
+            document.getElementById(`facility${key.charAt(0).toUpperCase() + key.slice(1)}`).value = String(facilityState[key]);
+        }
+
+        function resetHallForm() {
+            document.getElementById('hallForm').reset();
+            document.getElementById('hallId').value = '';
+            Object.keys(facilityState).forEach(key => {
+                facilityState[key] = 0;
+                document.getElementById(`facility${key.charAt(0).toUpperCase() + key.slice(1)}`).value = '0';
+            });
+        }
+
+        function resetHallSearch() {
+            document.getElementById('hallSearchInput').value = '';
+            loadHalls(1);
+        }
+
+        function loadHalls(page = 1) {
+            hallPage = page;
+            const list = document.getElementById('hallList');
+            const pagination = document.getElementById('hallPagination');
+            const search = document.getElementById('hallSearchInput').value.trim();
+            let url = `../api/get_funeral_halls.php?page=${page}&per_page=${hallPerPage}`;
+            if (search) url += `&search=${encodeURIComponent(search)}`;
+            list.innerHTML = '<div class="list-item"><div class="list-title">목록을 불러오는 중...</div></div>';
+            pagination.innerHTML = '';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success || !Array.isArray(data.halls)) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">목록을 불러올 수 없습니다.</div></div>';
+                        return;
+                    }
+                    if (data.halls.length === 0) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">등록된 장례식장이 없습니다.</div></div>';
+                        return;
+                    }
+                    hallCache = {};
+                    data.halls.forEach(hall => { hallCache[hall.hall_id] = hall; });
+                    list.innerHTML = data.halls.map(hall => `
+                        <div class="list-item">
+                            <div class="list-title">${MobileUI.escapeHtml(hall.hall_name)}</div>
+                            <div class="list-meta">
+                                <span>${MobileUI.escapeHtml(hall.tel || '-')}</span>
+                                <span>${MobileUI.escapeHtml(hall.address || '-')}</span>
+                            </div>
+                            <div class="actions" style="margin-top: 8px;">
+                                <button class="btn-outline" type="button" onclick="editHallById(${hall.hall_id})">수정</button>
+                                <button class="btn-primary" type="button" onclick="deleteHall(${hall.hall_id})">삭제</button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    const totalPages = data.total_pages || 1;
+                    const buttons = [];
+                    if (page > 1) buttons.push(`<button class="btn-outline" type="button" onclick="loadHalls(${page - 1})">이전</button>`);
+                    if (page < totalPages) buttons.push(`<button class="btn-outline" type="button" onclick="loadHalls(${page + 1})">다음</button>`);
+                    pagination.innerHTML = buttons.join('');
+                })
+                .catch(() => {
+                    list.innerHTML = '<div class="list-item"><div class="list-title">목록을 불러올 수 없습니다.</div></div>';
+                });
+        }
+
+        function editHallById(hallId) {
+            const hall = hallCache[hallId];
+            if (!hall) return;
+            document.getElementById('hallId').value = hall.hall_id;
+            document.getElementById('hallName').value = hall.hall_name || '';
+            document.getElementById('hallTel').value = hall.tel || '';
+            document.getElementById('hallAddress').value = hall.addr_full || hall.address || '';
+            document.getElementById('hallRepresentative').value = hall.representativename || '';
+            document.getElementById('hallCompanyNo').value = hall.companyno || '';
+            document.getElementById('hallHomepage').value = hall.homepage || '';
+            document.getElementById('hallBusinessDate').value = hall.businessdate || '';
+            document.getElementById('hallMortuayCnt').value = hall.mortuaycnt || '';
+            document.getElementById('hallCharnelCnt').value = hall.charnelabilitycnt || '';
+            document.getElementById('hallParkCnt').value = hall.parkcnt || '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteHall(hallId) {
+            if (!confirm('장례식장을 삭제하시겠습니까?')) {
+                return;
+            }
+            const formData = new FormData();
+            formData.append('hall_id', hallId);
+            fetch('../api/delete_funeral_hall.php', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success ? '삭제되었습니다.' : (data.message || '삭제 중 오류가 발생했습니다.'));
+                    if (data.success) {
+                        loadHalls(hallPage);
+                    }
+                })
+                .catch(() => { alert('삭제 중 오류가 발생했습니다.'); });
+        }
+
+        document.getElementById('hallForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const hallId = document.getElementById('hallId').value;
+            const formData = new FormData();
+            formData.append('hall_id', hallId);
+            formData.append('hall_name', document.getElementById('hallName').value.trim());
+            formData.append('tel', document.getElementById('hallTel').value.trim());
+            formData.append('full_address', document.getElementById('hallAddress').value.trim());
+            formData.append('representativename', document.getElementById('hallRepresentative').value.trim());
+            formData.append('companyno', document.getElementById('hallCompanyNo').value.trim());
+            formData.append('homepage', document.getElementById('hallHomepage').value.trim());
+            formData.append('businessdate', document.getElementById('hallBusinessDate').value);
+            formData.append('mortuaycnt', document.getElementById('hallMortuayCnt').value);
+            formData.append('charnelabilitycnt', document.getElementById('hallCharnelCnt').value);
+            formData.append('parkcnt', document.getElementById('hallParkCnt').value);
+            formData.append('mealroomyn', document.getElementById('facilityMealroomyn').value);
+            formData.append('superyn', document.getElementById('facilitySuperyn').value);
+            formData.append('parkyn', document.getElementById('facilityParkyn').value);
+            formData.append('waitroomyn', document.getElementById('facilityWaitroomyn').value);
+            formData.append('imparyn', document.getElementById('facilityImparyn').value);
+
+            const api = hallId ? '../api/update_funeral_hall.php' : '../api/save_funeral_hall.php';
+            fetch(api, { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success ? '저장되었습니다.' : (data.message || '저장 중 오류가 발생했습니다.'));
+                    if (data.success) {
+                        resetHallForm();
+                        loadHalls(1);
+                    }
+                })
+                .catch(() => { alert('저장 중 오류가 발생했습니다.'); });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            MobileUI.initAdmin({
+                requireSuper: true,
+                onReady: () => loadHalls(1)
+            });
+        });
+    </script>
+</body>
+</html>

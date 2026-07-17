@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비용 관리</title>
+    <link rel="stylesheet" href="mobile-shared.css">
+    <style>
+        .price-item {
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            background: #fafafa;
+            margin-bottom: 10px;
+        }
+        .price-item .actions {
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" type="button" aria-label="메뉴 열기" onclick="MobileUI.toggleMenu()">☰</button>
+                <h1>비용 관리</h1>
+            </div>
+            <div class="user" id="mobileUser">관리자</div>
+        </div>
+
+        <div class="drawer-overlay" onclick="MobileUI.closeMenu()"></div>
+        <aside class="drawer">
+            <h3>메뉴</h3>
+            <div class="menu">
+                <button onclick="MobileUI.goMobile('mobile.html')">홈</button>
+                <button onclick="MobileUI.goMobile('mobile-estimate.html')">견적서 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-funeralhall.html')">장례식장 관리</button>
+                <button onclick="MobileUI.goMobile('mobile-product.html')">상품 관리</button>
+                <button id="adminCreateBtn" onclick="MobileUI.goMobile('mobile-admin-create.html')">관리자 추가</button>
+                <button onclick="MobileUI.goMobile('mobile-password.html')">비밀번호 변경</button>
+                <button onclick="MobileUI.logout()">로그아웃</button>
+            </div>
+        </aside>
+
+        <div class="container">
+            <div class="card" id="noAccessCard" style="display:none;">
+                <div class="notice">최고관리자만 접근할 수 있습니다.</div>
+            </div>
+
+            <div class="card" id="costCard">
+                <div class="card-header">
+                    <h2>장례식장 선택</h2>
+                </div>
+                <div class="form-group">
+                    <select id="hallSelect"></select>
+                </div>
+                <div class="actions">
+                    <button class="btn-primary" type="button" onclick="loadPrices()">가격 조회</button>
+                </div>
+            </div>
+
+            <div class="card" id="priceListCard">
+                <div class="card-header">
+                    <h2>가격 항목</h2>
+                </div>
+                <div id="priceList"></div>
+            </div>
+
+            <div class="card" id="priceFormCard">
+                <div class="card-header">
+                    <h2>항목 추가</h2>
+                </div>
+                <form id="priceForm">
+                    <input type="hidden" id="priceId">
+                    <div class="form-group">
+                        <label for="priceCategory">카테고리</label>
+                        <select id="priceCategory"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceProductName">품명</label>
+                        <input type="text" id="priceProductName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceUnit">단위</label>
+                        <input type="text" id="priceUnit" required placeholder="예: 1회">
+                    </div>
+                    <div class="form-group">
+                        <label for="priceDefaultQty">기본 수량</label>
+                        <input type="number" id="priceDefaultQty" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="priceValue">가격</label>
+                        <input type="number" id="priceValue" min="0" required>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-outline" type="button" onclick="resetPriceForm()">초기화</button>
+                        <button class="btn-primary" type="submit">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="mobile-shared.js"></script>
+    <script>
+        let currentHallId = 0;
+        let priceCache = {};
+
+        function loadHallOptions() {
+            const select = document.getElementById('hallSelect');
+            select.innerHTML = '<option value="">장례식장 선택</option>';
+            fetch('../api/get_funeral_halls.php?per_page=1000&page=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success || !Array.isArray(data.halls)) return;
+                    select.innerHTML += data.halls.map(hall => `
+                        <option value="${hall.hall_id}">${MobileUI.escapeHtml(hall.hall_name)}</option>
+                    `).join('');
+                });
+        }
+
+        function loadCategories() {
+            const select = document.getElementById('priceCategory');
+            select.innerHTML = '';
+            fetch('../api/get_price_categories.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success || !Array.isArray(data.categories)) return;
+                    select.innerHTML = data.categories.map(cat => `
+                        <option value="${cat.category_id}">${MobileUI.escapeHtml(cat.category_name)}</option>
+                    `).join('');
+                });
+        }
+
+        function loadPrices() {
+            const hallId = Number(document.getElementById('hallSelect').value);
+            if (!hallId) {
+                alert('장례식장을 선택해주세요.');
+                return;
+            }
+            currentHallId = hallId;
+            const list = document.getElementById('priceList');
+            list.innerHTML = '<div class="list-item"><div class="list-title">가격을 불러오는 중...</div></div>';
+            fetch(`../api/get_funeral_hall_price.php?hall_id=${hallId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success || !Array.isArray(data.categories)) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">가격을 불러올 수 없습니다.</div></div>';
+                        return;
+                    }
+                    if (data.categories.length === 0) {
+                        list.innerHTML = '<div class="list-item"><div class="list-title">등록된 가격이 없습니다.</div></div>';
+                        return;
+                    }
+                    priceCache = {};
+                    data.categories.forEach(category => {
+                        (category.items || []).forEach(item => {
+                            priceCache[item.price_id] = item;
+                        });
+                    });
+                    list.innerHTML = data.categories.map(category => `
+                        <div class="price-item">
+                            <div class="list-title">${MobileUI.escapeHtml(category.category_name)}</div>
+                            ${(category.items || []).map(item => `
+                                <div class="list-item">
+                                    <div class="list-title">${MobileUI.escapeHtml(item.product_name || item.category_name)}</div>
+                                    <div class="list-meta">
+                                        <span>${MobileUI.escapeHtml(item.product_type || '-')}</span>
+                                        <span>${MobileUI.escapeHtml(Number.isFinite(Number(item.price)) ? Math.floor(Number(item.price)).toLocaleString('ko-KR') + '원' : '-')}</span>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-outline" type="button" onclick="editPriceById(${item.price_id})">수정</button>
+                                        <button class="btn-primary" type="button" onclick="deletePrice(${item.price_id})">삭제</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `).join('');
+                })
+                .catch(() => {
+                    list.innerHTML = '<div class="list-item"><div class="list-title">가격을 불러올 수 없습니다.</div></div>';
+                });
+        }
+
+        function editPriceById(priceId) {
+            const item = priceCache[priceId];
+            if (!item) return;
+            document.getElementById('priceId').value = item.price_id || '';
+            document.getElementById('priceCategory').value = item.category_id || '';
+            document.getElementById('priceProductName').value = item.product_name || '';
+            document.getElementById('priceUnit').value = item.product_type || '';
+            document.getElementById('priceDefaultQty').value = item.default_qty || '';
+            document.getElementById('priceValue').value = Number.isFinite(Number(item.price)) ? Math.floor(Number(item.price)) : '';
+            window.scrollTo({ top: document.getElementById('priceFormCard').offsetTop, behavior: 'smooth' });
+        }
+
+        function resetPriceForm() {
+            document.getElementById('priceForm').reset();
+            document.getElementById('priceId').value = '';
+        }
+
+        function deletePrice(priceId) {
+            if (!confirm('가격 항목을 삭제하시겠습니까?')) {
+                return;
+            }
+            fetch('../api/delete_funeral_hall_price.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ price_id: priceId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success ? '삭제되었습니다.' : (data.message || '삭제 중 오류가 발생했습니다.'));
+                    if (data.success) {
+                        loadPrices();
+                    }
+                })
+                .catch(() => { alert('삭제 중 오류가 발생했습니다.'); });
+        }
+
+        document.getElementById('priceForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!currentHallId) {
+                alert('장례식장을 선택해주세요.');
+                return;
+            }
+            const item = {
+                price_id: document.getElementById('priceId').value || 0,
+                category_id: document.getElementById('priceCategory').value,
+                product_name: document.getElementById('priceProductName').value.trim(),
+                unit: document.getElementById('priceUnit').value.trim(),
+                default_qty: document.getElementById('priceDefaultQty').value,
+                price: document.getElementById('priceValue').value
+            };
+            const payload = {
+                hall_id: currentHallId,
+                items: [item]
+            };
+            fetch('../api/save_funeral_hall_price.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success ? '저장되었습니다.' : (data.message || '저장 중 오류가 발생했습니다.'));
+                    if (data.success) {
+                        resetPriceForm();
+                        loadPrices();
+                    }
+                })
+                .catch(() => { alert('저장 중 오류가 발생했습니다.'); });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            MobileUI.initAdmin({
+                requireSuper: true,
+                onReady: () => {
+                    loadHallOptions();
+                    loadCategories();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[MASTER]
+ignore-patterns=test_.*\.py
+
+[MESSAGES CONTROL]
+disable=import-error,no-member,missing-module-docstring
+
+[TYPECHECK]
+ignored-modules=bs4,pymysql,requests
