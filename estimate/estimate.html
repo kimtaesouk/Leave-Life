@@ -4,7 +4,7 @@
                 <div class="intro-steps" aria-label="견적 작성 진행 단계">
                     <div class="intro-step is-active" data-step-indicator="0" aria-current="step"><span>01</span>기본 정보</div>
                     <div class="intro-step" data-step-indicator="1"><span>02</span>지역 · 상품</div>
-                    <div class="intro-step" data-step-indicator="2"><span>03</span>연락처 · 동의</div>
+                    <div class="intro-step" data-step-indicator="2"><span>03</span>연락처</div>
                 </div>
                 <p class="intro-note">필수 항목은 <span class="required">*</span>로 표시됩니다. 단계별로 입력한 뒤 다음 버튼을 눌러주세요.</p>
             </div>
@@ -300,23 +300,6 @@
                     color: var(--text);
                     font-size: 1rem;
                     margin-bottom: 12px;
-                }
-
-                .intro-steps {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-                    gap: 10px;
-                    margin-bottom: 10px;
-                }
-
-                .intro-step {
-                    background-color: var(--surface-alt);
-                    border: 1px solid var(--border);
-                    color: var(--muted);
-                    padding: 8px 10px;
-                    border-radius: 8px;
-                    font-size: 0.95rem;
-                    text-align: center;
                 }
 
                 .intro-note {
@@ -802,8 +785,10 @@
 
                 .intro-steps {
                     position: relative;
-                    grid-template-columns: repeat(4, 1fr);
+                    display: grid;
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
                     gap: 0;
+                    margin-bottom: 10px;
                     overflow: hidden;
                     border: 1px solid var(--line, #e5e3dd);
                     border-radius: 12px;
@@ -816,8 +801,8 @@
                     align-items: center;
                     justify-content: center;
                     gap: 9px;
-                    min-height: 54px;
-                    padding: 10px 12px;
+                    min-height: 50px;
+                    padding: 8px 12px;
                     border: 0;
                     border-right: 1px solid var(--line, #e5e3dd);
                     border-radius: 0;
@@ -1380,11 +1365,18 @@
                     }
                     
                     .intro-step {
-                        flex-direction: column;
-                        gap: 4px;
-                        min-height: 68px;
-                        padding: 8px 4px;
-                        font-size: 0.7rem;
+                        flex-direction: row;
+                        gap: 6px;
+                        min-height: 46px;
+                        padding: 7px 5px;
+                        font-size: 0.74rem;
+                        white-space: nowrap;
+                    }
+
+                    .intro-step span {
+                        width: 22px;
+                        height: 22px;
+                        font-size: 0.61rem;
                     }
 
                     .wizard-review-grid {
