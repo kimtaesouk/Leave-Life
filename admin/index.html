@@ -1252,6 +1252,7 @@
             top: 0;
             z-index: 50;
             height: 70px;
+            padding: 0 !important;
             background: rgba(255, 255, 255, .97);
             border-bottom: 1px solid var(--ops-line);
             box-shadow: none;
@@ -1263,6 +1264,7 @@
             max-width: none;
             height: 70px;
             padding: 0 30px;
+            transform: translateY(-3px);
         }
 
         .admin-brand strong { color: #173f31; letter-spacing: -.025em; }
@@ -1930,10 +1932,6 @@
             background: #dfe7e3;
         }
 
-        .header-content .user-info {
-            transform: translateY(-3px);
-        }
-
         .estimate-detail-section {
             scroll-margin-top: 92px;
         }
@@ -2186,6 +2184,7 @@
                 flex-flow: row wrap !important;
                 align-items: center !important;
                 gap: 10px 14px !important;
+                transform: none;
             }
             .user-info { width: auto; margin-left: auto; transform: none !important; }
             .admin-layout { display: block; min-height: 0; }
