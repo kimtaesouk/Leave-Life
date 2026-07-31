@@ -99,12 +99,56 @@
             color: #ffffff;
             text-align: center;
         }
-        .estimate-pdf-total {
-            margin-top: 10px;
+        .estimate-pdf-price-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .estimate-pdf-price-summary > div {
+            padding: 10px;
+            border: 1px solid #d8e1dc;
+            border-radius: 6px;
+            background: #f7f9f8;
             text-align: right;
+        }
+        .estimate-pdf-price-summary span {
+            display: block;
+            margin-bottom: 4px;
+            color: #68766f;
+            font-size: 10px;
+        }
+        .estimate-pdf-price-summary strong {
+            color: #174d3d;
             font-size: 13px;
-            font-weight: 600;
-            color: #333;
+        }
+        .estimate-pdf-price-summary .is-total {
+            border-color: #174d3d;
+            background: #174d3d;
+        }
+        .estimate-pdf-price-summary .is-total span,
+        .estimate-pdf-price-summary .is-total strong {
+            color: #ffffff;
+        }
+        .mobile-price-summary .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .mobile-price-summary .list-title {
+            font-size: .86rem;
+        }
+        .mobile-price-summary strong {
+            color: #174d3d;
+            font-size: 1rem;
+        }
+        .mobile-price-summary .is-total {
+            background: #174d3d;
+        }
+        .mobile-price-summary .is-total .list-title,
+        .mobile-price-summary .is-total strong {
+            color: #ffffff;
         }
         .estimate-pdf-footer {
             margin-top: 28px;
@@ -234,11 +278,20 @@
                 </div>
 
                 <div class="card-header" style="margin-top: 12px;">
-                    <h2>총 금액</h2>
+                    <h2>금액 요약</h2>
                 </div>
-                <div class="list">
+                <div class="list mobile-price-summary">
                     <div class="list-item">
-                        <div class="list-title" id="estimateTotalPrice">0원</div>
+                        <div class="list-title">상조 상품 금액</div>
+                        <strong id="estimateProductPrice">0원</strong>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-title">장례식장 금액</div>
+                        <strong id="estimateHallPrice">0원</strong>
+                    </div>
+                    <div class="list-item is-total">
+                        <div class="list-title">최종 합계</div>
+                        <strong id="estimateTotalPrice">0원</strong>
                     </div>
                 </div>
 
@@ -296,8 +349,19 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="estimate-pdf-total">
-                    총 금액: <span data-field="총 금액">0</span>원
+                <div class="estimate-pdf-price-summary">
+                    <div>
+                        <span>상조 상품 금액</span>
+                        <strong><span data-field="상조 상품 금액">0</span>원</strong>
+                    </div>
+                    <div>
+                        <span>장례식장 금액</span>
+                        <strong><span data-field="장례식장 금액">0</span>원</strong>
+                    </div>
+                    <div class="is-total">
+                        <span>최종 합계</span>
+                        <strong><span data-field="총 금액">0</span>원</strong>
+                    </div>
                 </div>
             </div>
 
@@ -308,7 +372,8 @@
         </div>
     </div>
 
-    <script src="libs/xlsx.full.min.js"></script>
+    <script src="../vendor/exceljs.min.js"></script>
+    <script src="../js/estimate-excel.js"></script>
     <script src="libs/jspdf.umd.min.js"></script>
     <script src="libs/jspdf.plugin.autotable.min.js"></script>
     <script src="libs/html2canvas.min.js"></script>
@@ -778,28 +843,34 @@
         }
 
         function updateEstimateTotalPrice() {
-            let total = 0;
+            let funeralHallAmount = 0;
             const checkboxes = document.querySelectorAll('.estimate-price-checkbox:checked');
             checkboxes.forEach(checkbox => {
                 const priceId = checkbox.getAttribute('data-price-id');
                 const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
                 const qtyInput = document.querySelector(`.estimate-qty-input[data-price-id="${priceId}"]`);
                 const qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
-                total += price * qty;
+                funeralHallAmount += price * qty;
             });
             const selectedProductId = document.querySelector('input[name="estimateFuneralProduct"]:checked')?.value
                 || (selectedEstimateForHall ? selectedEstimateForHall.funeral_product_id : null);
+            let funeralProductAmount = 0;
             if (selectedProductId && Array.isArray(estimateProductList) && estimateProductList.length) {
                 const product = estimateProductList.find(item => Number(item.product_id) === Number(selectedProductId));
                 if (product && product.price) {
-                    total += Number(product.price) * 10000;
+                    funeralProductAmount = Number(product.price) * 10000;
                 }
             }
+            const totalAmount = funeralProductAmount + funeralHallAmount;
+            const productEl = document.getElementById('estimateProductPrice');
+            const hallEl = document.getElementById('estimateHallPrice');
             const totalEl = document.getElementById('estimateTotalPrice');
-            if (totalEl) totalEl.textContent = `${Math.floor(total).toLocaleString('ko-KR')}원`;
+            if (productEl) productEl.textContent = `${Math.floor(funeralProductAmount).toLocaleString('ko-KR')}원`;
+            if (hallEl) hallEl.textContent = `${Math.floor(funeralHallAmount).toLocaleString('ko-KR')}원`;
+            if (totalEl) totalEl.textContent = `${Math.floor(totalAmount).toLocaleString('ko-KR')}원`;
         }
 
-        function completeEstimateAndDownload() {
+        async function completeEstimateAndDownload() {
             if (!selectedEstimateForHall || !selectedEstimateHallId) {
                 alert('장례식장을 선택해주세요.');
                 return;
@@ -810,32 +881,38 @@
                 return;
             }
             const estimateInfo = buildEstimateInfo();
-            const totalAmount = selectedItems.reduce((sum, item) => sum + item.amount, 0);
-            const excelRows = buildEstimateExcelRows(estimateInfo, selectedItems, totalAmount);
-            const excelPayload = createEstimateExcelBlob(excelRows);
-            if (!excelPayload || !excelPayload.blob) {
-                alert('엑셀 파일 생성에 실패했습니다. (XLSX 라이브러리 확인)');
+            if (!window.EstimateExcel) {
+                alert('엑셀 생성 기능을 불러오지 못했습니다. 페이지를 새로고침한 뒤 다시 시도해주세요.');
                 return;
             }
-            createEstimatePdfBlob(estimateInfo, selectedItems, totalAmount)
-                .then(pdfBlob => {
-                    if (!pdfBlob) {
-                        alert(`PDF 파일 생성에 실패했습니다. ${lastPdfError ? '(' + lastPdfError + ')' : ''}`);
-                        return;
-                    }
-                    uploadEstimateDocuments(selectedEstimateId, pdfBlob, excelPayload.blob, excelPayload.ext)
-                        .then(success => {
-                            if (success) {
-                                downloadBlob(excelPayload.blob, buildEstimateFileName(estimateInfo) + `.${excelPayload.ext}`);
-                                downloadBlob(pdfBlob, buildEstimateFileName(estimateInfo) + '.pdf');
-                                loadEstimates(estimatePage);
-                                alert('견적서가 저장되었습니다.');
-                            }
-                        });
-                })
-                .catch(() => {
-                    alert('PDF 생성 중 오류가 발생했습니다.');
+
+            const priceSummary = window.EstimateExcel.calculatePriceSummary(selectedItems);
+            let excelPayload;
+            try {
+                excelPayload = await window.EstimateExcel.createBlob({
+                    estimateInfo,
+                    items: selectedItems,
+                    priceSummary
                 });
+            } catch (error) {
+                console.error('Excel creation error:', error);
+                alert(error && error.message ? error.message : '엑셀 파일 생성에 실패했습니다.');
+                return;
+            }
+
+            const pdfBlob = await createEstimatePdfBlob(estimateInfo, selectedItems, priceSummary);
+            if (!pdfBlob) {
+                alert(`PDF 파일 생성에 실패했습니다. ${lastPdfError ? '(' + lastPdfError + ')' : ''}`);
+                return;
+            }
+
+            const success = await uploadEstimateDocuments(selectedEstimateId, pdfBlob, excelPayload.blob, excelPayload.ext);
+            if (success) {
+                downloadBlob(excelPayload.blob, buildEstimateFileName(estimateInfo) + `.${excelPayload.ext}`);
+                downloadBlob(pdfBlob, buildEstimateFileName(estimateInfo) + '.pdf');
+                loadEstimates(estimatePage);
+                alert('PDF와 엑셀 견적서가 저장되었습니다.');
+            }
         }
 
         function getSelectedEstimateItems() {
@@ -897,47 +974,6 @@
             };
         }
 
-        function buildEstimateExcelRows(info, items, totalAmount) {
-            const rows = [];
-            rows.push(['견적서']);
-            rows.push(['장례 서비스 견적']);
-            rows.push([]);
-            rows.push(['작성일', info['작성일'] || '-', '견적번호', info['견적번호'] || '-']);
-            rows.push([]);
-            rows.push(['기본 정보']);
-            rows.push(['고인 성함', info['고인 성함'] || '-', '담당자 성함', info['담당자 성함'] || '-']);
-            rows.push(['연락처', info['연락처'] || '-', '이메일', info['이메일'] || '-']);
-            rows.push(['장례 기간', info['장례 기간'] || '-', '지역', info['지역'] || '-']);
-            rows.push(['장례식장', info['장례식장'] || '-']);
-            rows.push(['장례식장 주소', info['장례식장 주소'] || '-']);
-            rows.push([]);
-            rows.push(['선택 항목']);
-            rows.push(['카테고리', '품명', '개수', '단가', '금액']);
-
-            items.forEach(item => {
-                rows.push([
-                    item.category,
-                    item.productName,
-                    item.qty,
-                    Math.floor(item.unitPrice),
-                    Math.floor(item.amount)
-                ]);
-            });
-
-            rows.push([]);
-            rows.push(['총 금액', Math.floor(totalAmount)]);
-            return rows;
-        }
-
-        function createEstimateExcelBlob(rows) {
-            if (typeof XLSX === 'undefined') return null;
-            const worksheet = XLSX.utils.aoa_to_sheet(rows);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, '견적서');
-            const data = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-            return { blob: new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), ext: 'xlsx' };
-        }
-
         let koreanFontPromise = null;
         function arrayBufferToBase64(buffer) {
             let binary = '';
@@ -964,7 +1000,7 @@
             return koreanFontPromise;
         }
 
-        async function createEstimatePdfBlob(info, items, totalAmount) {
+        async function createEstimatePdfBlob(info, items, priceSummary) {
             lastPdfError = '';
             try {
                 if (!window.jspdf || !window.jspdf.jsPDF) {
@@ -972,7 +1008,7 @@
                     return null;
                 }
                 if (typeof html2canvas === 'function') {
-                    const templateBlob = await createEstimatePdfBlobFromTemplate(info, items, totalAmount);
+                    const templateBlob = await createEstimatePdfBlobFromTemplate(info, items, priceSummary);
                     if (templateBlob) {
                         return templateBlob;
                     }
@@ -988,13 +1024,13 @@
             }
         }
 
-        async function createEstimatePdfBlobFromTemplate(estimateInfo, items, totalAmount) {
+        async function createEstimatePdfBlobFromTemplate(estimateInfo, items, priceSummary) {
             const template = document.getElementById('estimatePdfTemplate');
             if (!template) {
                 return null;
             }
 
-            populateEstimatePdfTemplate(estimateInfo, items, totalAmount);
+            populateEstimatePdfTemplate(estimateInfo, items, priceSummary);
             template.style.display = 'block';
             const page = template.querySelector('.estimate-pdf-page');
             if (!page) {
@@ -1033,7 +1069,7 @@
             }
         }
 
-        function populateEstimatePdfTemplate(estimateInfo, items, totalAmount) {
+        function populateEstimatePdfTemplate(estimateInfo, items, priceSummary) {
             const template = document.getElementById('estimatePdfTemplate');
             if (!template) return;
 
@@ -1044,10 +1080,15 @@
                 }
             });
 
-            const totalField = template.querySelector('[data-field="총 금액"]');
-            if (totalField) {
-                totalField.textContent = Math.floor(totalAmount).toLocaleString('ko-KR');
-            }
+            const summaryFields = {
+                '상조 상품 금액': priceSummary.funeralProductAmount,
+                '장례식장 금액': priceSummary.funeralHallAmount,
+                '총 금액': priceSummary.totalAmount
+            };
+            Object.entries(summaryFields).forEach(([fieldName, amount]) => {
+                const field = template.querySelector(`[data-field="${fieldName}"]`);
+                if (field) field.textContent = Math.floor(amount).toLocaleString('ko-KR');
+            });
 
             const body = template.querySelector('#estimatePdfItemsBody');
             if (!body) return;
