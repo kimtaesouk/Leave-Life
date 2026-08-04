@@ -22,10 +22,19 @@ if ($estimate_id <= 0) {
     exit;
 }
 
-$smtp_username = trim((string)getenv('LEAVE_LIFE_SMTP_USERNAME'));
-$smtp_password = (string)getenv('LEAVE_LIFE_SMTP_APP_PASSWORD');
-$from_email = trim((string)(getenv('LEAVE_LIFE_MAIL_FROM_EMAIL') ?: $smtp_username));
-$from_name = trim((string)(getenv('LEAVE_LIFE_MAIL_FROM_NAME') ?: '리브 라이프'));
+$mail_config = [];
+$mail_config_path = __DIR__ . '/../config/email_config.php';
+if (is_file($mail_config_path) && is_readable($mail_config_path)) {
+    $loaded_mail_config = require $mail_config_path;
+    if (is_array($loaded_mail_config)) {
+        $mail_config = $loaded_mail_config;
+    }
+}
+
+$smtp_username = trim((string)(getenv('LEAVE_LIFE_SMTP_USERNAME') ?: ($mail_config['smtp_username'] ?? '')));
+$smtp_password = (string)(getenv('LEAVE_LIFE_SMTP_APP_PASSWORD') ?: ($mail_config['smtp_app_password'] ?? ''));
+$from_email = trim((string)(getenv('LEAVE_LIFE_MAIL_FROM_EMAIL') ?: ($mail_config['from_email'] ?? $smtp_username)));
+$from_name = trim((string)(getenv('LEAVE_LIFE_MAIL_FROM_NAME') ?: ($mail_config['from_name'] ?? '리브 라이프')));
 if (!$from_email || !filter_var($from_email, FILTER_VALIDATE_EMAIL) || !$smtp_username || !$smtp_password) {
     echo json_encode(['success' => false, 'message' => '이메일 발송 서버 설정이 필요합니다.']);
     exit;
@@ -126,9 +135,9 @@ $attachments = [
 ];
 
 $smtp_config = [
-    'host' => getenv('LEAVE_LIFE_SMTP_HOST') ?: 'smtp.naver.com',
-    'port' => (int)(getenv('LEAVE_LIFE_SMTP_PORT') ?: 587),
-    'encryption' => getenv('LEAVE_LIFE_SMTP_ENCRYPTION') ?: 'tls',
+    'host' => getenv('LEAVE_LIFE_SMTP_HOST') ?: ($mail_config['smtp_host'] ?? 'smtp.naver.com'),
+    'port' => (int)(getenv('LEAVE_LIFE_SMTP_PORT') ?: ($mail_config['smtp_port'] ?? 587)),
+    'encryption' => getenv('LEAVE_LIFE_SMTP_ENCRYPTION') ?: ($mail_config['smtp_encryption'] ?? 'tls'),
     'username' => $smtp_username,
     'password' => $smtp_password,
     'timeout' => 20

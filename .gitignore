@@ -3,5 +3,6 @@ __pycache__/
 venv/
 .deps/
 uploads/
+config/email_config.php
 crawled_data/
 *.pyc
