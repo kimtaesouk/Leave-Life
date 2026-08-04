@@ -18,6 +18,14 @@
         })();
     </script>
     <style>
+        @font-face {
+            font-family: 'NotoSansKR';
+            src: url('../fonts/NotoSansKR-1.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -817,7 +825,7 @@
             padding: 40px 45px;
             background-color: #ffffff;
             color: #333333;
-            font-family: 'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;
+            font-family: 'NotoSansKR', 'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;
             box-sizing: border-box;
         }
 
@@ -825,15 +833,15 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #174d3d;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
         }
 
         .estimate-pdf-title {
             font-size: 26px;
             font-weight: 700;
-            color: #667eea;
+            color: #174d3d;
         }
 
         .estimate-pdf-subtitle {
@@ -843,9 +851,20 @@
         }
 
         .estimate-pdf-meta {
-            text-align: right;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             font-size: 12px;
             line-height: 1.6;
+        }
+
+        .estimate-pdf-meta > div,
+        .estimate-pdf-grid > div {
+            display: grid;
+            grid-template-columns: 108px minmax(0, 1fr);
+            min-height: 32px;
+            align-items: center;
+            border: 1px solid #d8e1dc;
+            margin: -1px 0 0 -1px;
         }
 
         .estimate-pdf-section {
@@ -855,27 +874,36 @@
         .estimate-pdf-section-title {
             font-size: 15px;
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 10px;
+            color: #174d3d;
+            margin-bottom: 0;
+            padding: 8px 10px;
+            border: 1px solid #d8e1dc;
+            background: #eaf2ee;
         }
 
         .estimate-pdf-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px 18px;
             font-size: 12px;
             line-height: 1.6;
-            padding: 12px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            background-color: #f9fafb;
         }
 
         .estimate-pdf-grid .label,
         .estimate-pdf-meta .label {
             font-weight: 600;
-            color: #555;
-            margin-right: 6px;
+            color: #53645c;
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            padding: 6px 9px;
+            background: #f7f4ee;
+            border-right: 1px solid #d8e1dc;
+        }
+
+        .estimate-pdf-grid > div > span:not(.label),
+        .estimate-pdf-meta > div > span:not(.label) {
+            padding: 6px 9px;
+            overflow-wrap: anywhere;
         }
 
         .estimate-pdf-table {
@@ -906,7 +934,7 @@
         }
 
         .estimate-pdf-table th {
-            background-color: #667eea;
+            background-color: #174d3d;
             color: #ffffff;
             text-align: center;
         }
@@ -921,39 +949,51 @@
 
         .estimate-pdf-price-summary {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 12px;
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-top: 18px;
+            border: 1px solid #d8e1dc;
         }
 
         .estimate-pdf-price-summary > div {
-            padding: 10px;
-            border: 1px solid #d8e1dc;
-            border-radius: 6px;
-            background: #f7f9f8;
-            text-align: right;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            align-items: center;
+            min-height: 34px;
+            border-bottom: 1px solid #d8e1dc;
+            background: #ffffff;
         }
 
         .estimate-pdf-price-summary span {
             display: block;
-            margin-bottom: 4px;
             color: #68766f;
-            font-size: 10px;
+            font-size: 11px;
+            padding: 8px 10px;
+            background: #f7f4ee;
+            border-right: 1px solid #d8e1dc;
         }
 
         .estimate-pdf-price-summary strong {
             color: #174d3d;
             font-size: 13px;
+            padding: 8px 10px;
+            text-align: right;
         }
 
         .estimate-pdf-price-summary .is-total {
             border-color: #174d3d;
             background: #174d3d;
+            border-bottom: 0;
         }
 
         .estimate-pdf-price-summary .is-total span,
         .estimate-pdf-price-summary .is-total strong {
             color: #ffffff;
+        }
+
+        .estimate-pdf-price-summary .is-total span {
+            background: transparent;
+            border-right-color: rgba(255, 255, 255, .28);
         }
 
         .estimate-price-summary {
@@ -2193,6 +2233,61 @@
             border-top: 1px solid #e1e8e4;
         }
 
+        .estimate-delivery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .estimate-delivery-channel {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #f7f9f8;
+            border: 1px solid #dfe7e3;
+            border-radius: 10px;
+        }
+
+        .estimate-delivery-channel span,
+        .estimate-delivery-channel strong,
+        .estimate-delivery-channel small {
+            display: block;
+        }
+
+        .estimate-delivery-channel span { color: #74827b; font-size: .69rem; font-weight: 750; }
+        .estimate-delivery-channel strong { margin: 5px 0 3px; color: #243b31; font-size: .9rem; overflow-wrap: anywhere; }
+        .estimate-delivery-channel small { color: #8a9690; font-size: .65rem; line-height: 1.45; }
+
+        .estimate-delivery-channel button:disabled {
+            cursor: not-allowed;
+            opacity: .45;
+        }
+
+        .estimate-list-delivery {
+            display: grid;
+            gap: 7px;
+            min-width: 285px;
+        }
+
+        .estimate-list-delivery-row {
+            display: grid;
+            grid-template-columns: 62px minmax(112px, 1fr) auto;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 8px;
+            background: #f7f9f8;
+            border: 1px solid #dfe7e3;
+            border-radius: 7px;
+            text-align: left;
+        }
+
+        .estimate-list-delivery-row span { color: #718078; font-size: .66rem; font-weight: 750; }
+        .estimate-list-delivery-row strong { color: #2b4036; font-size: .72rem; overflow-wrap: anywhere; }
+        .estimate-list-delivery-row button { padding: 6px 8px; border: 1px solid #2c6650; border-radius: 6px; color: #24513f; background: #fff; font-size: .68rem; font-weight: 800; cursor: pointer; }
+        .estimate-list-delivery-row button:disabled { cursor: not-allowed; opacity: .38; }
+
         @media (max-width: 1180px) {
             .admin-form-grid--3 {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -2302,7 +2397,9 @@
             .funeral-hall-list-actions .save-btn { width: 100%; }
             .estimate-detail-surface { padding: 19px; }
             .estimate-detail-grid,
-            .estimate-detail-fields { grid-template-columns: 1fr; }
+            .estimate-detail-fields,
+            .estimate-delivery-grid { grid-template-columns: 1fr; }
+            .estimate-delivery-channel { grid-template-columns: 1fr; }
             .estimate-detail-heading { align-items: stretch; flex-direction: column; }
             .estimate-detail-heading .cancel-btn { width: 100%; }
         }
@@ -2802,7 +2899,7 @@
 
         <!-- 견적서 관리 -->
         <div class="dashboard-card" id="estimateManagementCard" style="display: none;">
-            <div class="admin-section-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="admin-section-heading" style="margin-bottom: 20px;">
                 <h2>견적서 관리</h2>
             </div>
             
@@ -2904,13 +3001,7 @@
                         </div>
                         <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
                             <button onclick="completeEstimateAndDownload()" class="save-btn" style="padding: 12px 30px;">
-                                완료 (엑셀/PDF)
-                            </button>
-                        </div>
-                        <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end;">
-                            <input type="tel" id="estimateSmsPhone" placeholder="문자 받을 전화번호" style="padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; min-width: 220px;">
-                            <button onclick="sendEstimateSms()" class="save-btn" style="padding: 10px 20px;">
-                                PDF 문자 전송
+                                견적 작성 완료
                             </button>
                         </div>
                     </div>
@@ -3151,18 +3242,19 @@
             <div class="estimate-pdf-header">
                 <div>
                     <div class="estimate-pdf-title">견적서</div>
-                    <div class="estimate-pdf-subtitle">장례 서비스 견적</div>
+                    <div class="estimate-pdf-subtitle">리브 라이프 장례 서비스 견적</div>
                 </div>
-                <div class="estimate-pdf-meta">
-                    <div><span class="label">작성일</span> <span data-field="작성일">-</span></div>
-                    <div><span class="label">견적번호</span> <span data-field="견적번호">-</span></div>
-                </div>
+            </div>
+
+            <div class="estimate-pdf-meta">
+                <div><span class="label">작성일</span> <span data-field="작성일">-</span></div>
+                <div><span class="label">견적번호</span> <span data-field="견적번호">-</span></div>
             </div>
 
             <div class="estimate-pdf-section">
                 <div class="estimate-pdf-section-title">기본 정보</div>
                 <div class="estimate-pdf-grid">
-                    <div><span class="label">고인 성함</span> <span data-field="고인 성함">-</span></div>
+                    <div><span class="label" data-pdf-person-label>고인 성함</span> <span data-pdf-person-value>-</span></div>
                     <div><span class="label">담당자 성함</span> <span data-field="담당자 성함">-</span></div>
                     <div><span class="label">연락처</span> <span data-field="연락처">-</span></div>
                     <div><span class="label">이메일</span> <span data-field="이메일">-</span></div>
@@ -3174,7 +3266,7 @@
             </div>
 
             <div class="estimate-pdf-section">
-                <div class="estimate-pdf-section-title">선택 항목</div>
+                <div class="estimate-pdf-section-title">상조상품 목록</div>
                 <table class="estimate-pdf-table">
                     <thead>
                         <tr>
@@ -3185,12 +3277,36 @@
                             <th>금액</th>
                         </tr>
                     </thead>
-                    <tbody id="estimatePdfItemsBody">
+                    <tbody id="estimatePdfProductItemsBody">
                         <tr>
-                            <td colspan="5" style="text-align: center; color: #888;">선택된 항목이 없습니다.</td>
+                            <td colspan="5" style="text-align: center; color: #888;">선택된 상조상품이 없습니다.</td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="estimate-pdf-section">
+                <div class="estimate-pdf-section-title">장례식장 상품 목록</div>
+                <table class="estimate-pdf-table">
+                    <thead>
+                        <tr>
+                            <th>카테고리</th>
+                            <th>품명</th>
+                            <th>개수</th>
+                            <th>단가</th>
+                            <th>금액</th>
+                        </tr>
+                    </thead>
+                    <tbody id="estimatePdfHallItemsBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #888;">선택된 장례식장 상품이 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="estimate-pdf-section">
+                <div class="estimate-pdf-section-title">금액 요약</div>
                 <div class="estimate-pdf-price-summary">
                     <div>
                         <span>상조 상품 금액</span>
@@ -3782,18 +3898,48 @@
                             <th style="padding:12px; text-align:left;">연락처</th>
                             <th style="padding:12px; text-align:center;">상태</th>
                             <th style="padding:12px; text-align:center;">등록일시</th>
+                            <th style="padding:12px; text-align:center;">PDF 보기</th>
+                            <th style="padding:12px; text-align:center;">PDF 전송</th>
+                            <th style="padding:12px; text-align:center;">엑셀</th>
                         </tr></thead>
                         <tbody>
-                            ${records.map((estimate) => `
-                                <tr onclick="showEstimateDetail(${Number(estimate.estimate_id)})" style="cursor:pointer; border-top:1px solid #edf2ef;">
-                                    <td style="padding:13px 12px; font-weight:700;"><small style="display:block; margin-bottom:3px; color:#73827a; font-weight:700;">${getEstimateDeathStatus(estimate) === 'before' ? '사망 전' : '사망 후'}</small>${escapeHtml(formatEstimatePersonName(estimate))}</td>
-                                    <td style="padding:13px 12px; color:#66736e;">${escapeHtml([estimate.sido, estimate.sigungu, estimate.funeral_hall_name].filter(Boolean).join(' · ') || '-')}</td>
-                                    <td style="padding:13px 12px;">${escapeHtml(estimate.contact_name || '-')}</td>
-                                    <td style="padding:13px 12px; color:#66736e;">${escapeHtml(estimate.contact_phone || '-')}</td>
-                                    <td style="padding:13px 12px; text-align:center;"><span style="padding:5px 9px; color:#205442; background:#e7f0ec; border-radius:999px; font-size:.8rem; font-weight:700;">대기중</span></td>
-                                    <td style="padding:13px 12px; text-align:center; color:#66736e; white-space:nowrap;">${escapeHtml(estimate.created_at || '-')}</td>
-                                </tr>
-                            `).join('')}
+                            ${records.map((estimate) => {
+                                const estimateId = Number(estimate.estimate_id);
+                                const deliveryReady = estimate.status === 'completed' && Boolean(estimate.pdf_url);
+                                const phone = String(estimate.contact_phone || '').trim();
+                                const email = String(estimate.contact_email || '').trim();
+                                const pdfLink = estimate.pdf_url
+                                    ? `<button type="button" data-url="${estimate.pdf_url}" data-name="${escapeHtml(estimate.deceased_name || estimate.contact_name || '견적서')}" data-id="${estimateId}" data-created="${escapeHtml(estimate.created_at || '')}" onclick="event.stopPropagation(); downloadEstimateFileFromButton(this, 'pdf')" style="color:#2c6650;text-decoration:underline;background:none;border:none;cursor:pointer;">보기</button>`
+                                    : '-';
+                                const excelLink = estimate.excel_url
+                                    ? `<button type="button" data-url="${estimate.excel_url}" data-name="${escapeHtml(estimate.deceased_name || estimate.contact_name || '견적서')}" data-id="${estimateId}" data-created="${escapeHtml(estimate.created_at || '')}" onclick="event.stopPropagation(); downloadEstimateFileFromButton(this, 'xlsx')" style="color:#2c6650;text-decoration:underline;background:none;border:none;cursor:pointer;">보기</button>`
+                                    : '-';
+                                const deliveryButtons = `
+                                    <div class="estimate-list-delivery">
+                                        <div class="estimate-list-delivery-row">
+                                            <span>전화번호</span>
+                                            <strong>${escapeHtml(phone || '입력 없음')}</strong>
+                                            <button type="button" title="${deliveryReady ? '입력한 전화번호로 PDF 견적서를 전송합니다.' : '견적 작성 완료 후 전송할 수 있습니다.'}" onclick="sendEstimateDeliveryFromRow(event, ${estimateId}, 'sms')" ${deliveryReady && phone ? '' : 'disabled'}>전화번호 전송</button>
+                                        </div>
+                                        <div class="estimate-list-delivery-row">
+                                            <span>이메일</span>
+                                            <strong>${escapeHtml(email || '입력 없음')}</strong>
+                                            <button type="button" title="${deliveryReady ? '입력한 이메일로 PDF 견적서를 전송합니다.' : '견적 작성 완료 후 전송할 수 있습니다.'}" onclick="sendEstimateDeliveryFromRow(event, ${estimateId}, 'email')" ${deliveryReady && email ? '' : 'disabled'}>이메일 전송</button>
+                                        </div>
+                                    </div>`;
+                                return `
+                                    <tr onclick="showEstimateDetail(${estimateId})" style="cursor:pointer; border-top:1px solid #edf2ef;">
+                                        <td style="padding:13px 12px; font-weight:700;"><small style="display:block; margin-bottom:3px; color:#73827a; font-weight:700;">${getEstimateDeathStatus(estimate) === 'before' ? '사망 전' : '사망 후'}</small>${escapeHtml(formatEstimatePersonName(estimate))}</td>
+                                        <td style="padding:13px 12px; color:#66736e;">${escapeHtml([estimate.sido, estimate.sigungu, estimate.funeral_hall_name].filter(Boolean).join(' · ') || '-')}</td>
+                                        <td style="padding:13px 12px;">${escapeHtml(estimate.contact_name || '-')}</td>
+                                        <td style="padding:13px 12px; color:#66736e;">${escapeHtml(phone || '-')}</td>
+                                        <td style="padding:13px 12px; text-align:center;"><span style="padding:5px 9px; color:#205442; background:#e7f0ec; border-radius:999px; font-size:.8rem; font-weight:700;">${estimate.status === 'completed' ? '완료' : '대기중'}</span></td>
+                                        <td style="padding:13px 12px; text-align:center; color:#66736e; white-space:nowrap;">${escapeHtml(estimate.created_at || '-')}</td>
+                                        <td style="padding:13px 12px; text-align:center;">${pdfLink}</td>
+                                        <td style="padding:9px; text-align:center;">${deliveryButtons}</td>
+                                        <td style="padding:13px 12px; text-align:center;">${excelLink}</td>
+                                    </tr>`;
+                            }).join('')}
                         </tbody>
                     </table>
                 </div>
@@ -3843,7 +3989,8 @@
                                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">연락처</th>
                                             <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">상태</th>
                                             <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">등록일시</th>
-                                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">PDF</th>
+                                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">PDF 보기</th>
+                                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">PDF 전송</th>
                                             <th style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 600; white-space: nowrap;">엑셀</th>
                                         </tr>
                                     </thead>
@@ -3874,9 +4021,23 @@
                                           onclick="event.stopPropagation(); downloadEstimateFileFromButton(this, 'pdf')"
                                           style="color: #667eea; text-decoration: underline; background: none; border: none; cursor: pointer;">보기</button>`
                                 : '-';
-                            const pdfSendBtn = estimate.pdf_url
-                                ? `<button type="button" onclick="sendEstimateSmsFromRow(event, ${estimate.estimate_id})" style="margin-left: 6px; padding: 4px 8px; border: 1px solid #667eea; background: #fff; color: #667eea; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">전송</button>`
-                                : '';
+                            const deliveryReady = estimate.status === 'completed' && Boolean(estimate.pdf_url);
+                            const phone = String(estimate.contact_phone || '').trim();
+                            const email = String(estimate.contact_email || '').trim();
+                            const deliveryButtons = `
+                                <div class="estimate-list-delivery">
+                                    <div class="estimate-list-delivery-row">
+                                        <span>전화번호</span>
+                                        <strong>${escapeHtml(phone || '입력 없음')}</strong>
+                                        <button type="button" onclick="sendEstimateDeliveryFromRow(event, ${estimate.estimate_id}, 'sms')" ${deliveryReady && phone ? '' : 'disabled'}>전화번호 전송</button>
+                                    </div>
+                                    <div class="estimate-list-delivery-row">
+                                        <span>이메일</span>
+                                        <strong>${escapeHtml(email || '입력 없음')}</strong>
+                                        <button type="button" onclick="sendEstimateDeliveryFromRow(event, ${estimate.estimate_id}, 'email')" ${deliveryReady && email ? '' : 'disabled'}>이메일 전송</button>
+                                    </div>
+                                </div>
+                            `;
                             const excelLink = estimate.excel_url
                                 ? `<button type="button"
                                           data-url="${estimate.excel_url}"
@@ -3905,7 +4066,8 @@
                                         <span style="padding: 4px 8px; background-color: ${statusColor}; color: white; border-radius: 4px; font-size: 0.85rem; font-weight: 500;">${statusText}</span>
                                     </td>
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #666; text-align: center; white-space: nowrap; font-size: 0.9rem;">${estimate.created_at ? estimate.created_at.replace(' ', ' ') : '-'}</td>
-                                    <td style="padding: 12px; border: 1px solid #ddd; text-align: center; white-space: nowrap;">${pdfLink}${pdfSendBtn}</td>
+                                    <td style="padding: 12px; border: 1px solid #ddd; text-align: center; white-space: nowrap;">${pdfLink}</td>
+                                    <td style="padding: 9px; border: 1px solid #ddd; text-align: center;">${deliveryButtons}</td>
                                     <td style="padding: 12px; border: 1px solid #ddd; text-align: center; white-space: nowrap;">${excelLink}</td>
                                 </tr>
                             `;
@@ -4065,6 +4227,7 @@
             const detailContent = document.getElementById('estimateDetailContent');
             const createButton = document.getElementById('estimateCreateBtn');
             const productSummary = estimate.funeral_product_id ? '불러오는 중...' : '-';
+            selectedEstimateForHall = estimate;
             
             const statusText = {
                 'pending': '대기중',
@@ -4078,6 +4241,9 @@
             const privacyAgreed = Number(estimate.privacy_consent) === 1;
             const contactAgreed = Number(estimate.contact_consent ?? estimate.sensitive_info_consent) === 1;
             const placeText = [estimate.death_location, estimate.death_location_other].filter(Boolean).join(' · ') || '-';
+            const canDeliver = estimate.status === 'completed' && Boolean(estimate.pdf_url);
+            const hasPhone = Boolean(String(estimate.contact_phone || '').trim());
+            const hasEmail = Boolean(String(estimate.contact_email || '').trim());
 
             if (createButton) {
                 createButton.textContent = estimate.status === 'completed' ? '견적 수정' : '견적 작성';
@@ -4132,6 +4298,33 @@
                             <div class="estimate-detail-card-head"><h3>선택 상조 상품</h3></div>
                             <div class="estimate-detail-field"><label>상품</label><strong id="estimateDetailProductName">${productSummary}</strong></div>
                         </section>
+
+                        ${canDeliver ? `
+                        <section class="estimate-detail-card full">
+                            <div class="estimate-detail-card-head">
+                                <h3>완료된 견적서 전송</h3>
+                                <span class="estimate-detail-eyebrow">DELIVERY READY</span>
+                            </div>
+                            <div class="estimate-delivery-grid">
+                                <div class="estimate-delivery-channel">
+                                    <div>
+                                        <span>전화번호</span>
+                                        <strong>${escapeHtml(estimate.contact_phone || '연락처 없음')}</strong>
+                                        <small>저장된 견적서 링크를 문자 발송 화면에서 확인합니다.</small>
+                                    </div>
+                                    <button type="button" class="save-btn" onclick="sendEstimateSms()" ${hasPhone ? '' : 'disabled'}>전화번호 전송</button>
+                                </div>
+                                <div class="estimate-delivery-channel">
+                                    <div>
+                                        <span>이메일</span>
+                                        <strong>${escapeHtml(estimate.contact_email || '이메일 없음')}</strong>
+                                        <small>본문에서 견적 이미지를 바로 보고 PDF도 내려받을 수 있습니다.</small>
+                                    </div>
+                                    <button type="button" class="save-btn" onclick="sendEstimateEmail()" ${hasEmail ? '' : 'disabled'}>이메일 전송</button>
+                                </div>
+                            </div>
+                        </section>
+                        ` : ''}
                     </div>
                 </div>
             `;
@@ -4187,10 +4380,6 @@
                     selectedEstimateId = data.estimate.estimate_id || selectedEstimateId;
                     persistEstimateContext(data.estimate);
                     await loadEstimateSelection(selectedEstimateId);
-                    const smsPhoneInput = document.getElementById('estimateSmsPhone');
-                    if (smsPhoneInput && data.estimate.contact_phone) {
-                        smsPhoneInput.value = data.estimate.contact_phone;
-                    }
                     // 장례식장 리스트 섹션 표시
                     showEstimateHallList(data.estimate);
                 } else {
@@ -4661,17 +4850,25 @@
             }
 
             const pdfBlob = await createEstimatePdfBlob(estimateInfo, combinedItems, priceSummary);
+            if (!pdfBlob) {
+                alert('PDF 파일 생성에 실패했습니다. 페이지를 새로고침한 뒤 다시 시도해주세요.');
+                return;
+            }
+            populateEstimatePdfTemplate(estimateInfo, combinedItems, priceSummary);
+            const previewImageBlob = window.EstimatePreview
+                ? await window.EstimatePreview.createJpegBlob(document.getElementById('estimatePdfTemplate'))
+                : null;
             const selectionData = buildEstimateSelectionData(selectedItems);
 
             if (selectionData && estimateId) {
                 localStorage.setItem(`estimateSelection_${estimateId}`, JSON.stringify(selectionData));
             }
 
+            let uploadResult = null;
             if (pdfBlob && excelPayload && excelPayload.blob) {
-                const uploadSuccess = await uploadEstimateDocuments(estimateId, pdfBlob, excelPayload.blob, excelPayload.ext, selectionData);
-                if (uploadSuccess) {
-                    loadEstimateList(estimateCurrentPage);
-                }
+                uploadResult = await uploadEstimateDocuments(estimateId, pdfBlob, excelPayload.blob, excelPayload.ext, selectionData, previewImageBlob);
+                if (!uploadResult) return;
+                loadEstimateList(estimateCurrentPage);
             }
 
             if (excelPayload && excelPayload.blob) {
@@ -4679,6 +4876,20 @@
             }
             if (pdfBlob) {
                 downloadBlob(pdfBlob, `${safeFileName}.pdf`);
+            }
+            if (uploadResult) {
+                document.getElementById('estimateHallListSection').style.display = 'none';
+                document.getElementById('estimateHallPriceSection').style.display = 'none';
+                selectedEstimateForHall = {
+                    ...selectedEstimateForHall,
+                    status: 'completed',
+                    pdf_url: uploadResult.pdf_url || selectedEstimateForHall.pdf_url || '',
+                    excel_url: uploadResult.excel_url || selectedEstimateForHall.excel_url || '',
+                    preview_image_url: uploadResult.preview_image_url || selectedEstimateForHall.preview_image_url || ''
+                };
+                persistEstimateContext(selectedEstimateForHall);
+                displayEstimateDetail(selectedEstimateForHall);
+                alert('견적 작성이 완료되었습니다. 상세 화면에서 문자 또는 이메일로 전송할 수 있습니다.');
             }
         }
 
@@ -5013,7 +5224,7 @@
             return stored ? parseInt(stored, 10) : null;
         }
 
-        async function uploadEstimateDocuments(estimateId, pdfBlob, excelBlob, excelExt, selectionData) {
+        async function uploadEstimateDocuments(estimateId, pdfBlob, excelBlob, excelExt, selectionData, previewImageBlob) {
             const normalizedId = parseInt(estimateId, 10);
             if (!normalizedId || Number.isNaN(normalizedId)) {
                 alert('견적서 ID를 확인할 수 없습니다. 목록에서 다시 선택해주세요.');
@@ -5023,6 +5234,9 @@
             formData.append('estimate_id', String(normalizedId));
             formData.append('pdf', pdfBlob, `estimate_${normalizedId}.pdf`);
             formData.append('excel', excelBlob, `estimate_${normalizedId}.${excelExt || 'xlsx'}`);
+            if (previewImageBlob) {
+                formData.append('preview', previewImageBlob, `estimate_${normalizedId}.jpg`);
+            }
             if (selectionData) {
                 formData.append('selection_data', JSON.stringify(selectionData));
             }
@@ -5035,21 +5249,93 @@
                 const data = await response.json();
                 if (!data.success) {
                     alert(data.message || '견적서 파일 저장에 실패했습니다.');
-                    return false;
+                    return null;
                 }
                 if (selectionData) {
                     sessionStorage.setItem(`estimateSelection_${normalizedId}`, JSON.stringify(selectionData));
                 }
-                alert('완료 처리되었습니다.');
-                location.href = 'index.html#estimate';
-                setTimeout(() => {
-                    location.reload();
-                }, 100);
-                return true;
+                return data;
             } catch (error) {
                 console.error('Upload error:', error);
                 alert('견적서 파일 저장 중 오류가 발생했습니다.');
-                return false;
+                return null;
+            }
+        }
+
+        const SMS_DELIVERY_DEMO_MODE = true;
+        const EMAIL_DELIVERY_DEMO_MODE = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+        async function sendEstimateDeliveryFromRow(event, estimateId, channel) {
+            if (event) event.stopPropagation();
+            const normalizedId = parseInt(estimateId, 10);
+            if (!normalizedId || !['sms', 'email'].includes(channel)) {
+                alert('전송할 견적서 정보를 확인할 수 없습니다.');
+                return;
+            }
+
+            try {
+                const localEstimate = getLocalEstimateRecords().find((estimate) => Number(estimate.estimate_id) === normalizedId);
+                if (localEstimate) {
+                    selectedEstimateId = localEstimate.estimate_id || normalizedId;
+                    selectedEstimateForHall = localEstimate;
+                    persistEstimateContext(localEstimate);
+                    if (channel === 'sms') {
+                        await sendEstimateSms();
+                    } else {
+                        await sendEstimateEmail();
+                    }
+                    return;
+                }
+
+                const response = await fetch(`../api/get_estimate_requests.php?estimate_id=${normalizedId}`);
+                const data = await response.json();
+                if (!response.ok || !data.success || !data.estimate) {
+                    throw new Error(data.message || '견적서 정보를 불러올 수 없습니다.');
+                }
+
+                selectedEstimateId = data.estimate.estimate_id || normalizedId;
+                selectedEstimateForHall = data.estimate;
+                persistEstimateContext(data.estimate);
+
+                if (channel === 'sms') {
+                    await sendEstimateSms();
+                } else {
+                    await sendEstimateEmail();
+                }
+            } catch (error) {
+                console.error('Estimate delivery lookup error:', error);
+                alert(error.message || '견적서 정보를 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+
+        async function sendEstimateEmail() {
+            const estimateId = getCurrentEstimateId();
+            const email = String(selectedEstimateForHall?.contact_email || '').trim();
+            if (!estimateId) {
+                alert('견적서를 먼저 선택해주세요.');
+                return;
+            }
+            if (selectedEstimateForHall?.status !== 'completed' || !selectedEstimateForHall?.pdf_url) {
+                alert('견적 작성을 완료한 뒤 상세 화면에서 전송해주세요.');
+                return;
+            }
+            if (!email) {
+                alert('견적 요청에 저장된 이메일이 없습니다.');
+                return;
+            }
+            try {
+                const data = await window.LeaveLifeEmail.send({
+                    estimateId,
+                    email,
+                    previewImageUrl: selectedEstimateForHall?.preview_image_url || '',
+                    demoMode: EMAIL_DELIVERY_DEMO_MODE,
+                    apiUrl: '../api/send_estimate_email.php'
+                });
+                if (!data.demo && data.success) {
+                    alert('본문 미리보기와 PDF 견적서를 이메일로 전송했습니다.');
+                }
+            } catch (error) {
+                alert(error.message || '이메일 전송 중 오류가 발생했습니다.');
             }
         }
 
@@ -5059,65 +5345,29 @@
                 alert('견적서를 먼저 선택해주세요.');
                 return;
             }
-            const phoneInput = document.getElementById('estimateSmsPhone');
-            const phone = phoneInput ? phoneInput.value.trim() : '';
+            if (selectedEstimateForHall?.status !== 'completed' || !selectedEstimateForHall?.pdf_url) {
+                alert('견적 작성을 완료한 뒤 상세 화면에서 전송해주세요.');
+                return;
+            }
+            const phone = String(selectedEstimateForHall?.contact_phone || '').trim();
             if (!phone) {
-                alert('문자 받을 전화번호를 입력해주세요.');
+                alert('견적 요청에 저장된 전화번호가 없습니다.');
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('estimate_id', String(estimateId));
-            formData.append('phone', phone);
-
             try {
-                const response = await fetch('../api/send_estimate_sms.php', {
-                    method: 'POST',
-                    body: formData
+                const data = await window.LeaveLifeSms.send({
+                    estimateId,
+                    phone,
+                    demoMode: SMS_DELIVERY_DEMO_MODE,
+                    apiUrl: '../api/send_estimate_sms.php'
                 });
-                const data = await response.json();
-                if (!data.success) {
-                    alert(data.message || '문자 전송에 실패했습니다.');
-                    return;
+                if (!data.demo && data.success) {
+                    alert('문자를 전송했습니다.');
                 }
-                alert('문자를 전송했습니다.');
             } catch (error) {
                 console.error('SMS error:', error);
-                alert('문자 전송 중 오류가 발생했습니다.');
-            }
-        }
-
-        async function sendEstimateSmsFromRow(event, estimateId) {
-            if (event) {
-                event.stopPropagation();
-            }
-            if (!estimateId) {
-                alert('견적서를 확인할 수 없습니다.');
-                return;
-            }
-            const phone = prompt('문자 받을 전화번호를 입력하세요.');
-            if (!phone) {
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('estimate_id', String(estimateId));
-            formData.append('phone', phone.trim());
-
-            try {
-                const response = await fetch('../api/send_estimate_sms.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                if (!data.success) {
-                    alert(data.message || '문자 전송에 실패했습니다.');
-                    return;
-                }
-                alert('문자를 전송했습니다.');
-            } catch (error) {
-                console.error('SMS row error:', error);
-                alert('문자 전송 중 오류가 발생했습니다.');
+                alert(error.message || '문자 전송 중 오류가 발생했습니다.');
             }
         }
 
@@ -5213,6 +5463,14 @@
             return btoa(binary);
         }
 
+        function splitEstimateItems(items) {
+            const safeItems = Array.isArray(items) ? items : [];
+            return {
+                productItems: safeItems.filter(item => String(item.category || '').replace(/\s+/g, '') === '상조상품'),
+                hallItems: safeItems.filter(item => String(item.category || '').replace(/\s+/g, '') !== '상조상품')
+            };
+        }
+
         async function createEstimatePdfBlob(estimateInfo, items, priceSummary) {
             if (!window.jspdf || !window.jspdf.jsPDF) {
                 alert('PDF 다운로드 라이브러리를 불러오지 못했습니다.');
@@ -5247,39 +5505,67 @@
                 y += 14;
             });
 
-            const tableBody = items.map(item => ([
+            const groupedItems = splitEstimateItems(items);
+            const productTableBody = groupedItems.productItems.map(item => ([
+                item.category || '상조상품',
+                item.productName,
+                String(item.qty),
+                Math.floor(item.unitPrice).toLocaleString('ko-KR'),
+                Math.floor(item.amount).toLocaleString('ko-KR')
+            ]));
+            const hallTableBody = groupedItems.hallItems.map(item => ([
                 item.category,
                 item.productName,
-                item.serviceContent,
                 String(item.qty),
                 Math.floor(item.unitPrice).toLocaleString('ko-KR'),
                 Math.floor(item.amount).toLocaleString('ko-KR')
             ]));
 
             if (typeof doc.autoTable === 'function') {
-                doc.autoTable({
-                    startY: y + 10,
-                    head: [['카테고리', '품명', '서비스 내용', '개수', '단가', '금액']],
-                    body: tableBody,
-                    styles: { fontSize: 9, cellPadding: 4, font: fontBase64 ? 'NotoSansKR' : 'helvetica' },
-                    headStyles: { fillColor: [102, 126, 234], font: fontBase64 ? 'NotoSansKR' : 'helvetica' }
-                });
-                const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : y + 10;
                 doc.setFontSize(11);
-                doc.text(`상조 상품 금액: ${Math.floor(priceSummary.funeralProductAmount).toLocaleString('ko-KR')}원`, 40, finalY + 20);
-                doc.text(`장례식장 금액: ${Math.floor(priceSummary.funeralHallAmount).toLocaleString('ko-KR')}원`, 40, finalY + 36);
-                doc.text(`최종 합계: ${Math.floor(priceSummary.totalAmount).toLocaleString('ko-KR')}원`, 40, finalY + 52);
+                doc.text('상조상품 목록', 40, y + 10);
+                doc.autoTable({
+                    startY: y + 18,
+                    head: [['카테고리', '품명', '개수', '단가', '금액']],
+                    body: productTableBody.length ? productTableBody : [['-', '선택된 상조상품이 없습니다.', '-', '-', '-']],
+                    styles: { fontSize: 9, cellPadding: 4, font: fontBase64 ? 'NotoSansKR' : 'helvetica' },
+                    headStyles: { fillColor: [23, 77, 61], font: fontBase64 ? 'NotoSansKR' : 'helvetica' }
+                });
+                let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : y + 18;
+                doc.setFontSize(10);
+                doc.text(`상조 상품 소계: ${Math.floor(priceSummary.funeralProductAmount).toLocaleString('ko-KR')}원`, 40, finalY + 16);
+
+                doc.setFontSize(11);
+                doc.text('장례식장 상품 목록', 40, finalY + 38);
+                doc.autoTable({
+                    startY: finalY + 46,
+                    head: [['카테고리', '품명', '개수', '단가', '금액']],
+                    body: hallTableBody.length ? hallTableBody : [['-', '선택된 장례식장 상품이 없습니다.', '-', '-', '-']],
+                    styles: { fontSize: 9, cellPadding: 4, font: fontBase64 ? 'NotoSansKR' : 'helvetica' },
+                    headStyles: { fillColor: [23, 77, 61], font: fontBase64 ? 'NotoSansKR' : 'helvetica' }
+                });
+                finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : finalY + 46;
+                doc.setFontSize(11);
+                doc.text(`장례식장 소계: ${Math.floor(priceSummary.funeralHallAmount).toLocaleString('ko-KR')}원`, 40, finalY + 18);
+                doc.text(`최종 합계: ${Math.floor(priceSummary.totalAmount).toLocaleString('ko-KR')}원`, 40, finalY + 36);
             } else {
                 doc.setFontSize(11);
-                doc.text('선택 항목', 40, y + 10);
+                doc.text('상조상품 목록', 40, y + 10);
                 y += 24;
-                tableBody.forEach(row => {
-                    doc.text(`${row[0]} | ${row[1]} | ${row[2]} | ${row[3]} | ${row[4]} | ${row[5]}`, 40, y);
+                productTableBody.forEach(row => {
+                    doc.text(`${row[0]} | ${row[1]} | ${row[2]} | ${row[3]} | ${row[4]}`, 40, y);
                     y += 12;
                 });
-                doc.text(`상조 상품 금액: ${Math.floor(priceSummary.funeralProductAmount).toLocaleString('ko-KR')}원`, 40, y + 20);
-                doc.text(`장례식장 금액: ${Math.floor(priceSummary.funeralHallAmount).toLocaleString('ko-KR')}원`, 40, y + 36);
-                doc.text(`최종 합계: ${Math.floor(priceSummary.totalAmount).toLocaleString('ko-KR')}원`, 40, y + 52);
+                doc.text(`상조 상품 소계: ${Math.floor(priceSummary.funeralProductAmount).toLocaleString('ko-KR')}원`, 40, y + 8);
+                y += 30;
+                doc.text('장례식장 상품 목록', 40, y);
+                y += 14;
+                hallTableBody.forEach(row => {
+                    doc.text(`${row[0]} | ${row[1]} | ${row[2]} | ${row[3]} | ${row[4]}`, 40, y);
+                    y += 12;
+                });
+                doc.text(`장례식장 소계: ${Math.floor(priceSummary.funeralHallAmount).toLocaleString('ko-KR')}원`, 40, y + 8);
+                doc.text(`최종 합계: ${Math.floor(priceSummary.totalAmount).toLocaleString('ko-KR')}원`, 40, y + 24);
             }
 
             return doc.output('blob');
@@ -5341,6 +5627,11 @@
                     field.textContent = value || '-';
                 }
             });
+            const personLabel = Object.prototype.hasOwnProperty.call(estimateInfo, '환우명') ? '환우명' : '고인 성함';
+            const personLabelField = template.querySelector('[data-pdf-person-label]');
+            const personValueField = template.querySelector('[data-pdf-person-value]');
+            if (personLabelField) personLabelField.textContent = personLabel;
+            if (personValueField) personValueField.textContent = estimateInfo[personLabel] || '-';
 
             const summaryFields = {
                 '상조 상품 금액': priceSummary.funeralProductAmount,
@@ -5352,19 +5643,22 @@
                 if (field) field.textContent = Math.floor(amount).toLocaleString('ko-KR');
             });
 
-            const body = template.querySelector('#estimatePdfItemsBody');
-            if (!body) return;
+            const groupedItems = splitEstimateItems(items);
+            const productBody = template.querySelector('#estimatePdfProductItemsBody');
+            const hallBody = template.querySelector('#estimatePdfHallItemsBody');
+            if (!productBody || !hallBody) return;
 
-            if (!items.length) {
-                body.innerHTML = `
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: #888;">선택된 항목이 없습니다.</td>
-                    </tr>
-                `;
-                return;
-            }
+            productBody.innerHTML = groupedItems.productItems.length ? groupedItems.productItems.map(item => `
+                <tr>
+                    <td>${escapeHtml(item.category || '상조상품')}</td>
+                    <td>${escapeHtml(item.productName || '-')}</td>
+                    <td style="text-align: center;">${item.qty}</td>
+                    <td style="text-align: right;">${Math.floor(item.unitPrice).toLocaleString('ko-KR')}</td>
+                    <td style="text-align: right;">${Math.floor(item.amount).toLocaleString('ko-KR')}</td>
+                </tr>
+            `).join('') : '<tr><td colspan="5" style="text-align: center; color: #888;">선택된 상조상품이 없습니다.</td></tr>';
 
-            body.innerHTML = items.map(item => `
+            hallBody.innerHTML = groupedItems.hallItems.length ? groupedItems.hallItems.map(item => `
                 <tr>
                     <td>${escapeHtml(item.category || '-')}</td>
                     <td>${escapeHtml(item.productName || '-')}</td>
@@ -5372,7 +5666,7 @@
                     <td style="text-align: right;">${Math.floor(item.unitPrice).toLocaleString('ko-KR')}</td>
                     <td style="text-align: right;">${Math.floor(item.amount).toLocaleString('ko-KR')}</td>
                 </tr>
-            `).join('');
+            `).join('') : '<tr><td colspan="5" style="text-align: center; color: #888;">선택된 장례식장 상품이 없습니다.</td></tr>';
         }
         
         // 가격 정보 섹션 닫기
@@ -7078,5 +7372,8 @@
         }
 
     </script>
+    <script src="../js/estimate-preview.js"></script>
+    <script src="../js/sms-demo.js"></script>
+    <script src="../js/email-demo.js"></script>
 </body>
 </html>

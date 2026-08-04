@@ -98,6 +98,92 @@
         worksheet.getRow(rowNumber).height = 24;
     }
 
+    function styleItemHeader(row) {
+        row.values = ['카테고리', '품명', '개수', '단가', '금액'];
+        row.height = 25;
+        row.eachCell(cell => {
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLORS.brand } };
+            cell.alignment = { vertical: 'middle', horizontal: 'center' };
+            cell.border = thinBorder();
+            setCellFont(cell, { size: 9, bold: true, color: COLORS.white });
+        });
+    }
+
+    function addItemSection(worksheet, startRow, title, items, emptyText, subtotalLabel, subtotalAmount) {
+        styleSectionTitle(worksheet, startRow, title);
+        const headerRowNumber = startRow + 1;
+        styleItemHeader(worksheet.getRow(headerRowNumber));
+        const firstItemRow = headerRowNumber + 1;
+        const safeItems = Array.isArray(items) ? items : [];
+
+        if (safeItems.length === 0) {
+            worksheet.mergeCells(`A${firstItemRow}:E${firstItemRow}`);
+            const emptyCell = worksheet.getCell(`A${firstItemRow}`);
+            emptyCell.value = emptyText;
+            emptyCell.alignment = { vertical: 'middle', horizontal: 'center' };
+            emptyCell.border = thinBorder();
+            setCellFont(emptyCell, { size: 9, color: COLORS.muted });
+            worksheet.getRow(firstItemRow).height = 23;
+        } else {
+            safeItems.forEach((item, index) => {
+                const rowNumber = firstItemRow + index;
+                const row = worksheet.getRow(rowNumber);
+                row.values = [
+                    item.category || '-',
+                    item.productName || '-',
+                    money(item.qty || 1),
+                    money(item.unitPrice),
+                    null
+                ];
+                row.getCell(5).value = {
+                    formula: `C${rowNumber}*D${rowNumber}`,
+                    result: money(item.amount)
+                };
+                row.height = 23;
+                row.eachCell((cell, columnNumber) => {
+                    cell.border = thinBorder();
+                    cell.alignment = {
+                        vertical: 'middle',
+                        horizontal: columnNumber >= 3 ? 'right' : 'left',
+                        wrapText: columnNumber <= 2
+                    };
+                    setCellFont(cell, { size: 9, color: COLORS.text });
+                });
+                row.getCell(3).numFmt = '#,##0';
+                row.getCell(4).numFmt = '#,##0"원"';
+                row.getCell(5).numFmt = '#,##0"원"';
+            });
+        }
+
+        const lastItemRow = firstItemRow + Math.max(safeItems.length, 1) - 1;
+        const subtotalRow = lastItemRow + 1;
+        worksheet.mergeCells(`A${subtotalRow}:C${subtotalRow}`);
+        worksheet.mergeCells(`D${subtotalRow}:E${subtotalRow}`);
+        const subtotalLabelCell = worksheet.getCell(`A${subtotalRow}`);
+        const subtotalValueCell = worksheet.getCell(`D${subtotalRow}`);
+        subtotalLabelCell.value = subtotalLabel;
+        subtotalValueCell.value = safeItems.length
+            ? { formula: `SUM(E${firstItemRow}:E${lastItemRow})`, result: money(subtotalAmount) }
+            : 0;
+        [subtotalLabelCell, subtotalValueCell].forEach(cell => {
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLORS.brandSoft } };
+            cell.border = thinBorder();
+            setCellFont(cell, { size: 9, bold: true, color: COLORS.brand });
+        });
+        subtotalLabelCell.alignment = { vertical: 'middle', horizontal: 'left' };
+        subtotalValueCell.alignment = { vertical: 'middle', horizontal: 'right' };
+        subtotalValueCell.numFmt = '#,##0"원"';
+        worksheet.getRow(subtotalRow).height = 23;
+
+        return {
+            headerRowNumber,
+            firstItemRow,
+            lastItemRow,
+            subtotalRow,
+            nextRow: subtotalRow + 2
+        };
+    }
+
     async function createBlob(options) {
         if (!global.ExcelJS || !global.ExcelJS.Workbook) {
             throw new Error('엑셀 생성 라이브러리를 불러오지 못했습니다.');
@@ -138,6 +224,9 @@
         worksheet.mergeCells('A1:E1');
         worksheet.getCell('A1').value = '견적서';
         worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'left' };
+        worksheet.getCell('A1').border = {
+            bottom: { style: 'medium', color: { argb: COLORS.brand } }
+        };
         setCellFont(worksheet.getCell('A1'), { size: 22, bold: true, color: COLORS.brand });
         worksheet.getRow(1).height = 34;
 
@@ -185,64 +274,43 @@
         addWideInfoRow(worksheet, 10, '장례식장', estimateInfo['장례식장'] || '-');
         addWideInfoRow(worksheet, 11, '장례식장 주소', estimateInfo['장례식장 주소'] || '-');
 
-        styleSectionTitle(worksheet, 13, '선택 항목');
-        const headerRow = worksheet.getRow(14);
-        headerRow.values = ['카테고리', '품명', '개수', '단가', '금액'];
-        headerRow.height = 25;
-        headerRow.eachCell(cell => {
-            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLORS.brand } };
-            cell.alignment = { vertical: 'middle', horizontal: 'center' };
-            cell.border = thinBorder();
-            setCellFont(cell, { size: 9, bold: true, color: COLORS.white });
-        });
+        const productItems = items.filter(isFuneralProduct);
+        const hallItems = items.filter(item => !isFuneralProduct(item));
+        const productSection = addItemSection(
+            worksheet,
+            13,
+            '상조상품 목록',
+            productItems,
+            '선택된 상조상품이 없습니다.',
+            '상조상품 소계',
+            summary.funeralProductAmount
+        );
+        const hallSection = addItemSection(
+            worksheet,
+            productSection.nextRow,
+            '장례식장 상품 목록',
+            hallItems,
+            '선택된 장례식장 상품이 없습니다.',
+            '장례식장 상품 소계',
+            summary.funeralHallAmount
+        );
 
-        const firstItemRow = 15;
-        if (items.length === 0) {
-            worksheet.mergeCells(`A${firstItemRow}:E${firstItemRow}`);
-            worksheet.getCell(`A${firstItemRow}`).value = '선택된 항목이 없습니다.';
-            worksheet.getCell(`A${firstItemRow}`).alignment = { vertical: 'middle', horizontal: 'center' };
-            worksheet.getCell(`A${firstItemRow}`).border = thinBorder();
-            setCellFont(worksheet.getCell(`A${firstItemRow}`), { size: 9, color: COLORS.muted });
-        } else {
-            items.forEach((item, index) => {
-                const row = worksheet.getRow(firstItemRow + index);
-                row.values = [
-                    item.category || '-',
-                    item.productName || '-',
-                    money(item.qty || 1),
-                    money(item.unitPrice),
-                    money(item.amount)
-                ];
-                row.height = 23;
-                row.eachCell((cell, columnNumber) => {
-                    cell.border = thinBorder();
-                    cell.alignment = {
-                        vertical: 'middle',
-                        horizontal: columnNumber >= 3 ? 'right' : 'left',
-                        wrapText: columnNumber <= 2
-                    };
-                    setCellFont(cell, { size: 9, color: COLORS.text });
-                });
-                row.getCell(3).numFmt = '#,##0';
-                row.getCell(4).numFmt = '#,##0"원"';
-                row.getCell(5).numFmt = '#,##0"원"';
-            });
-        }
-
-        const lastItemRow = firstItemRow + Math.max(items.length, 1) - 1;
-        const summaryTitleRow = lastItemRow + 2;
+        const summaryTitleRow = hallSection.nextRow;
         styleSectionTitle(worksheet, summaryTitleRow, '금액 요약');
 
         const summaryRows = [
-            ['상조 상품 금액', money(summary.funeralProductAmount)],
-            ['장례식장 금액', money(summary.funeralHallAmount)]
+            ['상조 상품 금액', `D${productSection.subtotalRow}`, money(summary.funeralProductAmount)],
+            ['장례식장 금액', `D${hallSection.subtotalRow}`, money(summary.funeralHallAmount)]
         ];
         summaryRows.forEach((entry, index) => {
             const rowNumber = summaryTitleRow + 1 + index;
             worksheet.mergeCells(`A${rowNumber}:C${rowNumber}`);
             worksheet.mergeCells(`D${rowNumber}:E${rowNumber}`);
             worksheet.getCell(`A${rowNumber}`).value = entry[0];
-            worksheet.getCell(`D${rowNumber}`).value = entry[1];
+            worksheet.getCell(`D${rowNumber}`).value = {
+                formula: entry[1],
+                result: entry[2]
+            };
             styleInfoLabel(worksheet.getCell(`A${rowNumber}`));
             styleInfoValue(worksheet.getCell(`D${rowNumber}`));
             worksheet.getCell(`D${rowNumber}`).alignment = { vertical: 'middle', horizontal: 'right' };
@@ -274,7 +342,6 @@
         setCellFont(worksheet.getCell(`A${footerRow}`), { size: 8, color: COLORS.muted });
         worksheet.getRow(footerRow).height = 22;
 
-        worksheet.autoFilter = { from: `A14`, to: `E${lastItemRow}` };
         worksheet.pageSetup.printArea = `A1:E${footerRow}`;
         worksheet.headerFooter.oddFooter = '리브 라이프 | &P / &N';
 

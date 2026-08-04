@@ -1,6 +1,13 @@
 <?php
+session_start();
 header('Content-Type: application/json; charset=utf-8');
 require_once '../config/api_config.php';
+
+if (empty($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || ($_SESSION['login_type'] ?? '') !== 'admin') {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => '관리자 로그인이 필요합니다.']);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'POST 요청만 허용됩니다.']);
@@ -35,7 +42,16 @@ $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' :
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $pdf_url = $scheme . '://' . $host . '/uploads/estimate_docs/estimate_' . $estimate_id . '.pdf';
 
-$message = "견적서 PDF 링크입니다.\n" . $pdf_url;
+$message = "[리브 라이프]\n요청하신 견적서가 준비되었습니다.\nPDF 확인: " . $pdf_url;
+
+$preview_path = null;
+foreach (['jpg', 'png', 'gif'] as $preview_ext) {
+    $candidate = __DIR__ . '/../uploads/estimate_docs/estimate_' . $estimate_id . '.' . $preview_ext;
+    if (file_exists($candidate)) {
+        $preview_path = $candidate;
+        break;
+    }
+}
 
 $post_fields = [
     'key' => ALIGO_API_KEY,
@@ -44,6 +60,12 @@ $post_fields = [
     'receiver' => $phone,
     'msg' => $message
 ];
+if ($preview_path) {
+    $mime_type = function_exists('mime_content_type') ? mime_content_type($preview_path) : 'image/jpeg';
+    $post_fields['title'] = '리브 라이프 견적서';
+    $post_fields['msg_type'] = 'MMS';
+    $post_fields['image1'] = new CURLFile($preview_path, $mime_type ?: 'image/jpeg', basename($preview_path));
+}
 if (ALIGO_TESTMODE) {
     $post_fields['testmode_yn'] = 'Y';
 }
@@ -51,7 +73,7 @@ if (ALIGO_TESTMODE) {
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, 'https://apis.aligo.in/send/');
 curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_fields));
+curl_setopt($ch, CURLOPT_POSTFIELDS, $preview_path ? $post_fields : http_build_query($post_fields));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
@@ -76,5 +98,10 @@ if ((int)$data['result_code'] !== 1) {
     exit;
 }
 
-echo json_encode(['success' => true, 'message' => '문자를 전송했습니다.']);
+echo json_encode([
+    'success' => true,
+    'message' => $preview_path ? '견적서 이미지와 링크를 MMS로 전송했습니다.' : '견적서 링크를 문자로 전송했습니다.',
+    'message_type' => $preview_path ? 'MMS' : 'LMS',
+    'image_attached' => (bool)$preview_path
+]);
 ?>

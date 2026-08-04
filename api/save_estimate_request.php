@@ -27,7 +27,7 @@ try {
     // 필수 필드 검증
     $required_fields = ['deathStatus', 'deceasedName', 'relationship', 'deathLocation',
                        'sido', 'sigungu', 'funeralPeriod',
-                       'funeralProductId', 'contactName', 'contactPhone'];
+                       'funeralProductId', 'contactName', 'contactPhone', 'contactEmail'];
     
     foreach ($required_fields as $field) {
         if (!isset($data[$field]) || empty(trim($data[$field]))) {
@@ -71,6 +71,10 @@ try {
     $contact_name = trim($data['contactName']);
     $contact_phone = trim($data['contactPhone']);
     $contact_email = isset($data['contactEmail']) ? trim($data['contactEmail']) : null;
+    if (!$contact_email || !filter_var($contact_email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(['success' => false, 'message' => '올바른 이메일 주소를 입력해주세요.']);
+        exit;
+    }
     $privacy_consent = !empty($data['privacyConsent']) ? 1 : 0;
     // 기존 컬럼을 견적 상담 연락 동의 기록으로 계속 사용
     $sensitive_info_consent = !empty($data['contactConsent']) ? 1 : 0;

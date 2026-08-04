@@ -8,7 +8,7 @@
     <style>
         @font-face {
             font-family: 'NotoSansKR';
-            src: url('libs/NotoSansKR-Regular.ttf') format('truetype');
+            src: url('../fonts/NotoSansKR-1.ttf') format('truetype');
             font-weight: 400;
             font-style: normal;
             font-display: swap;
@@ -26,14 +26,14 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #174d3d;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
         }
         .estimate-pdf-title {
             font-size: 26px;
             font-weight: 700;
-            color: #667eea;
+            color: #174d3d;
         }
         .estimate-pdf-subtitle {
             margin-top: 6px;
@@ -41,9 +41,19 @@
             color: #666;
         }
         .estimate-pdf-meta {
-            text-align: right;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             font-size: 12px;
             line-height: 1.6;
+        }
+        .estimate-pdf-meta > div,
+        .estimate-pdf-grid > div {
+            display: grid;
+            grid-template-columns: 108px minmax(0, 1fr);
+            min-height: 32px;
+            align-items: center;
+            border: 1px solid #d8e1dc;
+            margin: -1px 0 0 -1px;
         }
         .estimate-pdf-section {
             margin-top: 18px;
@@ -51,25 +61,33 @@
         .estimate-pdf-section-title {
             font-size: 15px;
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 10px;
+            color: #174d3d;
+            margin-bottom: 0;
+            padding: 8px 10px;
+            border: 1px solid #d8e1dc;
+            background: #eaf2ee;
         }
         .estimate-pdf-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px 18px;
             font-size: 12px;
             line-height: 1.6;
-            padding: 12px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            background-color: #f9fafb;
         }
         .estimate-pdf-grid .label,
         .estimate-pdf-meta .label {
             font-weight: 600;
-            color: #555;
-            margin-right: 6px;
+            color: #53645c;
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            padding: 6px 9px;
+            background: #f7f4ee;
+            border-right: 1px solid #d8e1dc;
+        }
+        .estimate-pdf-grid > div > span:not(.label),
+        .estimate-pdf-meta > div > span:not(.label) {
+            padding: 6px 9px;
+            overflow-wrap: anywhere;
         }
         .estimate-pdf-table {
             width: 100%;
@@ -95,41 +113,104 @@
             padding: 8px 6px;
         }
         .estimate-pdf-table th {
-            background-color: #667eea;
+            background-color: #174d3d;
             color: #ffffff;
             text-align: center;
         }
         .estimate-pdf-price-summary {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 12px;
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-top: 18px;
+            border: 1px solid #d8e1dc;
         }
         .estimate-pdf-price-summary > div {
-            padding: 10px;
-            border: 1px solid #d8e1dc;
-            border-radius: 6px;
-            background: #f7f9f8;
-            text-align: right;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            align-items: center;
+            min-height: 34px;
+            border-bottom: 1px solid #d8e1dc;
+            background: #ffffff;
         }
         .estimate-pdf-price-summary span {
             display: block;
-            margin-bottom: 4px;
             color: #68766f;
-            font-size: 10px;
+            font-size: 11px;
+            padding: 8px 10px;
+            background: #f7f4ee;
+            border-right: 1px solid #d8e1dc;
         }
         .estimate-pdf-price-summary strong {
             color: #174d3d;
             font-size: 13px;
+            padding: 8px 10px;
+            text-align: right;
         }
         .estimate-pdf-price-summary .is-total {
             border-color: #174d3d;
             background: #174d3d;
+            border-bottom: 0;
         }
         .estimate-pdf-price-summary .is-total span,
         .estimate-pdf-price-summary .is-total strong {
             color: #ffffff;
         }
+        .estimate-pdf-price-summary .is-total span {
+            background: transparent;
+            border-right-color: rgba(255, 255, 255, .28);
+        }
+        .mobile-delivery-panel {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #dfe7e3;
+        }
+        .mobile-delivery-channel {
+            margin-top: 10px;
+            padding: 13px;
+            background: #f7f9f8;
+            border: 1px solid #dfe7e3;
+            border-radius: 10px;
+        }
+        .mobile-delivery-channel span,
+        .mobile-delivery-channel strong,
+        .mobile-delivery-channel small {
+            display: block;
+        }
+        .mobile-delivery-channel span { color: #73827a; font-size: .72rem; font-weight: 700; }
+        .mobile-delivery-channel strong { margin: 5px 0 3px; color: #243b31; overflow-wrap: anywhere; }
+        .mobile-delivery-channel small { color: #85928b; font-size: .7rem; line-height: 1.45; }
+        .mobile-delivery-channel .actions { margin-top: 10px; }
+        .mobile-delivery-channel button:disabled { opacity: .45; cursor: not-allowed; }
+        .estimate-list-delivery {
+            display: grid;
+            gap: 7px;
+            min-width: 270px;
+        }
+        .estimate-list-delivery-row {
+            display: grid;
+            grid-template-columns: 58px minmax(105px, 1fr) auto;
+            align-items: center;
+            gap: 7px;
+            padding: 7px;
+            background: #f7f9f8;
+            border: 1px solid #dfe7e3;
+            border-radius: 7px;
+            text-align: left;
+        }
+        .estimate-list-delivery-row span { color: #718078; font-size: .66rem; font-weight: 750; }
+        .estimate-list-delivery-row strong { color: #2b4036; font-size: .7rem; overflow-wrap: anywhere; }
+        .estimate-list-delivery-row button {
+            padding: 6px 8px;
+            border: 1px solid #2c6650;
+            border-radius: 6px;
+            color: #24513f;
+            background: #ffffff;
+            font-size: .66rem;
+            font-weight: 800;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .estimate-list-delivery-row button:disabled { cursor: not-allowed; opacity: .38; }
         .mobile-price-summary .list-item {
             display: flex;
             align-items: center;
@@ -234,17 +315,32 @@
                 </div>
 
                 <div class="card-header" style="margin-top: 12px;">
-                    <h2>문자 전송</h2>
-                </div>
-                <div class="actions">
-                    <button class="btn-primary" type="button" onclick="sendEstimateSms()">PDF 문자 전송</button>
-                </div>
-
-                <div class="card-header" style="margin-top: 12px;">
                     <h2>견적 작성</h2>
                 </div>
                 <div class="actions">
                     <button class="btn-primary" type="button" onclick="openEstimateComposer()">견적 작성</button>
+                </div>
+
+                <div id="estimateDeliveryPanel" class="mobile-delivery-panel" style="display: none;">
+                    <div class="card-header">
+                        <h2>완료된 견적서 전송</h2>
+                    </div>
+                    <div class="mobile-delivery-channel">
+                        <span>전화번호</span>
+                        <strong id="estimateDeliveryPhone">-</strong>
+                        <small>저장된 견적서 링크를 문자 발송 화면에서 확인합니다.</small>
+                        <div class="actions">
+                            <button id="estimateSmsSendBtn" class="btn-primary" type="button" onclick="sendEstimateSms()">전화번호 전송</button>
+                        </div>
+                    </div>
+                    <div class="mobile-delivery-channel">
+                        <span>이메일</span>
+                        <strong id="estimateDeliveryEmail">-</strong>
+                        <small>본문에서 견적 이미지를 바로 보고 PDF도 내려받을 수 있습니다.</small>
+                        <div class="actions">
+                            <button id="estimateEmailSendBtn" class="btn-primary" type="button" onclick="sendEstimateEmail()">이메일 전송</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -296,7 +392,7 @@
                 </div>
 
                 <div class="actions" style="margin-top: 12px;">
-                    <button class="btn-primary" type="button" onclick="completeEstimateAndDownload()">완료 (엑셀/PDF)</button>
+                    <button class="btn-primary" type="button" onclick="completeEstimateAndDownload()">견적 작성 완료</button>
                     <button class="btn-outline" type="button" onclick="closeEstimateComposer()">닫기</button>
                 </div>
             </div>
@@ -309,18 +405,19 @@
             <div class="estimate-pdf-header">
                 <div>
                     <div class="estimate-pdf-title">견적서</div>
-                    <div class="estimate-pdf-subtitle">장례 서비스 견적</div>
+                    <div class="estimate-pdf-subtitle">리브 라이프 장례 서비스 견적</div>
                 </div>
-                <div class="estimate-pdf-meta">
-                    <div><span class="label">작성일</span> <span data-field="작성일">-</span></div>
-                    <div><span class="label">견적번호</span> <span data-field="견적번호">-</span></div>
-                </div>
+            </div>
+
+            <div class="estimate-pdf-meta">
+                <div><span class="label">작성일</span> <span data-field="작성일">-</span></div>
+                <div><span class="label">견적번호</span> <span data-field="견적번호">-</span></div>
             </div>
 
             <div class="estimate-pdf-section">
                 <div class="estimate-pdf-section-title">기본 정보</div>
                 <div class="estimate-pdf-grid">
-                    <div><span class="label">고인 성함</span> <span data-field="고인 성함">-</span></div>
+                    <div><span class="label" data-pdf-person-label>고인 성함</span> <span data-pdf-person-value>-</span></div>
                     <div><span class="label">담당자 성함</span> <span data-field="담당자 성함">-</span></div>
                     <div><span class="label">연락처</span> <span data-field="연락처">-</span></div>
                     <div><span class="label">이메일</span> <span data-field="이메일">-</span></div>
@@ -332,7 +429,7 @@
             </div>
 
             <div class="estimate-pdf-section">
-                <div class="estimate-pdf-section-title">선택 항목</div>
+                <div class="estimate-pdf-section-title">상조상품 목록</div>
                 <table class="estimate-pdf-table">
                     <thead>
                         <tr>
@@ -343,12 +440,36 @@
                             <th>금액</th>
                         </tr>
                     </thead>
-                    <tbody id="estimatePdfItemsBody">
+                    <tbody id="estimatePdfProductItemsBody">
                         <tr>
-                            <td colspan="5" style="text-align: center; color: #888;">선택된 항목이 없습니다.</td>
+                            <td colspan="5" style="text-align: center; color: #888;">선택된 상조상품이 없습니다.</td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="estimate-pdf-section">
+                <div class="estimate-pdf-section-title">장례식장 상품 목록</div>
+                <table class="estimate-pdf-table">
+                    <thead>
+                        <tr>
+                            <th>카테고리</th>
+                            <th>품명</th>
+                            <th>개수</th>
+                            <th>단가</th>
+                            <th>금액</th>
+                        </tr>
+                    </thead>
+                    <tbody id="estimatePdfHallItemsBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #888;">선택된 장례식장 상품이 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="estimate-pdf-section">
+                <div class="estimate-pdf-section-title">금액 요약</div>
                 <div class="estimate-pdf-price-summary">
                     <div>
                         <span>상조 상품 금액</span>
@@ -383,6 +504,7 @@
         const estimatePerPage = 20;
         let selectedEstimateId = null;
         let selectedEstimatePhone = '';
+        let selectedEstimateEmail = '';
         let selectedEstimateForHall = null;
         let selectedEstimateHallId = null;
         let selectedEstimateHallName = '';
@@ -454,7 +576,8 @@
                                     <th style="text-align:left;">연락처</th>
                                     <th style="text-align:center;">상태</th>
                                     <th style="text-align:center;">등록일시</th>
-                                    <th style="text-align:center;">PDF</th>
+                                    <th style="text-align:center;">PDF 보기</th>
+                                    <th style="text-align:center;">PDF 전송</th>
                                     <th style="text-align:center;">엑셀</th>
                                 </tr>
                             </thead>
@@ -470,6 +593,23 @@
                                                   onclick="event.stopPropagation(); downloadEstimateFileFromButton(this, 'pdf')"
                                                   style="color:#667eea;text-decoration:underline;background:none;border:none;cursor:pointer;">보기</button>`
                                         : '-';
+                                    const deliveryReady = item.status === 'completed' && Boolean(item.pdf_url);
+                                    const phone = String(item.contact_phone || '').trim();
+                                    const email = String(item.contact_email || '').trim();
+                                    const deliveryButtons = `
+                                        <div class="estimate-list-delivery">
+                                            <div class="estimate-list-delivery-row">
+                                                <span>전화번호</span>
+                                                <strong>${MobileUI.escapeHtml(phone || '입력 없음')}</strong>
+                                                <button type="button" onclick="sendEstimateDeliveryFromRow(event, ${item.estimate_id}, 'sms')" ${deliveryReady && phone ? '' : 'disabled'}>전화번호 전송</button>
+                                            </div>
+                                            <div class="estimate-list-delivery-row">
+                                                <span>이메일</span>
+                                                <strong>${MobileUI.escapeHtml(email || '입력 없음')}</strong>
+                                                <button type="button" onclick="sendEstimateDeliveryFromRow(event, ${item.estimate_id}, 'email')" ${deliveryReady && email ? '' : 'disabled'}>이메일 전송</button>
+                                            </div>
+                                        </div>
+                                    `;
                                     const excelLink = item.excel_url
                                         ? `<button type="button"
                                                   data-url="${item.excel_url}"
@@ -494,6 +634,7 @@
                                             <td style="text-align:center;">${MobileUI.escapeHtml(statusText)}</td>
                                             <td style="text-align:center;">${MobileUI.escapeHtml(item.created_at || '-')}</td>
                                             <td style="text-align:center;">${pdfLink}</td>
+                                            <td style="text-align:center;">${deliveryButtons}</td>
                                             <td style="text-align:center;">${excelLink}</td>
                                         </tr>
                                     `;
@@ -521,7 +662,9 @@
             selectedEstimateId = estimateId;
             const detailCard = document.getElementById('estimateDetailCard');
             const detailContent = document.getElementById('estimateDetailContent');
+            const deliveryPanel = document.getElementById('estimateDeliveryPanel');
             detailCard.style.display = 'block';
+            if (deliveryPanel) deliveryPanel.style.display = 'none';
             detailContent.innerHTML = '<div class="list-item"><div class="list-title">상세 정보를 불러오는 중...</div></div>';
 
             fetch(`../api/get_estimate_requests.php?estimate_id=${estimateId}`)
@@ -534,6 +677,19 @@
                     const est = data.estimate;
                     selectedEstimateForHall = est;
                     selectedEstimatePhone = est.contact_phone || '';
+                    selectedEstimateEmail = est.contact_email || '';
+                    const deliveryReady = est.status === 'completed' && Boolean(est.pdf_url);
+                    if (deliveryPanel) {
+                        deliveryPanel.style.display = deliveryReady ? 'block' : 'none';
+                    }
+                    const phoneField = document.getElementById('estimateDeliveryPhone');
+                    const emailField = document.getElementById('estimateDeliveryEmail');
+                    const smsButton = document.getElementById('estimateSmsSendBtn');
+                    const emailButton = document.getElementById('estimateEmailSendBtn');
+                    if (phoneField) phoneField.textContent = selectedEstimatePhone || '연락처 없음';
+                    if (emailField) emailField.textContent = selectedEstimateEmail || '이메일 없음';
+                    if (smsButton) smsButton.disabled = !selectedEstimatePhone;
+                    if (emailButton) emailButton.disabled = !selectedEstimateEmail;
                     const rows = [
                         ['고인명', est.deceased_name || '-'],
                         ['관계', est.relationship || '-'],
@@ -601,20 +757,87 @@
                 .catch(() => { alert('저장 중 오류가 발생했습니다.'); });
         }
 
-        function sendEstimateSms() {
+        const SMS_DELIVERY_DEMO_MODE = true;
+        const EMAIL_DELIVERY_DEMO_MODE = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+        async function sendEstimateDeliveryFromRow(event, estimateId, channel) {
+            if (event) event.stopPropagation();
+            const normalizedId = parseInt(estimateId, 10);
+            if (!normalizedId || !['sms', 'email'].includes(channel)) {
+                alert('전송할 견적서 정보를 확인할 수 없습니다.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`../api/get_estimate_requests.php?estimate_id=${normalizedId}`);
+                const data = await response.json();
+                if (!response.ok || !data.success || !data.estimate) {
+                    throw new Error(data.message || '견적서 정보를 불러올 수 없습니다.');
+                }
+
+                selectedEstimateId = data.estimate.estimate_id || normalizedId;
+                selectedEstimateForHall = data.estimate;
+                selectedEstimatePhone = String(data.estimate.contact_phone || '').trim();
+                selectedEstimateEmail = String(data.estimate.contact_email || '').trim();
+
+                if (channel === 'sms') {
+                    await sendEstimateSms();
+                } else {
+                    await sendEstimateEmail();
+                }
+            } catch (error) {
+                console.error('Estimate delivery lookup error:', error);
+                alert(error.message || '견적서 정보를 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+
+        async function sendEstimateEmail() {
+            if (!selectedEstimateId || !selectedEstimateEmail) {
+                alert('견적 요청에 저장된 이메일이 없습니다.');
+                return;
+            }
+            if (selectedEstimateForHall?.status !== 'completed' || !selectedEstimateForHall?.pdf_url) {
+                alert('견적 작성을 완료한 뒤 상세 화면에서 전송해주세요.');
+                return;
+            }
+            try {
+                const data = await window.LeaveLifeEmail.send({
+                    estimateId: selectedEstimateId,
+                    email: selectedEstimateEmail,
+                    previewImageUrl: selectedEstimateForHall?.preview_image_url || '',
+                    demoMode: EMAIL_DELIVERY_DEMO_MODE,
+                    apiUrl: '../api/send_estimate_email.php'
+                });
+                if (!data.demo && data.success) {
+                    alert('본문 미리보기와 PDF 견적서를 이메일로 전송했습니다.');
+                }
+            } catch (error) {
+                alert(error.message || '이메일 전송 중 오류가 발생했습니다.');
+            }
+        }
+
+        async function sendEstimateSms() {
             if (!selectedEstimateId || !selectedEstimatePhone) {
                 alert('연락처가 없습니다.');
                 return;
             }
-            const formData = new FormData();
-            formData.append('estimate_id', selectedEstimateId);
-            formData.append('phone', selectedEstimatePhone);
-            fetch('../api/send_estimate_sms.php', { method: 'POST', body: formData })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.success ? '문자를 전송했습니다.' : (data.message || '문자 전송에 실패했습니다.'));
-                })
-                .catch(() => { alert('문자 전송 중 오류가 발생했습니다.'); });
+            if (selectedEstimateForHall?.status !== 'completed' || !selectedEstimateForHall?.pdf_url) {
+                alert('견적 작성을 완료한 뒤 상세 화면에서 전송해주세요.');
+                return;
+            }
+            try {
+                const data = await window.LeaveLifeSms.send({
+                    estimateId: selectedEstimateId,
+                    phone: selectedEstimatePhone,
+                    demoMode: SMS_DELIVERY_DEMO_MODE,
+                    apiUrl: '../api/send_estimate_sms.php'
+                });
+                if (!data.demo && data.success) {
+                    alert('문자를 전송했습니다.');
+                }
+            } catch (error) {
+                alert(error.message || '문자 전송 중 오류가 발생했습니다.');
+            }
         }
 
         function openEstimateComposer() {
@@ -906,12 +1129,18 @@
                 return;
             }
 
-            const success = await uploadEstimateDocuments(selectedEstimateId, pdfBlob, excelPayload.blob, excelPayload.ext);
-            if (success) {
+            populateEstimatePdfTemplate(estimateInfo, selectedItems, priceSummary);
+            const previewImageBlob = window.EstimatePreview
+                ? await window.EstimatePreview.createJpegBlob(document.getElementById('estimatePdfTemplate'))
+                : null;
+            const uploadResult = await uploadEstimateDocuments(selectedEstimateId, pdfBlob, excelPayload.blob, excelPayload.ext, previewImageBlob);
+            if (uploadResult) {
                 downloadBlob(excelPayload.blob, buildEstimateFileName(estimateInfo) + `.${excelPayload.ext}`);
                 downloadBlob(pdfBlob, buildEstimateFileName(estimateInfo) + '.pdf');
                 loadEstimates(estimatePage);
-                alert('PDF와 엑셀 견적서가 저장되었습니다.');
+                closeEstimateComposer();
+                showEstimateDetail(selectedEstimateId);
+                alert('견적 작성이 완료되었습니다. 상세 화면에서 문자 또는 이메일로 전송할 수 있습니다.');
             }
         }
 
@@ -988,7 +1217,7 @@
 
         function loadKoreanFont() {
             if (koreanFontPromise) return koreanFontPromise;
-            koreanFontPromise = fetch('libs/NotoSansKR-Regular.ttf')
+            koreanFontPromise = fetch('../fonts/NotoSansKR-1.ttf')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Font not found');
@@ -998,6 +1227,14 @@
                 .then(buffer => arrayBufferToBase64(buffer))
                 .catch(() => null);
             return koreanFontPromise;
+        }
+
+        function splitEstimateItems(items) {
+            const safeItems = Array.isArray(items) ? items : [];
+            return {
+                productItems: safeItems.filter(item => String(item.category || '').replace(/\s+/g, '') === '상조상품'),
+                hallItems: safeItems.filter(item => String(item.category || '').replace(/\s+/g, '') !== '상조상품')
+            };
         }
 
         async function createEstimatePdfBlob(info, items, priceSummary) {
@@ -1079,6 +1316,11 @@
                     field.textContent = value || '-';
                 }
             });
+            const personLabel = Object.prototype.hasOwnProperty.call(estimateInfo, '환우명') ? '환우명' : '고인 성함';
+            const personLabelField = template.querySelector('[data-pdf-person-label]');
+            const personValueField = template.querySelector('[data-pdf-person-value]');
+            if (personLabelField) personLabelField.textContent = personLabel;
+            if (personValueField) personValueField.textContent = estimateInfo[personLabel] || '-';
 
             const summaryFields = {
                 '상조 상품 금액': priceSummary.funeralProductAmount,
@@ -1090,19 +1332,22 @@
                 if (field) field.textContent = Math.floor(amount).toLocaleString('ko-KR');
             });
 
-            const body = template.querySelector('#estimatePdfItemsBody');
-            if (!body) return;
+            const groupedItems = splitEstimateItems(items);
+            const productBody = template.querySelector('#estimatePdfProductItemsBody');
+            const hallBody = template.querySelector('#estimatePdfHallItemsBody');
+            if (!productBody || !hallBody) return;
 
-            if (!items.length) {
-                body.innerHTML = `
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: #888;">선택된 항목이 없습니다.</td>
-                    </tr>
-                `;
-                return;
-            }
+            productBody.innerHTML = groupedItems.productItems.length ? groupedItems.productItems.map(item => `
+                <tr>
+                    <td>${MobileUI.escapeHtml(item.category || '상조상품')}</td>
+                    <td>${MobileUI.escapeHtml(item.productName || '-')}</td>
+                    <td style="text-align: center;">${item.qty}</td>
+                    <td style="text-align: right;">${Math.floor(item.unitPrice).toLocaleString('ko-KR')}</td>
+                    <td style="text-align: right;">${Math.floor(item.amount).toLocaleString('ko-KR')}</td>
+                </tr>
+            `).join('') : '<tr><td colspan="5" style="text-align: center; color: #888;">선택된 상조상품이 없습니다.</td></tr>';
 
-            body.innerHTML = items.map(item => `
+            hallBody.innerHTML = groupedItems.hallItems.length ? groupedItems.hallItems.map(item => `
                 <tr>
                     <td>${MobileUI.escapeHtml(item.category || '-')}</td>
                     <td>${MobileUI.escapeHtml(item.productName || '-')}</td>
@@ -1110,14 +1355,17 @@
                     <td style="text-align: right;">${Math.floor(item.unitPrice).toLocaleString('ko-KR')}</td>
                     <td style="text-align: right;">${Math.floor(item.amount).toLocaleString('ko-KR')}</td>
                 </tr>
-            `).join('');
+            `).join('') : '<tr><td colspan="5" style="text-align: center; color: #888;">선택된 장례식장 상품이 없습니다.</td></tr>';
         }
 
-        function uploadEstimateDocuments(estimateId, pdfBlob, excelBlob, excelExt) {
+        function uploadEstimateDocuments(estimateId, pdfBlob, excelBlob, excelExt, previewImageBlob) {
             const formData = new FormData();
             formData.append('estimate_id', estimateId);
             formData.append('pdf', pdfBlob, `estimate_${estimateId}.pdf`);
             formData.append('excel', excelBlob, `estimate_${estimateId}.${excelExt || 'xlsx'}`);
+            if (previewImageBlob) {
+                formData.append('preview', previewImageBlob, `estimate_${estimateId}.jpg`);
+            }
             const selectionData = buildEstimateSelectionData(getSelectedEstimateItems());
             if (selectionData) {
                 formData.append('selection_data', JSON.stringify(selectionData));
@@ -1127,13 +1375,13 @@
                 .then(data => {
                     if (!data.success) {
                         alert(data.message || '견적서 저장에 실패했습니다.');
-                        return false;
+                        return null;
                     }
-                    return true;
+                    return data;
                 })
                 .catch(() => {
                     alert('견적서 저장 중 오류가 발생했습니다.');
-                    return false;
+                    return null;
                 });
         }
 
@@ -1244,5 +1492,8 @@
             });
         });
     </script>
+    <script src="../js/estimate-preview.js"></script>
+    <script src="../js/sms-demo.js"></script>
+    <script src="../js/email-demo.js"></script>
 </body>
 </html>

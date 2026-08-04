@@ -40,6 +40,7 @@ if ($estimate_id <= 0) {
 
 $pdf = isset($_FILES['pdf']) ? $_FILES['pdf'] : null;
 $excel = isset($_FILES['excel']) ? $_FILES['excel'] : null;
+$preview = isset($_FILES['preview']) ? $_FILES['preview'] : null;
 
 if (!$pdf || $pdf['error'] !== UPLOAD_ERR_OK) {
     $error = $pdf ? $pdf['error'] : 'NO_FILE';
@@ -72,6 +73,23 @@ $excel_filename = "estimate_{$estimate_id}.{$excel_ext}";
 
 $pdf_path = $upload_dir . '/' . $pdf_filename;
 $excel_path = $upload_dir . '/' . $excel_filename;
+$preview_filename = null;
+$preview_path = null;
+
+if ($preview && $preview['error'] === UPLOAD_ERR_OK) {
+    if ($preview['size'] > 900 * 1024) {
+        echo json_encode(['success' => false, 'message' => '문자 첨부용 견적서 이미지는 900KB 이하여야 합니다.']);
+        exit;
+    }
+    $image_info = @getimagesize($preview['tmp_name']);
+    if (!$image_info || !in_array($image_info[2], [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF], true)) {
+        echo json_encode(['success' => false, 'message' => '문자 첨부용 견적서 이미지 형식이 올바르지 않습니다.']);
+        exit;
+    }
+    $preview_ext = $image_info[2] === IMAGETYPE_PNG ? 'png' : ($image_info[2] === IMAGETYPE_GIF ? 'gif' : 'jpg');
+    $preview_filename = "estimate_{$estimate_id}.{$preview_ext}";
+    $preview_path = $upload_dir . '/' . $preview_filename;
+}
 
 if (!move_uploaded_file($pdf['tmp_name'], $pdf_path)) {
     echo json_encode(['success' => false, 'message' => 'PDF 파일 저장에 실패했습니다.']);
@@ -80,6 +98,11 @@ if (!move_uploaded_file($pdf['tmp_name'], $pdf_path)) {
 
 if (!move_uploaded_file($excel['tmp_name'], $excel_path)) {
     echo json_encode(['success' => false, 'message' => '엑셀 파일 저장에 실패했습니다.']);
+    exit;
+}
+
+if ($preview_path && !move_uploaded_file($preview['tmp_name'], $preview_path)) {
+    echo json_encode(['success' => false, 'message' => '문자 첨부용 견적서 이미지 저장에 실패했습니다.']);
     exit;
 }
 
@@ -123,7 +146,8 @@ try {
         'success' => true,
         'message' => '견적서 파일이 저장되었습니다.',
         'pdf_url' => "/uploads/estimate_docs/{$pdf_filename}",
-        'excel_url' => "/uploads/estimate_docs/{$excel_filename}"
+        'excel_url' => "/uploads/estimate_docs/{$excel_filename}",
+        'preview_image_url' => $preview_filename ? "/uploads/estimate_docs/{$preview_filename}" : null
     ]);
 } catch (Exception $e) {
     error_log($e->getMessage());

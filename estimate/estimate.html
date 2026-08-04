@@ -136,8 +136,8 @@
                         <input type="tel" id="contactPhone" name="contactPhone" placeholder="010-1234-5678" oninput="formatPhoneNumber(this)" required>
                     </div>
                     <div class="form-group">
-                        <label for="contactEmail">이메일</label>
-                        <input type="email" id="contactEmail" name="contactEmail">
+                        <label for="contactEmail">견적서 받을 이메일 <span class="required">*</span></label>
+                        <input type="email" id="contactEmail" name="contactEmail" placeholder="example@email.com" autocomplete="email" required>
                     </div>
 
                     <div class="wizard-review" id="wizardReview" aria-live="polite">
@@ -155,6 +155,7 @@
                             <div><dt>장례 기간</dt><dd id="reviewPeriod">-</dd></div>
                             <div><dt>예상 조문객</dt><dd id="reviewVisitors">-</dd></div>
                             <div><dt>연락받을 분</dt><dd id="reviewContact">-</dd></div>
+                            <div><dt>견적서 받을 이메일</dt><dd id="reviewEmail">-</dd></div>
                         </dl>
                     </div>
                 </div>
@@ -180,7 +181,7 @@
                                 </label>
                                 <dl class="consent-detail-list">
                                     <div><dt>수집·이용 목적</dt><dd>장례 견적 산출, 상담 접수, 요청 내용 확인 및 상담 결과 안내</dd></div>
-                                    <div><dt>수집 항목</dt><dd>현재 상황, 환우명 또는 고인 성함, 관계, 사망일(사망 후인 경우), 장소, 예상 조문객 수, 장례 지역·기간, 선택 상품·시설, 요청자 성명·연락처 및 이메일(선택)</dd></div>
+                                    <div><dt>수집 항목</dt><dd>현재 상황, 환우명 또는 고인 성함, 관계, 사망일(사망 후인 경우), 장소, 예상 조문객 수, 장례 지역·기간, 선택 상품·시설, 요청자 성명·연락처 및 견적서 수신 이메일</dd></div>
                                     <div><dt>보유·이용 기간</dt><dd>견적 상담 완료 및 관련 업무 종료 시까지 보유 후 지체 없이 파기합니다. 관계 법령에 별도 보관 의무가 있는 경우 해당 기간 동안 보관합니다.</dd></div>
                                     <div><dt>동의 거부 권리</dt><dd>동의를 거부할 권리가 있으나, 필수 정보 수집·이용에 동의하지 않으면 온라인 견적 상담 접수가 제한됩니다.</dd></div>
                                 </dl>
@@ -193,7 +194,7 @@
                                 </label>
                                 <dl class="consent-detail-list">
                                     <div><dt>연락 목적</dt><dd>견적 요청 확인, 추가 정보 확인, 상담 일정 조율 및 견적 결과 안내</dd></div>
-                                    <div><dt>이용 항목</dt><dd>요청자 성명, 휴대전화번호, 이메일(입력한 경우), 견적 요청 식별정보</dd></div>
+                                    <div><dt>이용 항목</dt><dd>요청자 성명, 휴대전화번호, 견적서 수신 이메일, 견적 요청 식별정보</dd></div>
                                     <div><dt>연락 방법</dt><dd>전화, 문자메시지 또는 이메일 중 요청 처리에 필요한 방법</dd></div>
                                     <div><dt>동의 거부 권리</dt><dd>연락에 동의하지 않을 수 있으나, 견적 요청 확인과 결과 안내가 어려워 접수가 제한됩니다.</dd></div>
                                 </dl>
@@ -2084,7 +2085,8 @@
                         reviewRegion: [valueOf('sido'), valueOf('sigungu'), hallName].filter(Boolean).join(' · ') || '-',
                         reviewPeriod: [period, selectedProductTitle].filter(Boolean).join(' · ') || '-',
                         reviewVisitors: valueOf('expectedVisitors') ? `${Number(valueOf('expectedVisitors')).toLocaleString('ko-KR')}명` : '미입력',
-                        reviewContact: [valueOf('contactName'), valueOf('contactPhone')].filter(Boolean).join(' · ') || '-'
+                        reviewContact: [valueOf('contactName'), valueOf('contactPhone')].filter(Boolean).join(' · ') || '-',
+                        reviewEmail: valueOf('contactEmail') || '-'
                     };
 
                     Object.entries(reviewData).forEach(([id, text]) => {
@@ -2225,6 +2227,67 @@
                     openProductInfo
                 });
 
+                function ensureEstimateCompletionStyles() {
+                    if (document.getElementById('estimateCompletionStyles')) return;
+                    const style = document.createElement('style');
+                    style.id = 'estimateCompletionStyles';
+                    style.textContent = `
+                        .estimate-complete-overlay { position: fixed; inset: 0; z-index: 120000; display: grid; place-items: center; padding: 20px; background: rgba(25, 38, 32, .6); backdrop-filter: blur(6px); }
+                        .estimate-complete-dialog { width: min(470px, 100%); padding: 34px 30px 28px; border: 1px solid rgba(31, 78, 58, .14); border-radius: 26px; background: #fff; box-shadow: 0 30px 90px rgba(12, 35, 25, .26); text-align: center; color: #25382f; }
+                        .estimate-complete-icon { display: grid; place-items: center; width: 68px; height: 68px; margin: 0 auto 18px; border-radius: 50%; background: #e4f2e9; color: #226447; font-size: 2rem; font-weight: 900; }
+                        .estimate-complete-kicker { color: #9a783c; font-size: .72rem; font-weight: 900; letter-spacing: .12em; }
+                        .estimate-complete-dialog h2 { margin: 8px 0 10px; color: #1f4e3a; font-size: 1.45rem; }
+                        .estimate-complete-dialog > p { margin: 0; color: #65766e; font-size: .9rem; line-height: 1.7; }
+                        .estimate-complete-summary { display: grid; gap: 10px; margin: 22px 0; padding: 16px; border-radius: 15px; background: #f4f7f5; text-align: left; }
+                        .estimate-complete-row { display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: start; }
+                        .estimate-complete-row span { color: #7a8982; font-size: .78rem; font-weight: 700; }
+                        .estimate-complete-row strong { color: #31463c; font-size: .84rem; overflow-wrap: anywhere; }
+                        .estimate-complete-note { margin: 0 0 18px; padding: 11px 13px; border-radius: 12px; background: #fff8e9; color: #775b28; font-size: .78rem; line-height: 1.55; }
+                        .estimate-complete-home { width: 100%; min-height: 49px; border: 0; border-radius: 13px; background: #1f4e3a; color: #fff; font-weight: 850; cursor: pointer; }
+                        @media (max-width: 520px) { .estimate-complete-dialog { padding: 30px 22px 24px; border-radius: 22px; } }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                function escapeEstimateCompletionHtml(value) {
+                    return String(value == null ? '' : value)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                }
+
+                function showEstimateCompletion(result, email) {
+                    ensureEstimateCompletionStyles();
+                    const overlay = document.createElement('div');
+                    const isLocal = Boolean(result && result.localPreview);
+                    const estimateId = result && result.estimate_id ? result.estimate_id : '-';
+                    overlay.className = 'estimate-complete-overlay';
+                    overlay.setAttribute('role', 'dialog');
+                    overlay.setAttribute('aria-modal', 'true');
+                    overlay.setAttribute('aria-labelledby', 'estimateCompleteTitle');
+                    overlay.innerHTML = `
+                        <section class="estimate-complete-dialog">
+                            <div class="estimate-complete-icon">✓</div>
+                            <span class="estimate-complete-kicker">REQUEST COMPLETE</span>
+                            <h2 id="estimateCompleteTitle">견적 신청이 완료되었습니다</h2>
+                            <p>접수 내용을 확인한 뒤 리브 라이프 전문 상담사가 순서대로 안내드리겠습니다.</p>
+                            <div class="estimate-complete-summary">
+                                <div class="estimate-complete-row"><span>접수번호</span><strong>${escapeEstimateCompletionHtml(estimateId)}</strong></div>
+                                <div class="estimate-complete-row"><span>이메일</span><strong>${escapeEstimateCompletionHtml(email || '-')}</strong></div>
+                            </div>
+                            ${isLocal ? '<div class="estimate-complete-note">로컬 시연 데이터로 저장되었습니다. 실제 운영 서버나 이메일로 전송되지 않습니다.</div>' : '<div class="estimate-complete-note">견적서가 준비되면 입력하신 이메일과 연락처로 안내드립니다.</div>'}
+                            <button type="button" class="estimate-complete-home">홈으로 돌아가기</button>
+                        </section>`;
+                    overlay.querySelector('.estimate-complete-home').addEventListener('click', () => {
+                        localStorage.setItem('currentSection', 'home/home.html');
+                        window.location.replace('../index.html');
+                    });
+                    document.body.appendChild(overlay);
+                    overlay.querySelector('.estimate-complete-home').focus();
+                }
+
                 function isLocalPreviewHost() {
                     return ['127.0.0.1', 'localhost', '::1'].includes(window.location.hostname);
                 }
@@ -2354,7 +2417,7 @@
                     const requiredFields = ['deathStatus', 'deceasedName', 'relationship', 'deathLocation',
                                           'sido', 'sigungu', 'funeralPeriod',
                                           'funeralProductId',
-                                          'contactName', 'contactPhone'];
+                                          'contactName', 'contactPhone', 'contactEmail'];
                     if (submitData.deathStatus === 'after') requiredFields.push('deathDate');
                     const missingFields = requiredFields.filter(field => !submitData[field] || submitData[field].trim() === '');
                     
@@ -2384,12 +2447,7 @@
 
                     sendEstimateRequest(submitData)
                         .then((result) => {
-                            const message = result.localPreview
-                                ? '로컬 미리보기에서 견적 요청이 임시 저장되었습니다.\n관리자 페이지의 견적 관리에서 확인할 수 있습니다.'
-                                : '견적 요청이 접수되었습니다.\n전문 컨설턴트가 연락드리겠습니다.';
-                            alert(message);
-                            localStorage.setItem('currentSection', 'home/home.html');
-                            window.location.replace('../index.html');
+                            showEstimateCompletion(result, submitData.contactEmail);
                         })
                         .catch((error) => {
                             alert(error.message || '견적 요청을 접수하지 못했습니다. 잠시 후 다시 시도해주세요.');

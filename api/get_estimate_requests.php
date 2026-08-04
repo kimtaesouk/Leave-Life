@@ -34,6 +34,14 @@ try {
             $xlsx_filename = "estimate_{$row['estimate_id']}.xlsx";
             $csv_filename = "estimate_{$row['estimate_id']}.csv";
             $pdf_url = file_exists($doc_dir . '/' . $pdf_filename) ? "/uploads/estimate_docs/{$pdf_filename}" : null;
+            $preview_image_url = null;
+            foreach (['jpg', 'png', 'gif'] as $preview_ext) {
+                $preview_filename = "estimate_{$row['estimate_id']}.{$preview_ext}";
+                if (file_exists($doc_dir . '/' . $preview_filename)) {
+                    $preview_image_url = "/uploads/estimate_docs/{$preview_filename}";
+                    break;
+                }
+            }
             $excel_url = null;
             if (file_exists($doc_dir . '/' . $xlsx_filename)) {
                 $excel_url = "/uploads/estimate_docs/{$xlsx_filename}";
@@ -67,7 +75,8 @@ try {
                 'created_at' => $row['created_at'],
                 'updated_at' => $row['updated_at'],
                 'pdf_url' => $pdf_url,
-                'excel_url' => $excel_url
+                'excel_url' => $excel_url,
+                'preview_image_url' => $preview_image_url
             ];
             
             $stmt->close();
@@ -167,6 +176,14 @@ try {
         $xlsx_filename = "estimate_{$row['estimate_id']}.xlsx";
         $csv_filename = "estimate_{$row['estimate_id']}.csv";
         $pdf_url = file_exists($doc_dir . '/' . $pdf_filename) ? "/uploads/estimate_docs/{$pdf_filename}" : null;
+        $preview_image_url = null;
+        foreach (['jpg', 'png', 'gif'] as $preview_ext) {
+            $preview_filename = "estimate_{$row['estimate_id']}.{$preview_ext}";
+            if (file_exists($doc_dir . '/' . $preview_filename)) {
+                $preview_image_url = "/uploads/estimate_docs/{$preview_filename}";
+                break;
+            }
+        }
         $excel_url = null;
         if (file_exists($doc_dir . '/' . $xlsx_filename)) {
             $excel_url = "/uploads/estimate_docs/{$xlsx_filename}";
@@ -200,7 +217,8 @@ try {
             'created_at' => $row['created_at'],
             'updated_at' => $row['updated_at'],
             'pdf_url' => $pdf_url,
-            'excel_url' => $excel_url
+            'excel_url' => $excel_url,
+            'preview_image_url' => $preview_image_url
         ];
     }
     
